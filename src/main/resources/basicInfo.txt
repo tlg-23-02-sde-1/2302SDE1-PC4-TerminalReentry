@@ -1,0 +1,18 @@
+
+
+
+
+
+
+                Welcome to Terminal Velocity, an exhilarating console-based
+                murder mystery set aboard the International Space Station (ISS).
+                In this gripping tale, you find yourself as an intrepid
+                investigator trapped amidst the vast expanses of space,
+                facing a heinous crime that threatens the safety of everyone
+                aboard. As you venture through the intricate corridors of the ISS,
+                uncovering secrets and deciphering clues, it is up to you
+                to solve the enigma and unmask the cold-blooded killer.
+
+
+
+
