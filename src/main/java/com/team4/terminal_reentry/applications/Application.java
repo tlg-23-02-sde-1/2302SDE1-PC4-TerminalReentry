@@ -11,8 +11,34 @@ public class Application {
 
     public void run() {
         titleScreen();
-        basicInfo();
-        instructions();
+        if(newGame()) {
+            basicInfo();
+            instructions();
+            //while(textparser doesn't equal quit) {
+            //  Run the game.
+            //}
+        }
+
+    }
+
+    private boolean newGame() {
+        Console.clear();
+        System.out.println("New Game --> [Y,N] : ");
+        String answer = scanner.nextLine();
+        boolean valid = false;
+        while(!valid) {
+            if(answer.toLowerCase().equals("y")) {
+                valid = true;
+            }
+            else if(answer.toLowerCase().equals("n")) {
+                break;
+            }
+            else {
+                System.out.println("Invalid Input. Please enter y or n: ");
+                answer = scanner.nextLine();
+            }
+        }
+        return valid;
     }
 
     private void instructions() {
