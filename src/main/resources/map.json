@@ -1,0 +1,85 @@
+[
+  {
+    "title": "Harmony",
+    "description" : "see the machinery that provides air, electrical power, water, and other essential systems.",
+    "exits": {
+      "down": "Kibo",
+      "up": "Columbus",
+      "left": "Airlock 1",
+      "right": "Destiny"
+    }
+  },
+  {
+    "title": "Kibo",
+    "description": "feel the space of the largest ISS module. You look over the two experiment sections and don't see anything out of place at first glance.",
+    "exits":
+    {"up": "Harmony"}
+  },
+  {
+    "title": "Columbus",
+    "description": "are  careful not to disrupt the Europoean Space Agency experiments.",
+    "exits":
+    {"down": "Harmony"}
+  },
+  {
+    "title": "Destiny",
+    "description": "check the ISS control systems and make sure that the status indicators are green.",
+    "exits": {
+      "left": "Harmony",
+      "right": "Unity"
+    }
+  },
+  {
+    "title": "Unity",
+    "description": "wonder how many people have floated through here since it first launched in 1998.",
+    "exits": {
+      "left": "Destiny",
+      "down": "Tranquility",
+      "up": "Quest",
+      "right": "Zarya"
+    }
+  },
+  {
+    "title": "Tranquility",
+    "description": "look at the treadmil, dreading your next zero-g workout. ",
+    "exits": {
+      "up": "Unity"
+    }
+  },
+  {
+    "title": "Quest",
+    "description": "double check the integrity of each of the airlocks and spacesuits.",
+    "exits": {
+      "down": "Unity"
+    }
+  },
+  {
+    "title": "Zarya Cargo",
+    "description": "look through each of the storage racks for clues.",
+    "exits":{
+      "left": "Unity",
+      "right": "Zvezda"
+    }
+  },
+  {
+    "title": "Zvezda",
+    "description": "wonder if any of the Russian cosmonauts would object to your inspection.",
+    "exits": {
+      "left": "Zarya Cargo",
+      "up": "Rassvet Docking",
+      "down": "Nauka Multipurpose Laboratory"
+    }
+  },
+  {
+    "title": "Nauka Multipurpose Laboratory",
+    "description": "keep thinking that you're not quite comfortable with some of the experiments hapening in here.",
+    "exits": {
+      "up": "Zvezda"
+    }
+  },
+  {
+    "title": "Rassvet Docking",
+    "description": "remember that the next Soyuz crew transport is scheduled to dock right there in just two months.",
+    "exits": "Zvezda"
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "title": "Postit Note",
+    "description": "A yellow sticky, just like the ones you used back home.",
+    "data": "The experiment is proceeding as expected. The world will tremble when they discover that I've done.",
+    "secretData": "The black light reveals the following characters: mcpr%o^Xt9JZ3w!D70. It might be a password."
+  },
+  {
+    "title": "Email",
+    "description": "Size: 8Kb",
+    "data": "I see that the email was sent to the victim just hours before he died.",
+    "secretData": "Subject: never again\n \nI've put up with your actions for far too long. I won't let you hurt me again. This will end... one way or another."
+  },
+  {
+    "title": "Log file",
+    "description": "Computer access logfile",
+    "data": "These are the terminal access and command files for the last 2 days.",
+    "secretData": "There is nothing out of the ordinary in these log files."
+
+  }
+]
