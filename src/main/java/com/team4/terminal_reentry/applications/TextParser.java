@@ -7,7 +7,7 @@ public class TextParser {
 
     public TextParser() {
         commands= new HashMap<>();
-        commands.put("Look", "Look around");
+        commands.put("Look", "Look around"); //prints room.description & room.inventory
         commands.put("go", "Move in the specified direction.");
         commands.put("take", "Pick up an item.");
         commands.put("use", "Use an item in your inventory.");
