@@ -3,7 +3,7 @@ package com.team4.terminal_reentry.setup;
 import java.util.List;
 import java.util.Map;
 
-class NPC {
+public class NPC {
     private String name;
     private String nationality;
     private String pronoun;

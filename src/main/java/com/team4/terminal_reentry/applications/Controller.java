@@ -15,23 +15,38 @@ class Controller {
         this.player = player;
     }
 
-    public void execute(String[] commands) {
+    public boolean execute(String[] commands) {
+        boolean isQuit = false;
         String verb = commands[1];
         String noun = commands[2];
-        if(verb.equals("go")) {
-            player.getCurrentRoom().getExits().forEach((key, value)->{
-                if(key.equals(noun)) {
-                    player.setCurrentRoom(map.get(value));
-                }
-            });
+        switch (verb) {
+            case "inventory":
+                System.out.println(player.showInventory());
+            case "look":
+                player.getCurrentRoom().getInventory().forEach((item)->{
+                    if(item.getName().equals(noun)) {
+                        System.out.println(item.getDescription());
+                    }
+                });
+            case "go":
+                player.getCurrentRoom().getExits().forEach((key, value) -> {
+                    if (key.equals(noun)) {
+                        player.setCurrentRoom(map.get(value));
+                    }
+                });
+                break;
+            case "get":
+                player.getCurrentRoom().getInventory().forEach((value) -> {
+                    if (value.getName().equals(noun)) {
+                        player.addItem(value);
+                        player.getCurrentRoom().removeItem(value);
+                    }
+                });
+                break;
+            case "quit":
+                isQuit = true;
+                break;
         }
-        else if(verb.equals("get")) {
-            player.getCurrentRoom().getInventory().forEach((value)-> {
-                if(value.getName().equals(noun)) {
-                    player.addItem(value);
-                    player.getCurrentRoom().removeItem(value);
-                }
-            });
-        }
+        return isQuit;
     }
 }

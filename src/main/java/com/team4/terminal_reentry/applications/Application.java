@@ -1,9 +1,12 @@
 package com.team4.terminal_reentry.applications;
 
 
+import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Room;
 import com.team4.terminal_reentry.setup.Scenario;
+import jdk.jshell.spi.SPIResolutionException;
 
+import javax.naming.ldap.Control;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,15 +26,19 @@ public class Application {
             instructions();
             Map<String, Room> map = setUpMap();
             Room currentRoom = map.get("Harmony");
-
+            Player player = new Player(currentRoom);
+            Controller controller = new Controller(map,player);
+            boolean quit = false;
             do {
-                displayScreen(currentRoom);
-                // controller.display room info
-                // String input = scanner.nextLine()
-                // controller.process(textparser.handleInput(input));
-                //
+                displayScreen(player.getCurrentRoom());
+                String command = promptForCommand();
+                String[] response = textParser.handleInput(command);
+                if(response[0].equals("200")) {
+                    quit = controller.execute(response);
+                }
+                enterToContinue();
             }
-            while (!promptForCommand().toLowerCase().equals("quit"));//textParser.handleInput(scanner.nextLine())[0]);
+            while (!quit);//textParser.handleInput(scanner.nextLine())[0]);
         }
     }
 
@@ -44,9 +51,17 @@ public class Application {
         Console.clear();
         displayISS();
         System.out.println("\nYou are currently in the " + currentRoom.getName() + " module.");
-        System.out.println("Description of the module: You " + currentRoom.getDescription());
+        System.out.println("You " + currentRoom.getDescription());
         System.out.println("Possible directions you can go:");
         currentRoom.getExits().forEach((key, value) -> System.out.println(key + ": " + value));
+        if(!currentRoom.getInventory().isEmpty()) {
+            System.out.println("You see the following items room: ");
+            currentRoom.getInventory().forEach((item)-> System.out.println(item.getName()));
+        }
+        if(!currentRoom.getNpcs().isEmpty()) {
+            System.out.println("You see the following people in the room: ");
+            currentRoom.getNpcs().forEach((npc)-> System.out.println(npc.getName()));
+        }
     }
 
     private void displayISS() {
