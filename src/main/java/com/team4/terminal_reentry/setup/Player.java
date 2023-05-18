@@ -5,7 +5,7 @@ import com.team4.terminal_reentry.items.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-class Player {
+public class Player {
     private String name= "Jessy";
     private Room currentRoom;
     private List<Item> inventory = new ArrayList<>();
