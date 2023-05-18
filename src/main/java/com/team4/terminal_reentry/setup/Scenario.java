@@ -11,14 +11,14 @@ import com.google.gson.*;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 
-class Scenario {
+public class Scenario {
     private Map<String, Room> map;
     private List<String> winCondition;
 
-    Scenario() {
+    public Scenario() throws FileNotFoundException {
         this.map = new HashMap<>();
         this.winCondition = null;
-//        setUp();
+        setUp();
     }
 
     private void setUp() throws FileNotFoundException {
@@ -56,11 +56,11 @@ class Scenario {
         for(int i = 0; i < weaponsData.size(); i++) {
             JsonObject weapon = weaponsData.get(i).getAsJsonObject();
             weapons.add(new Weapon(
-                    weapon.get("title").toString(),
-                    weapon.get("description").toString(),
+                    weapon.get("title").toString().replace("\"",""),
+                    weapon.get("description").toString().replace("\"",""),
                     i == murderWeapon,
-                    weapon.get("data").toString(),
-                    weapon.get("secretData").toString()
+                    weapon.get("data").toString().replace("\"",""),
+                    weapon.get("secretData").toString().replace("\"","")
             ));
         }
         return weapons;
@@ -75,12 +75,12 @@ class Scenario {
             Map<String, String> dialogue = new HashMap<>();
             JsonObject npc = npcData.get(i).getAsJsonObject();
             for(String answer: answers) {
-                dialogue.put(answer, npc.get(answer).toString());
+                dialogue.put(answer, npc.get(answer).toString().replace("\"",""));
             }
             npcs.add(new NPC(
-                    npc.get("name").toString(),
-                    npc.get("nationality").toString(),
-                    npc.get("pronoun").toString(),
+                    npc.get("name").toString().replace("\"",""),
+                    npc.get("nationality").toString().replace("\"",""),
+                    npc.get("pronoun").toString().replace("\"",""),
                     i == murderer,
                     dialogue
             ));
@@ -147,13 +147,13 @@ class Scenario {
             String[] directions = {"left", "right", "up", "down"};
             for (String direction: directions) {
                 if(exitsJson.get(direction) != null) {
-                    exits.put(direction, exitsJson.get(direction).toString());
+                    exits.put(direction, exitsJson.get(direction).toString().replace("\"",""));
                 }
             }
-            String roomName = room.get("name").toString();
+            String roomName = room.get("name").toString().replace("\"","");
             map.put(roomName, new Room(
                     roomName,
-                    room.get("description").toString(),
+                    room.get("description").toString().replace("\"",""),
                     items,
                     npcInRoom,
                     exits

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Room {
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
     private Map<String,String> exits;
-    private List<Item> inventory = new ArrayList<>();
-    private List<NPC> characters = new ArrayList<>();
+    private final List<Item> inventory = new ArrayList<>();
+    private final List<NPC> characters = new ArrayList<>();
 
     Room(String name, String description, List<Item> items, List<NPC> npcs, Map<String, String> exits) {
         this.name = name;
@@ -23,6 +23,14 @@ public class Room {
             setNpcs(npc);
         }
         setExits(exits);
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getDescription() {
+        return this.description;
     }
 
     public void setInventory(Item item) {
