@@ -1,53 +1,89 @@
 package com.team4.terminal_reentry.setup;
 
 import java.io.*;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import com.team4.terminal_reentry.items.Item;
+import com.team4.terminal_reentry.items.Weapon;
 
 class Scenario {
     private Map<String, Room> map;
     private List<String> winCondition;
 
     Scenario() {
-        setUp();
+        this.map = new HashMap<>();
+        this.winCondition = null;
+//        setUp();
     }
 
-    private void setUp() {
-        //read map
-        String filePath = "";
-        try (Reader reader = new FileReader(filePath)) {
-            JsonElement mapJson = JsonParser.parseReader(reader);
-            //set up the map
-            setMap(mapJson);
-        }
-        catch (IOException e) {
-            System.out.println("Couldn't load map");
-        }
+    private void setUp() throws FileNotFoundException {
 
-        //read in items
-        filePath = "";
-        try (Reader reader = new FileReader(filePath)) {
-            JsonElement itemJson = JsonParser.parseReader(reader);
-            //set up the items in the map
-            setItems(itemJson);
-        }
-        catch (IOException e) {
-            System.out.println("Couldn't load map");
-        }
+        //read in weapons
+        String weaponsJson = "./src/main/resources/weapons.json";
+        List<Weapon> weapons = getWeapons(loadJson(weaponsJson));
 
         //read in npcs
-        filePath = "";
-        try (Reader reader = new FileReader(filePath)) {
-            JsonElement npcsJson = JsonParser.parseReader(reader);
-            //set up npcs in the map
-            setNpcs(npcsJson);
+        String npcsJson = "./src/main/resources/npcs.json";
+        List<NPC> npcs = getNPCs(loadJson(npcsJson));
+
+        //load map
+        String mapJson = "./src/main/resources/map.json";
+        try {
+            setMap(loadJson(mapJson), weapons, npcs);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        catch (IOException e) {
-            System.out.println("Couldn't load map");
+
+
+    }
+
+    public List<Weapon> getWeapons(JsonArray weaponsData) {
+        List<Weapon> weapons = new ArrayList<>();
+        Random rand = new Random();
+        int murderWeapon = rand.nextInt(weaponsData.size());
+        for(int i = 0; i < weaponsData.size(); i++) {
+            JsonObject weapon = weaponsData.get(i).getAsJsonObject();
+            weapons.add(new Weapon(
+                    weapon.get("title").toString(),
+                    weapon.get("description").toString(),
+                    i == murderWeapon,
+                    weapon.get("data").toString(),
+                    weapon.get("secretData").toString()
+            ));
         }
+        return weapons;
+    }
+
+    public List<NPC> getNPCs(JsonArray npcData) {
+        List<NPC> npcs = new ArrayList<>();
+        Random rand = new Random();
+        int murderer = rand.nextInt(npcData.size());
+        String[] answers = {"locationAtTimeOfMurder", "activityAtTimeOfMurder", "opinionOfVictim", "otherTestimony"};
+        for(int i = 0; i < npcData.size(); i++) {
+            Map<String, String> dialogue = new HashMap<>();
+            JsonObject npc = npcData.get(i).getAsJsonObject();
+            for(String answer: answers) {
+                dialogue.put(answer, npc.get(answer).toString());
+            }
+            npcs.add(new NPC(
+                    npc.get("name").toString(),
+                    npc.get("nationality").toString(),
+                    npc.get("pronoun").toString(),
+                    i == murderer,
+                    dialogue
+            ));
+        }
+        return npcs;
+    }
+
+    public JsonArray loadJson(String filePath) throws FileNotFoundException {
+        Reader reader = new FileReader(filePath);
+        return (JsonArray) JsonParser.parseReader(reader);
     }
 
     private void setNpcs(JsonElement npcsJson) {
@@ -58,8 +94,57 @@ class Scenario {
         //TODO: implement initializing Item
     }
 
-    private void setMap(JsonElement mapJson) {
-        //TODO: implement initializing Rooms
+    private int[] getRandomPlacement(int sourceSize, int destSize) {
+        Random rand = new Random();
+        int[] placementArray = new int[sourceSize];
+        for(int i = 0; i < sourceSize; i++) {
+            placementArray[i] = rand.nextInt(destSize);
+        }
+        return placementArray;
+    }
+
+    public void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
+//        Random rand = new Random();
+        JsonArray issJson = mapJson.getAsJsonArray();
+//        int[] itemPlacementNumbers = new int[weapons.size()];
+//        for (int i = 0; i < itemPlacementNumbers.length; i++) {
+//            itemPlacementNumbers[i] = rand.nextInt(issJson.size());
+//        }
+        int[] itemPlacementNumbers = getRandomPlacement(weapons.size(), issJson.size());
+        int[] npcPlacement = getRandomPlacement(npcs.size(), issJson.size());
+        for (int i = 0; i < issJson.size(); i++) {
+            List<Item> items = new ArrayList<>();
+            List<NPC> npcInRoom = new ArrayList<>();
+            for (int j = 0; j < weapons.size(); j++) {
+                if(itemPlacementNumbers[j] == i) {
+                    items.add(weapons.get(j));
+                }
+            }
+            for (int j = 0; j < npcs.size(); j++) {
+                if(npcPlacement[j] == i) {
+                    npcInRoom.add(npcs.get(j));
+                }
+            }
+            Map<String, String> exits = new HashMap<>();
+
+            JsonObject room = issJson.get(i).getAsJsonObject();
+            JsonObject exitsJson = room.get("exits").getAsJsonObject();
+            String[] directions = {"left", "right", "up", "down"};
+            for (String direction: directions) {
+                if(exitsJson.get(direction) != null) {
+                    exits.put(direction, exitsJson.get(direction).toString());
+                }
+            }
+            String roomName = room.get("name").toString();
+            map.put(roomName, new Room(
+                    roomName,
+                    room.get("description").toString(),
+                    items,
+                    npcInRoom,
+                    exits
+            ));
+        }
+
     }
 
     public Map<String, Room> getMap() {
