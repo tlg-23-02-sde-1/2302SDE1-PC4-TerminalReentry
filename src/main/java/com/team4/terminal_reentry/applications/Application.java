@@ -23,23 +23,28 @@ public class Application {
             instructions();
             Map<String, Room> map = setUpMap();
             Room currentRoom = map.get("Harmony");
+
             do {
                 displayScreen(currentRoom);
-                Console.pause(1000000);
                 // controller.display room info
                 // String input = scanner.nextLine()
                 // controller.process(textparser.handleInput(input));
                 //
             }
-            while (true);//textParser.handleInput(scanner.nextLine())[0]);
+            while (!promptForCommand().toLowerCase().equals("quit"));//textParser.handleInput(scanner.nextLine())[0]);
         }
+    }
+
+    private String promptForCommand() {
+        System.out.println("Enter your command: ");
+        return scanner.nextLine();
     }
 
     private void displayScreen(Room currentRoom) {
         Console.clear();
         displayISS();
-        System.out.println("\nYou are currently in module: " + currentRoom.getName());
-        System.out.println("Description of the module: " + currentRoom.getDescription());
+        System.out.println("\nYou are currently in the " + currentRoom.getName() + " module.");
+        System.out.println("Description of the module: You " + currentRoom.getDescription());
         System.out.println("Possible directions you can go:");
         currentRoom.getExits().forEach((key, value) -> System.out.println(key + ": " + value));
     }
