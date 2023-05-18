@@ -18,15 +18,12 @@ class ScenarioTest {
 
     @BeforeAll
     public static void initialize() {
-        game = new Scenario();
-        String weaponsJson = "./src/main/resources/weapons.json";
-        String npcsJson = "./src/main/resources/npcs.json";
         try {
-            weapons = game.getWeapons(game.loadJson(weaponsJson));
-            npcs = game.getNPCs(game.loadJson(npcsJson));
+            game = new Scenario();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Test
@@ -40,12 +37,7 @@ class ScenarioTest {
 
     @Test
     void setMap_shouldInitializeGameMap() {
-        String mapJson = "./src/main/resources/map.json";
-        try {
-            game.setMap(game.loadJson(mapJson), weapons, npcs);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+
         for(Map.Entry<String, Room> entry : game.getMap().entrySet()) {
             Room room = entry.getValue();
             System.out.println(room.toString());

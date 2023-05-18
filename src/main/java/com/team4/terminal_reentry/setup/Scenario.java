@@ -25,7 +25,11 @@ class Scenario {
 
         //read in weapons
         String weaponsJson = "./src/main/resources/weapons.json";
-        List<Weapon> weapons = getWeapons(loadJson(weaponsJson));
+        List<Item> weapons = getWeapons(loadJson(weaponsJson));
+
+        // TODO: load in data items (notes, emails, logs, etc.)
+        String clueItemsJson = "./src/main/resources/clueItems.json";
+        List<Item> clues = getClues(loadJson(clueItemsJson));
 
         //read in npcs
         String npcsJson = "./src/main/resources/npcs.json";
@@ -42,8 +46,11 @@ class Scenario {
 
     }
 
-    public List<Weapon> getWeapons(JsonArray weaponsData) {
-        List<Weapon> weapons = new ArrayList<>();
+    private List<Item> getClues(JsonArray loadJson) {
+    }
+
+    private List<Item> getWeapons(JsonArray weaponsData) {
+        List<Item> weapons = new ArrayList<>();
         Random rand = new Random();
         int murderWeapon = rand.nextInt(weaponsData.size());
         for(int i = 0; i < weaponsData.size(); i++) {
@@ -59,7 +66,7 @@ class Scenario {
         return weapons;
     }
 
-    public List<NPC> getNPCs(JsonArray npcData) {
+    private List<NPC> getNPCs(JsonArray npcData) {
         List<NPC> npcs = new ArrayList<>();
         Random rand = new Random();
         int murderer = rand.nextInt(npcData.size());
@@ -81,7 +88,7 @@ class Scenario {
         return npcs;
     }
 
-    public JsonArray loadJson(String filePath) throws FileNotFoundException {
+    private JsonArray loadJson(String filePath) throws FileNotFoundException {
         Reader reader = new FileReader(filePath);
         return (JsonArray) JsonParser.parseReader(reader);
     }
@@ -103,8 +110,16 @@ class Scenario {
         return placementArray;
     }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     public void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
 //        Random rand = new Random();
+=======
+    private void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
+>>>>>>> Stashed changes
+=======
+    private void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
+>>>>>>> Stashed changes
         JsonArray issJson = mapJson.getAsJsonArray();
 //        int[] itemPlacementNumbers = new int[weapons.size()];
 //        for (int i = 0; i < itemPlacementNumbers.length; i++) {
