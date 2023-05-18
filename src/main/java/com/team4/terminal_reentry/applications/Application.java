@@ -49,7 +49,7 @@ public class Application {
 
     private void displayScreen(Room currentRoom) {
         Console.clear();
-        displayISS();
+        displayISS(currentRoom.getName());
         System.out.println("\nYou are currently in the " + currentRoom.getName() + " module.");
         System.out.println("You " + currentRoom.getDescription());
         System.out.println("Possible directions you can go:");
@@ -64,10 +64,9 @@ public class Application {
         }
     }
 
-    private void displayISS() {
-        Console.clear();
+    private void displayISS(String roomName) {
         try {
-            String path = "src/main/resources/map.txt";
+            String path = "src/main/resources/locations/" + roomName + ".txt";
             // read the entire file as a string
             String contents = Files.readString(Path.of(path));
             System.out.println(contents);
@@ -83,6 +82,7 @@ public class Application {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        assert scenario != null;
         return scenario.getMap();
     }
 
