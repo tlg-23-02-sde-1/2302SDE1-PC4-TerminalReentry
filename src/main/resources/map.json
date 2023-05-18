@@ -41,7 +41,7 @@
   },
   {
     "name": "Tranquility",
-    "description": "look at the treadmil, dreading your next zero-g workout. ",
+    "description": "look at the treadmill, dreading your next zero-g workout. ",
     "exits": {
       "up": "Unity"
     }
@@ -54,7 +54,7 @@
     }
   },
   {
-    "name": "Zarya Cargo",
+    "name": "Zarya",
     "description": "look through each of the storage racks for clues.",
     "exits":{
       "left": "Unity",
@@ -65,20 +65,20 @@
     "name": "Zvezda",
     "description": "wonder if any of the Russian cosmonauts would object to your inspection.",
     "exits": {
-      "left": "Zarya Cargo",
-      "up": "Rassvet Docking",
-      "down": "Nauka Multipurpose Laboratory"
+      "left": "Zarya",
+      "up": "Rassvet",
+      "down": "Nauka"
     }
   },
   {
-    "name": "Nauka Multipurpose Laboratory",
+    "name": "Nauka",
     "description": "keep thinking that you're not quite comfortable with some of the experiments hapening in here.",
     "exits": {
       "up": "Zvezda"
     }
   },
   {
-    "name": "Rassvet Docking",
+    "name": "Rassvet",
     "description": "remember that the next Soyuz crew transport is scheduled to dock right there in just two months.",
     "exits": {"down":"Zvezda"}
   }
