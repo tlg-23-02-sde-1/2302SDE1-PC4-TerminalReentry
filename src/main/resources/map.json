@@ -1,6 +1,6 @@
 [
   {
-    "title": "Harmony",
+    "name": "Harmony",
     "description" : "see the machinery that provides air, electrical power, water, and other essential systems.",
     "exits": {
       "down": "Kibo",
@@ -10,19 +10,19 @@
     }
   },
   {
-    "title": "Kibo",
+    "name": "Kibo",
     "description": "feel the space of the largest ISS module. You look over the two experiment sections and don't see anything out of place at first glance.",
     "exits":
     {"up": "Harmony"}
   },
   {
-    "title": "Columbus",
+    "name": "Columbus",
     "description": "are  careful not to disrupt the Europoean Space Agency experiments.",
     "exits":
     {"down": "Harmony"}
   },
   {
-    "title": "Destiny",
+    "name": "Destiny",
     "description": "check the ISS control systems and make sure that the status indicators are green.",
     "exits": {
       "left": "Harmony",
@@ -30,7 +30,7 @@
     }
   },
   {
-    "title": "Unity",
+    "name": "Unity",
     "description": "wonder how many people have floated through here since it first launched in 1998.",
     "exits": {
       "left": "Destiny",
@@ -40,21 +40,21 @@
     }
   },
   {
-    "title": "Tranquility",
+    "name": "Tranquility",
     "description": "look at the treadmil, dreading your next zero-g workout. ",
     "exits": {
       "up": "Unity"
     }
   },
   {
-    "title": "Quest",
+    "name": "Quest",
     "description": "double check the integrity of each of the airlocks and spacesuits.",
     "exits": {
       "down": "Unity"
     }
   },
   {
-    "title": "Zarya Cargo",
+    "name": "Zarya Cargo",
     "description": "look through each of the storage racks for clues.",
     "exits":{
       "left": "Unity",
@@ -62,7 +62,7 @@
     }
   },
   {
-    "title": "Zvezda",
+    "name": "Zvezda",
     "description": "wonder if any of the Russian cosmonauts would object to your inspection.",
     "exits": {
       "left": "Zarya Cargo",
@@ -71,15 +71,15 @@
     }
   },
   {
-    "title": "Nauka Multipurpose Laboratory",
+    "name": "Nauka Multipurpose Laboratory",
     "description": "keep thinking that you're not quite comfortable with some of the experiments hapening in here.",
     "exits": {
       "up": "Zvezda"
     }
   },
   {
-    "title": "Rassvet Docking",
+    "name": "Rassvet Docking",
     "description": "remember that the next Soyuz crew transport is scheduled to dock right there in just two months.",
-    "exits": "Zvezda"
+    "exits": {"down":"Zvezda"}
   }
 ]

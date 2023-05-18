@@ -1,13 +1,13 @@
 package com.team4.terminal_reentry.items;
 
-class Weapon extends Item{
+public class Weapon extends Item{
 
     private String data;
-    private String secret;
+    private String secretData;
 
-    Weapon(String name, String description, boolean associated, String data, String secret) {
+    public Weapon(String name, String description, boolean associated, String data, String secretData) {
         super(name, description, associated);
-        setSecret(secret);
+        setSecretData(associated ? secretData : "No new information.");
         setData(data);
     }
 
@@ -19,11 +19,11 @@ class Weapon extends Item{
         this.data = data;
     }
 
-    public void setSecret(String secret) {
-        this.secret = secret;
+    public void setSecretData(String secretData) {
+        this.secretData = secretData;
     }
 
     public String getSecret(boolean gotBlackLight) {
-        return secret;
+        return secretData;
     }
 }
