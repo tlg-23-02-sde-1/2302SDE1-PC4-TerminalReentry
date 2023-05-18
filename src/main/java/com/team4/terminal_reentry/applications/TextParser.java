@@ -14,7 +14,6 @@ public class TextParser {
         commands.put("inventory", "Check your inventory.");
         commands.put("quit", "Quit the game.");
         commands.put("help", "show the commands");
-
     }
 
     public void handleInput(String input) {

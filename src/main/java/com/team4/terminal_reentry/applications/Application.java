@@ -1,25 +1,69 @@
 package com.team4.terminal_reentry.applications;
 
 
+import com.team4.terminal_reentry.setup.Room;
+import com.team4.terminal_reentry.setup.Scenario;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Application {
 
     private final Scanner scanner = new Scanner(System.in);
+    private final TextParser textParser = new TextParser();
 
     public void run() {
         titleScreen();
         if(newGame()) {
             basicInfo();
             instructions();
-            //while(textparser doesn't equal quit) {
-            //  Run the game.
-            //}
+            Map<String, Room> map = setUpMap();
+            Room currentRoom = map.get("Harmony");
+            do {
+                displayScreen(currentRoom);
+                Console.pause(1000000);
+                // controller.display room info
+                // String input = scanner.nextLine()
+                // controller.process(textparser.handleInput(input));
+                //
+            }
+            while (true);//textParser.handleInput(scanner.nextLine())[0]);
         }
+    }
 
+    private void displayScreen(Room currentRoom) {
+        Console.clear();
+        displayISS();
+        System.out.println("\nYou are currently in module: " + currentRoom.getName());
+        System.out.println("Description of the module: " + currentRoom.getDescription());
+        System.out.println("Possible directions you can go:");
+        currentRoom.getExits().forEach((key, value) -> System.out.println(key + ": " + value));
+    }
+
+    private void displayISS() {
+        Console.clear();
+        try {
+            String path = "src/main/resources/map.txt";
+            // read the entire file as a string
+            String contents = Files.readString(Path.of(path));
+            System.out.println(contents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Map<String,Room> setUpMap() {
+        Scenario scenario = null;
+        try {
+            scenario = new Scenario();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return scenario.getMap();
     }
 
     private boolean newGame() {
