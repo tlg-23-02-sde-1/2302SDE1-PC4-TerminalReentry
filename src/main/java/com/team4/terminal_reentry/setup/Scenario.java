@@ -42,11 +42,10 @@ public class Scenario {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     private List<Item> getClues(JsonArray loadJson) {
+        return null;
     }
 
     private List<Item> getWeapons(JsonArray weaponsData) {
@@ -110,16 +109,8 @@ public class Scenario {
         return placementArray;
     }
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    public void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
-//        Random rand = new Random();
-=======
-    private void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
->>>>>>> Stashed changes
-=======
-    private void setMap(JsonElement mapJson, List<Weapon> weapons, List<NPC> npcs) {
->>>>>>> Stashed changes
+
+    private void setMap(JsonElement mapJson, List<Item> weapons, List<NPC> npcs) {
         JsonArray issJson = mapJson.getAsJsonArray();
 //        int[] itemPlacementNumbers = new int[weapons.size()];
 //        for (int i = 0; i < itemPlacementNumbers.length; i++) {
