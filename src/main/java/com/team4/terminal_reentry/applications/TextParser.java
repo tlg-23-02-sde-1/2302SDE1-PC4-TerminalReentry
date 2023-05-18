@@ -4,24 +4,64 @@ import java.util.*;
 
 public class TextParser {
     private final Map<String, String> commands;
+    private final Map<String, String> synonyms;
 
     public TextParser() {
         commands= new HashMap<>();
-        commands.put("Look", "Look around"); //prints room.description & room.inventory
+        commands.put("look", "Look at object"); //prints room.description & room.inventory
         commands.put("go", "Move in the specified direction.");
         commands.put("take", "Pick up an item.");
         commands.put("use", "Use an item in your inventory.");
         commands.put("inventory", "Check your inventory.");
         commands.put("quit", "Quit the game.");
         commands.put("help", "show the commands");
+
+        synonyms= new HashMap<>();
+        synonyms.put("move", "go");
+        synonyms.put("grab", "take");
+        synonyms.put("view", "look");
+        synonyms.put("check inventory", "inventory");
+        synonyms.put("examine", "look");
+        synonyms.put("apply", "use");
+        synonyms.put("get", "take");
+        synonyms.put("help!", "help");
+        synonyms.put("help?", "help");
+        synonyms.put("check", "look");
     }
 
-    public void handleInput(String input) {
-        if (input.equalsIgnoreCase("help")) {
-            displayHelp();
+    public String[] handleInput(String input) {
+        input = reformatInput(input);
+        Scanner inputStream = new Scanner(input);
+        String[] result = new String[3];
+        if(!inputStream.hasNext()) {
+            result[0] = "You need to provide input.";
         } else {
-            System.out.println("Invalid command: " + commands);
+            String command = inputStream.next();
+            if (commands.containsKey(command)) {
+                result[1] = command;
+            } else {
+                result[0] = input + " is not valid because " + command + " is not a valid command.";
+            }
         }
+        if(inputStream.hasNext()) {
+            result[2] = inputStream.next();
+        } else {
+            result[2] = null;
+        }
+        if (result[1].equalsIgnoreCase("help")) {
+            displayHelp();
+        }
+        result[0] = result[0] == null ? "200" : result[0];
+        return result;
+    }
+
+    private String reformatInput(String input) {
+        String fixedInput = input.replace(" at ", " ")
+                .replace(" the ", " ").replace(" to "," ").toLowerCase();
+        for(Map.Entry<String, String> entry : synonyms.entrySet()) {
+            fixedInput= fixedInput.replace(entry.getKey(), entry.getValue());
+        }
+        return fixedInput;
     }
 
     private void displayHelp() {
