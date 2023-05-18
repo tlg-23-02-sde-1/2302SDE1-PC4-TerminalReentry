@@ -41,6 +41,11 @@ public class Room {
         return inventory;
     }
 
+    //TODO: implement this
+    public void removeItem(Item item) {
+        inventory.remove(item);
+    }
+
     public void setNpcs(NPC npc) {
         characters.add(npc);
     }
