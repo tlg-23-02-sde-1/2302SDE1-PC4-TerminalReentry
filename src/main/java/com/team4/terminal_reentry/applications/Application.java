@@ -9,10 +9,16 @@ import jdk.jshell.spi.SPIResolutionException;
 import javax.naming.ldap.Control;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Map;
 import java.util.Scanner;
 
@@ -20,7 +26,11 @@ public class Application {
 
     private final Scanner scanner = new Scanner(System.in);
     private final TextParser textParser = new TextParser();
+
+    private String resourcePath = "src/main/resources/";
+
     private List<String> winCondition = new ArrayList<>();
+
 
     public void run() {
         titleScreen();
@@ -69,9 +79,9 @@ public class Application {
 
     private void displayISS(String roomName) {
         try {
-            String path = "src/main/resources/locations/" + roomName + ".txt";
+            String path = "/locations/" + roomName + ".txt";
             // read the entire file as a string
-            String contents = Files.readString(Path.of(path));
+            String contents = readResource(path);
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,9 +123,8 @@ public class Application {
     private void instructions() {
         Console.clear();
         try {
-            String path = "src/main/resources/instructions.txt";
             // read the entire file as a string
-            String contents = Files.readString(Path.of(path));
+            String contents = readResource("/instructions.txt");
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,9 +135,8 @@ public class Application {
     private void basicInfo() {
         Console.clear();
         try {
-            String path = "src/main/resources/basicInfo.txt";
             // read the entire file as a string
-            String contents = Files.readString(Path.of(path));
+            String contents = readResource("/basicInfo.txt");
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -139,14 +147,23 @@ public class Application {
     private void titleScreen() {
         Console.clear();
         try {
-            String path = "src/main/resources/titleScreen.txt";
             // read the entire file as a string
-            String contents = Files.readString(Path.of(path));
-            System.out.println(contents);
+            String titleScreen = readResource("/titleScreen.txt");
+            System.out.println(titleScreen);
         } catch (IOException e) {
             e.printStackTrace();
         }
         enterToContinue();
+    }
+
+
+    private static String readResource(String path) throws IOException {
+        try (InputStream is = Application.class.getResourceAsStream(path)) {
+            if (is == null) {
+                throw new FileNotFoundException("Resource not found: " + path);
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 
     private void enterToContinue() {

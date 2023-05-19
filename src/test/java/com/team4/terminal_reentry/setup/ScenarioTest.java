@@ -26,14 +26,7 @@ class ScenarioTest {
 
     }
 
-    @Test
-    void getWeapons() {
 
-        for (Weapon weapon: weapons
-             ) {
-            System.out.println(weapon.getSecret(true));
-        }
-    }
 
     @Test
     void setMap_shouldInitializeGameMap() {
