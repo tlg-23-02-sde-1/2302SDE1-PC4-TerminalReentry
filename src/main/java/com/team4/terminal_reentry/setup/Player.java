@@ -14,6 +14,10 @@ public class Player {
         this.currentRoom = currentRoom;
     }
 
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
     public void addItem(Item item) {
         this.inventory.add(item);
     }
