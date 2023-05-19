@@ -13,6 +13,8 @@ import com.team4.terminal_reentry.applications.Application;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 
+import javax.swing.*;
+
 public class Scenario {
     private final Map<String, Room> map;
     private final List<String> winCondition;
@@ -20,7 +22,8 @@ public class Scenario {
 
     public Scenario() throws FileNotFoundException {
         this.map = new HashMap<>();
-        this.winCondition = null;
+
+        this.winCondition = new ArrayList<>();
         this.resourcePath = "/";
         try {
             setUp();
@@ -50,6 +53,41 @@ public class Scenario {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        //set win condition
+        setWinCondition(npcs,map,weapons);
+    }
+
+    private void setWinCondition(List<NPC> npcs, Map<String, Room> map, List<Item> weapons) {
+        String name = null;
+
+        for(NPC npc:npcs) {
+            if(npc.isMurderer()) {
+                name = npc.getName();
+            }
+        }
+
+        for(NPC npc:npcs) {
+            if("Yuri Gagarin".equalsIgnoreCase(npc.getName())) {
+                assert name != null;
+                npc.getAnswers().put("otherTestimony", npc.getAnswers()
+                        .get("otherTestimony")
+                        .replace("<name>",name)
+                        .replace("<sceneOfCrime>","Zarya"));
+            }
+        }
+
+        String weaponName = null;
+
+        for(Item weapon: weapons) {
+            if(weapon.isEvidence()) {
+                weaponName = weapon.getName();
+            }
+        }
+
+        winCondition.add(name);       //add murderer
+        winCondition.add(weaponName);  //add murder weapon
+        winCondition.add("Zarya"); //add location
     }
 
     private List<Item> getClues(JsonArray loadJson) {
@@ -100,10 +138,6 @@ public class Scenario {
         return (JsonArray) JsonParser.parseString(contents);
     }
 
-
-    private void setItems(JsonElement itemJson) {
-        //TODO: implement initializing Item
-    }
 
     private int[] getRandomPlacement(int sourceSize, int destSize) {
         Random rand = new Random();
