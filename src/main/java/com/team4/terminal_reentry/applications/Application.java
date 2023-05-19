@@ -11,6 +11,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,6 +20,7 @@ public class Application {
 
     private final Scanner scanner = new Scanner(System.in);
     private final TextParser textParser = new TextParser();
+    private List<String> winCondition = new ArrayList<>();
 
     public void run() {
         titleScreen();
@@ -27,7 +30,7 @@ public class Application {
             Map<String, Room> map = setUpMap();
             Room currentRoom = map.get("Harmony");
             Player player = new Player(currentRoom);
-            Controller controller = new Controller(map,player);
+            Controller controller = new Controller(map,player,winCondition);
             boolean quit = false;
             do {
                 displayScreen(player.getCurrentRoom());
@@ -83,6 +86,7 @@ public class Application {
             e.printStackTrace();
         }
         assert scenario != null;
+        winCondition = scenario.getWinCondition();
         return scenario.getMap();
     }
 

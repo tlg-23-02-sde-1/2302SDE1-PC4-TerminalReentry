@@ -11,13 +11,15 @@ import com.google.gson.*;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 
+import javax.swing.*;
+
 public class Scenario {
     private Map<String, Room> map;
     private List<String> winCondition;
 
     public Scenario() throws FileNotFoundException {
         this.map = new HashMap<>();
-        this.winCondition = null;
+        this.winCondition = new ArrayList<>();
         setUp();
     }
 
@@ -42,6 +44,41 @@ public class Scenario {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        //set win condition
+        setWinCondition(npcs,map,weapons);
+    }
+
+    private void setWinCondition(List<NPC> npcs, Map<String, Room> map, List<Item> weapons) {
+        String name = null;
+
+        for(NPC npc:npcs) {
+            if(npc.isMurderer()) {
+                name = npc.getName();
+            }
+        }
+
+        for(NPC npc:npcs) {
+            if("Yuri Gagarin".equalsIgnoreCase(npc.getName())) {
+                assert name != null;
+                npc.getAnswers().put("otherTestimony", npc.getAnswers()
+                        .get("otherTestimony")
+                        .replace("<name>",name)
+                        .replace("<sceneOfCrime>","Zarya"));
+            }
+        }
+
+        String weaponName = null;
+
+        for(Item weapon: weapons) {
+            if(weapon.isEvidence()) {
+                weaponName = weapon.getName();
+            }
+        }
+
+        winCondition.add(name);       //add murderer
+        winCondition.add(weaponName);  //add murder weapon
+        winCondition.add("Zarya"); //add location
     }
 
     private List<Item> getClues(JsonArray loadJson) {
@@ -92,14 +129,6 @@ public class Scenario {
         return (JsonArray) JsonParser.parseReader(reader);
     }
 
-    private void setNpcs(JsonElement npcsJson) {
-        //TODO: implement initializing NPCs
-    }
-
-    private void setItems(JsonElement itemJson) {
-        //TODO: implement initializing Item
-    }
-
     private int[] getRandomPlacement(int sourceSize, int destSize) {
         Random rand = new Random();
         int[] placementArray = new int[sourceSize];
@@ -112,10 +141,6 @@ public class Scenario {
 
     private void setMap(JsonElement mapJson, List<Item> weapons, List<NPC> npcs) {
         JsonArray issJson = mapJson.getAsJsonArray();
-//        int[] itemPlacementNumbers = new int[weapons.size()];
-//        for (int i = 0; i < itemPlacementNumbers.length; i++) {
-//            itemPlacementNumbers[i] = rand.nextInt(issJson.size());
-//        }
         int[] itemPlacementNumbers = getRandomPlacement(weapons.size(), issJson.size());
         int[] npcPlacement = getRandomPlacement(npcs.size(), issJson.size());
         for (int i = 0; i < issJson.size(); i++) {

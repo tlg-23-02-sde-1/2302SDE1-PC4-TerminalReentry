@@ -16,6 +16,8 @@ public class TextParser {
         commands.put("quit", "Quit the game.");
         commands.put("help", "show the commands");
         commands.put("inspect", "Get more details about something.");
+        commands.put("talk", "talk to characters");
+        commands.put("accuse","accuse the murderer");
 
         synonyms= new HashMap<>();
         synonyms.put("move", "go");
@@ -28,7 +30,7 @@ public class TextParser {
         synonyms.put("help!", "help");
         synonyms.put("help?", "help");
         synonyms.put("check", "look");
-        synonyms.put("examine", "inspect");
+        synonyms.put("observe", "inspect");
     }
 
     public String[] handleInput(String input) {
@@ -56,9 +58,9 @@ public class TextParser {
         if ("help".equalsIgnoreCase(result[1])) {
             displayHelp();
         }
-        //TODO: check cases where errors
+
         result[0] = result[0] == null ? "200" : result[0];
-        System.out.println(Arrays.toString(result));
+
         return result;
     }
 
