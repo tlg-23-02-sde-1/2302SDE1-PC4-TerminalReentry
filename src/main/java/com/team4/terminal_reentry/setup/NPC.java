@@ -11,7 +11,7 @@ public class NPC {
     private String activityAtTimeOfMurder;
     private String opinionOfVictim;
     private String otherTestimony;
-    boolean isMurderer;
+    private boolean isMurderer;
     private Map<String, String> answers;
 
     NPC (String name, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
