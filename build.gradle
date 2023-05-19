@@ -1,6 +1,40 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version "${shadowVersion}"
     id 'application'
+    id 'java'
+    id 'java-library'
+}
+
+
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'TerminalReentry',
+                'Implementation-version': '1.0',
+                'Main-Class': 'com.team4.terminal_reentry.Main'
+    }
+    archiveBaseName.set('terminal-reentry-jar')
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it)}}
+    with jar
+}
+
+tasks.whenTaskAdded { task ->
+    task.ext.srcDir = 'src/main/java'
+}
+
+tasks.register('a')
+
+println "source dir is $a.srcDir"
+
+
+jar {
+    manifest {
+        attributes "Main-Class": "com.team4.terminal_reentry"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 java {

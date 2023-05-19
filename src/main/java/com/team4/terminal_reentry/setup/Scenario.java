@@ -1,6 +1,7 @@
 package com.team4.terminal_reentry.setup;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,35 +9,42 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import com.google.gson.*;
+import com.team4.terminal_reentry.applications.Application;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 
 public class Scenario {
-    private Map<String, Room> map;
-    private List<String> winCondition;
+    private final Map<String, Room> map;
+    private final List<String> winCondition;
+    private final String resourcePath;
 
     public Scenario() throws FileNotFoundException {
         this.map = new HashMap<>();
         this.winCondition = null;
-        setUp();
+        this.resourcePath = "/";
+        try {
+            setUp();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void setUp() throws FileNotFoundException {
+    private void setUp() throws IOException {
 
         //read in weapons
-        String weaponsJson = "./src/main/resources/weapons.json";
+        String weaponsJson = resourcePath + "weapons.json";
         List<Item> weapons = getWeapons(loadJson(weaponsJson));
 
         // TODO: load in data items (notes, emails, logs, etc.)
-        String clueItemsJson = "./src/main/resources/clueItems.json";
+        String clueItemsJson = resourcePath + "clueItems.json";
         List<Item> clues = getClues(loadJson(clueItemsJson));
 
         //read in npcs
-        String npcsJson = "./src/main/resources/npcs.json";
+        String npcsJson = resourcePath + "npcs.json";
         List<NPC> npcs = getNPCs(loadJson(npcsJson));
 
         //load map
-        String mapJson = "./src/main/resources/map.json";
+        String mapJson = resourcePath + "map.json";
         try {
             setMap(loadJson(mapJson), weapons, npcs);
         } catch (FileNotFoundException e) {
@@ -87,14 +95,11 @@ public class Scenario {
         return npcs;
     }
 
-    private JsonArray loadJson(String filePath) throws FileNotFoundException {
-        Reader reader = new FileReader(filePath);
-        return (JsonArray) JsonParser.parseReader(reader);
+    private JsonArray loadJson(String filePath) throws IOException {
+        String contents = readResource(filePath);
+        return (JsonArray) JsonParser.parseString(contents);
     }
 
-    private void setNpcs(JsonElement npcsJson) {
-        //TODO: implement initializing NPCs
-    }
 
     private void setItems(JsonElement itemJson) {
         //TODO: implement initializing Item
@@ -112,10 +117,6 @@ public class Scenario {
 
     private void setMap(JsonElement mapJson, List<Item> weapons, List<NPC> npcs) {
         JsonArray issJson = mapJson.getAsJsonArray();
-//        int[] itemPlacementNumbers = new int[weapons.size()];
-//        for (int i = 0; i < itemPlacementNumbers.length; i++) {
-//            itemPlacementNumbers[i] = rand.nextInt(issJson.size());
-//        }
         int[] itemPlacementNumbers = getRandomPlacement(weapons.size(), issJson.size());
         int[] npcPlacement = getRandomPlacement(npcs.size(), issJson.size());
         for (int i = 0; i < issJson.size(); i++) {
@@ -159,5 +160,14 @@ public class Scenario {
 
     public List<String> getWinCondition() {
         return winCondition;
+    }
+
+    private static String readResource(String path) throws IOException {
+        try (InputStream is = Scenario.class.getResourceAsStream(path)) {
+            if (is == null) {
+                throw new FileNotFoundException("Resource not found: " + path);
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
     }
 }
