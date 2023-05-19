@@ -1,5 +1,6 @@
 package com.team4.terminal_reentry.applications;
 
+import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Room;
 
@@ -28,21 +29,51 @@ class Controller {
                         System.out.println(item.getDescription());
                     }
                 });
+                player.getInventory().forEach((item)->{
+                    if(item.getName().equals(noun)) {
+                        System.out.println(item.getDescription());
+                    }
+                });
+                break;
+            case "inspect":
+                player.getCurrentRoom().getInventory().forEach((item)->{
+                    if(item.getName().equals(noun)) {
+                        System.out.println(item.getData());
+                    }
+                });
+                player.getInventory().forEach((item)->{
+                    if(item.getName().equals(noun)) {
+                        System.out.println(item.getData());
+                    }
+                });
+                break;
             case "go":
+                Room current = player.getCurrentRoom();
                 player.getCurrentRoom().getExits().forEach((key, value) -> {
                     if (key.equals(noun)) {
                         player.setCurrentRoom(map.get(value));
                     }
                 });
+                if (current.equals(player.getCurrentRoom())) {
+                    System.out.println("You can't go that way dummy!");
+                }
                 break;
-            case "get":
-                player.getCurrentRoom().getInventory().forEach((value) -> {
-                    if (value.getName().equals(noun)) {
+            case "take":
+                Item item = null;
+                for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
+                    Item value = player.getCurrentRoom().getInventory().get(i);
+                    if(value.getName().equals(noun)) {
                         player.addItem(value);
-                        player.getCurrentRoom().removeItem(value);
+                        item = value;
                     }
-                });
+                }
+                player.getCurrentRoom().removeItem(item);
+                if (item == null) {
+                    System.out.println("There is no " + noun + " in the room.");
+                }
                 break;
+            case "talk":
+
             case "quit":
                 isQuit = true;
                 break;

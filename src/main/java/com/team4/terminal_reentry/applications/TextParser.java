@@ -15,6 +15,7 @@ public class TextParser {
         commands.put("inventory", "Check your inventory.");
         commands.put("quit", "Quit the game.");
         commands.put("help", "show the commands");
+        commands.put("inspect", "Get more details about something.");
 
         synonyms= new HashMap<>();
         synonyms.put("move", "go");
@@ -27,12 +28,13 @@ public class TextParser {
         synonyms.put("help!", "help");
         synonyms.put("help?", "help");
         synonyms.put("check", "look");
+        synonyms.put("examine", "inspect");
     }
 
     public String[] handleInput(String input) {
         input = reformatInput(input);
         Scanner inputStream = new Scanner(input);
-        String[] result = new String[3];
+        String[] result = {null, "", ""};
         if(!inputStream.hasNext()) {
             result[0] = "You need to provide input.";
         } else {
@@ -43,15 +45,20 @@ public class TextParser {
                 result[0] = input + " is not valid because " + command + " is not a valid command.";
             }
         }
-        if(inputStream.hasNext()) {
-            result[2] = inputStream.next();
-        } else {
-            result[2] = null;
+        while(inputStream.hasNext()) {
+            if (inputStream.hasNext()) {
+                result[2] = result[2] + " " + inputStream.next();
+                result[2] = result[2].trim();
+            } else {
+                result[2] = null;
+            }
         }
-        if (result[1].equalsIgnoreCase("help")) {
+        if ("help".equalsIgnoreCase(result[1])) {
             displayHelp();
         }
+        //TODO: check cases where errors
         result[0] = result[0] == null ? "200" : result[0];
+        System.out.println(Arrays.toString(result));
         return result;
     }
 

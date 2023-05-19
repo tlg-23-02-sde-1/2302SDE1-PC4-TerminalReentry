@@ -2,8 +2,6 @@ package com.team4.terminal_reentry.items;
 
 public class Weapon extends Item{
 
-    private String data;
-    private String secretData;
 
     public Weapon(String name, String description, boolean associated, String data, String secretData) {
         super(name, description, associated);
@@ -20,10 +18,10 @@ public class Weapon extends Item{
     }
 
     public void setSecretData(String secretData) {
-        this.secretData = secretData;
+        this.secret = secretData;
     }
 
     public String getSecret(boolean gotBlackLight) {
-        return secretData;
+        return secret;
     }
 }
