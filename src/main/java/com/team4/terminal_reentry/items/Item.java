@@ -3,12 +3,27 @@ package com.team4.terminal_reentry.items;
 public class Item {
     private String name;
     private String description;
-    private boolean associated;
+    String data;
+    String secret;
 
-    Item(String name, String description, boolean associated) {
+    private boolean isEvidence;
+
+    Item(String name, String description, boolean isEvidence) {
         setName(name);
         setDescription(description);
-        setAssociated(associated);
+        setEvidence(isEvidence);
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public boolean isEvidence() {
+        return isEvidence;
     }
 
     public String getName() {
@@ -27,11 +42,11 @@ public class Item {
         this.description = description;
     }
 
-    public void setAssociated(boolean associated) {
-        this.associated = associated;
+    public void setEvidence(boolean evidence) {
+        this.isEvidence = evidence;
     }
 
-    public boolean getAssociated() {
-        return associated;
+    public boolean getEvidence() {
+        return isEvidence;
     }
 }

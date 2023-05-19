@@ -2,8 +2,6 @@ package com.team4.terminal_reentry.items;
 
 public class Evidence extends Item{
 
-    String data;
-    String secret;
 
     Evidence(String name, String description, boolean associated, String data, String secret) {
         super(name, description, associated);

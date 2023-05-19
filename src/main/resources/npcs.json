@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Yuri Gagarin",
+    "nationality": "Russian",
+    "pronoun": "his",
+    "locationAtTimeOfMurder": "Zarya Cargo",
+    "activityAtTimeOfMurder": "checking inventory",
+    "opinionOfVictim": "was a lazy bastard who cheated at cards. But I would never hurt a fly.",
+    "otherTestimony": "I heard <name> arguing with Dr. Hartman in the <sceneOfCrime> module two days ago. I don't know what it was about."
+  },
+  {
+    "name": "Sergei Korolev",
+    "nationality": "Ukranian",
+    "pronoun": "his",
+    "locationAtTimeOfMurder": "Zvezda",
+    "activityAtTimeOfMurder": "sleeping",
+    "opinionOfVictim": "was anoying. So I just avoided him. I don't waste my time with people who are a waste of time.",
+    "otherTestimony": "I heard that Yuri owes Dr. Hartman some money. I guess that's one debt Yuri won't have to pay."
+  },
+  {
+    "name": "Jean-Pierre Haigneré",
+    "nationality": "French",
+    "pronoun": "his",
+    "locationAtTimeOfMurder": "Unity",
+    "activityAtTimeOfMurder": "studying",
+    "opinionOfVictim": "was a great guy. Dr. Hartman always shared his ice cream with me. It might have been because he hated it. But it was a kindness that I'll remember him for.",
+    "otherTestimony": "Dr. Hartman seemed really anxious and secretive the day before. I don't know what was going on. But every time I saw him on a computer, he locked the screen."
+  },
+  {
+    "name": "Koichi Wakata",
+    "nationality": "Japanese",
+    "pronoun": "his",
+    "locationAtTimeOfMurder": "Unity",
+    "activityAtTimeOfMurder": "reviewing results from the last experiment that I did.",
+    "opinionOfVictim": "seemed very private. He wasn't very open about what he was working on and seemed nervous... like he didn't want anyone to know what he was doing.",
+    "otherTestimony": "Dr. Hartman seemed to value his privacy. So I didn't intrude."
+  },
+  {
+    "name": "Samuel Goldstein",
+    "nationality": "Israeli",
+    "pronoun": "his",
+    "locationAtTimeOfMurder": "Rassvet Docking",
+    "activityAtTimeOfMurder": "Praying. I needed someplace private.",
+    "opinionOfVictim": "really stunk. Nobody smells good up here... But, he's smelling any better now.",
+    "otherTestimony": "I'm a little suspicious of Yuri. I think that he was very resentful toward him."
+  }
+]

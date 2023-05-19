@@ -1,0 +1,32 @@
+[
+  {
+    "title": "knife",
+    "description": "This is the utility knife that everyone uses from time to time.",
+    "data": "It looks like it has been recently sharpened",
+    "secretData": "Although the edge is clean, the black light reveals blood stains on the rest of the blade. None of the food onboard has blood in it."
+  },
+  {
+    "title": "wrench",
+    "description": "This is a space wrench used for both internal repairs and for use on spacewalks.",
+    "data": "This old wrench has seen a lot of wear an tear in its lifetime. There are many scratches on its surface.",
+    "secretData": "The blacklight shows blood in all of the scratches even though the rest of the wrench is clean."
+  },
+  {
+    "title": "keyboard",
+    "description": "This keyboard is malfunctioning and many of the keys don't work.",
+    "data": "It's possible that cosmic rays have fried the electrical components of the keyboard.",
+    "secretData": "Shining the blacklight on the keyboard shows blood hidden under the keys."
+  },
+  {
+    "title": "candlestick",
+    "description": "This is an ornate silver candlestick brought onboard by an eccentric billionaire that toured the station last year.",
+    "data": "The candlestick is very solid and heavy. You wonder how they managed to smuggle something so useless onto the ISS.",
+    "secretData": "The blacklight confirms your suspicion that the victim was struck with a blunt object. The candlestick was recently covered in blood."
+  },
+  {
+    "title": "rubber chicken",
+    "description": "This stowaway has been onboard for decades. It's a little sticky in places and smells funny.",
+    "data": "You don't know why, but something about this rubber chicken makes you uncomfortable.",
+    "secretData": "When you examine the rubber chicken under the black light, you find evidence that it was used to choke the victim."
+  }
+]

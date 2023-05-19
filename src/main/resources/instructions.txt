@@ -1,0 +1,38 @@
+
+
+
+
+
+
+                Gameplay Basics:
+                This is a text based console game. Each command you enter will need to be in the following format:
+                [verb] [noun]
+                For example, go up
+                or get notes
+                Enter help for a list of available commands
+                Enter quit to exit the game
+
+                Objectives and Goals:
+                You will need to gather evidence to find and accuse the killer.
+                Evidence is collected in your inventory.
+                Evidence may have a secret revealed by another item. Inspect evidence items again with a tool to uncover them.
+                You must interact with the crew to find out the motive.
+
+                The evidence you will need is the following:
+                1. Name of the killer
+                2. Murder weapon
+                3. Motive of the murder
+                4. Location of the murder
+
+                Progression and Storyline:
+                Progress through map using the mini map.
+
+                Feedback and Responses:
+                When you interact with an object, move to a new location, or engage in a conversation,
+                the game will provide relevant text-based responses.
+
+                Enjoy the Adventure:
+                Immerse yourself in the game, enjoy the story, and have fun exploring the game world.
+                Let them know that surprises, challenges, and exciting discoveries await them.
+
+

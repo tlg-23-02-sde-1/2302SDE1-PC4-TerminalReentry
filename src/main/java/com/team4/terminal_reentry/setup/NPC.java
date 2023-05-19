@@ -1,13 +1,22 @@
 package com.team4.terminal_reentry.setup;
 
 import java.util.List;
+import java.util.Map;
 
-class NPC {
+public class NPC {
     private String name;
-    boolean isMurderer;
-    private List<String> answers;
+    private String nationality;
+    private String pronoun;
+    private String locationAtTimeOfMurder;
+    private String activityAtTimeOfMurder;
+    private String opinionOfVictim;
+    private String otherTestimony;
+    private boolean isMurderer;
+    private Map<String, String> answers;
 
-    NPC (String name, boolean isMurderer, List<String> answers) {
+    NPC (String name, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
+        this.nationality = nationality;
+        this.pronoun = pronoun;
         setName(name);
         setMurderer(isMurderer);
         setAnswers(answers);
@@ -29,11 +38,11 @@ class NPC {
         isMurderer = murderer;
     }
 
-    public List<String> getAnswers() {
+    public Map<String, String> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<String> answers) {
+    public void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
 }
