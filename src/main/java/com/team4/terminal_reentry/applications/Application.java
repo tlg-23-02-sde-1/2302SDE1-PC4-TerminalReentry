@@ -56,32 +56,48 @@ public class Application {
     }
 
     private String promptForCommand() {
-        System.out.println("Enter your command: ");
+        System.out.print("\n\n\t\tEnter your command: ");
         return scanner.nextLine();
     }
 
     private void displayScreen(Room currentRoom) {
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_RED = "\u001B[31m";
+        String ANSI_GREEN = "\u001B[32m";
+        String ANSI_YELLOW = "\u001B[33m";
+        String ANSI_WHITE = "\u001B[37m";
+
         Console.clear();
+
         displayISS(currentRoom.getName());
-        System.out.println("\nYou are currently in the " + currentRoom.getName() + " module.");
-        System.out.println("You " + currentRoom.getDescription());
-        System.out.println("Possible directions you can go:");
-        currentRoom.getExits().forEach((key, value) -> System.out.println(key + ": " + value));
+        System.out.println("\n\t\tYou are currently in the " + ANSI_GREEN + currentRoom.getName() + ANSI_RESET + " module.");
+        System.out.println("\t\t" + "You " + currentRoom.getDescription());
+        System.out.println("\t\t===================================================================================");
+        System.out.println("\t\tPossible directions you can go:");
+        currentRoom.getExits().forEach((key, value) -> System.out.println("\t\t" + ANSI_WHITE + key + ANSI_RESET + ": "
+                + ANSI_GREEN + value + ANSI_RESET));
         if(!currentRoom.getInventory().isEmpty()) {
-            System.out.println("You see the following items room: ");
-            currentRoom.getInventory().forEach((item)-> System.out.println(item.getName()));
+            System.out.println("\t\tYou see the following items room: ");
+            currentRoom.getInventory().forEach((item)-> System.out.println("\t\t" + ANSI_RED + item.getName() + ANSI_RESET));
         }
         if(!currentRoom.getNpcs().isEmpty()) {
-            System.out.println("You see the following people in the room: ");
-            currentRoom.getNpcs().forEach((npc)-> System.out.println(npc.getName()));
+            System.out.println("\t\tYou see the following people in the room: ");
+            currentRoom.getNpcs().forEach((npc)-> System.out.println("\t\t" + ANSI_YELLOW + npc.getName() + ANSI_RESET));
         }
     }
 
     private void displayISS(String roomName) {
+        String ANSI_GOLD = "\u001B[38;5;220m";
+        String ANSI_RESET = "\u001B[0m";
+
         try {
             String path = "/locations/" + roomName + ".txt";
             // read the entire file as a string
             String contents = readResource(path);
+            contents = "\t\t" + contents;
+            contents = contents.replaceAll("\n","\n\t\t");
+            contents = contents.replace("\u00A7", ANSI_GOLD + "\u00A7" + ANSI_RESET);
+            contents = "\n\n" + contents;
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
