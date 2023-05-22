@@ -8,6 +8,7 @@ import com.team4.terminal_reentry.setup.Room;
 
 import javax.swing.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 class Controller {
     //get, go, look, quit, help
@@ -23,79 +24,93 @@ class Controller {
         this.winCondition = winCondition;
     }
 
+    private void enterToContinue() {
+        System.out.print(INDENT + "Press enter to continue...");
+        // Wait for the user to press enter
+        scanner.nextLine();
+    }
+
     public boolean execute(String[] commands) {
         boolean isQuit = false;
         String verb = commands[1];
         String noun = commands[2];
         switch (verb) {
             case "accuse":
-                System.out.println("List of possible suspects: ");
+                System.out.println(INDENT + "List of possible suspects: ");
                 List<String> accusation = new ArrayList<>();
                 int index = 1;
                 for(Room room: map.values()) {
                     for(NPC npc: room.getNpcs()) {
-                        System.out.println(index + ". " + npc.getName());
+                        System.out.println(INDENT + index + ". " + npc.getName());
                         index++;
                     }
                 }
-                System.out.println("Please type who you want to accuse: ");
+                System.out.print(INDENT + "Please type who you want to accuse: ");
                 accusation.add(scanner.nextLine());
 
                 index = 1;
-                System.out.println("List of possible murder weapons: ");
+                System.out.println(INDENT + "List of possible murder weapons: ");
                 for(Room room: map.values()) {
                     for(Item item: room.getInventory()) {
                         if(item instanceof Weapon) {
-                            System.out.println(index + ". " + item.getName());
+                            System.out.println(INDENT + index + ". " + item.getName());
                             index++;
                         }
                     }
                 }
-                System.out.println("Please type the murder weapon: ");
+                System.out.print(INDENT + "Please type the murder weapon: ");
                 accusation.add(scanner.nextLine());
 
                 index = 1;
-                System.out.println("List of possible locations: ");
+                System.out.println(INDENT + "List of possible locations: ");
                 for(Room room: map.values()) {
-                    System.out.println(index + ". " + room.getName());
+                    System.out.println(INDENT + index + ". " + room.getName());
                     index++;
                 }
-                System.out.println("Please type location of the murder: ");
+                System.out.print(INDENT + "Please type location of the murder: ");
                 accusation.add(scanner.nextLine());
 
-                if(accusation.containsAll(winCondition)) {
-                    System.out.println("You got it right!");
+                if (!accusation.stream().map(String::toLowerCase)
+                        .allMatch(winCondition.stream()
+                                .map(String::toLowerCase)
+                                .collect(Collectors.toList())::contains)) {
+//                    System.out.println(INDENT + "You've entered: " + accusation.toString());
+//                    System.out.println(INDENT + "The win condition was: " + winCondition.toString());
+                    System.out.println(INDENT + "That was wrong! Try again");
+                } else {
+                    System.out.println(INDENT + "You got it right!");
                     isQuit = true;
                 }
-                else {
-                    System.out.println("That was wrong! Try again");
-                }
+                enterToContinue();
                 break;
             case "inventory":
-                System.out.println(player.showInventory());
+                System.out.println(INDENT + player.showInventory());
+                break;
             case "look":
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equals(noun)) {
-                        System.out.println(item.getDescription());
+                        System.out.println(INDENT + item.getDescription());
                     }
                 });
                 player.getInventory().forEach((item)->{
                     if(item.getName().equals(noun)) {
-                        System.out.println(item.getDescription());
+                        System.out.println(INDENT + item.getDescription());
                     }
                 });
+                enterToContinue();
                 break;
             case "inspect":
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equals(noun)) {
-                        System.out.println(item.getData());
+                        System.out.println(INDENT + item.getData());
                     }
                 });
                 player.getInventory().forEach((item)->{
                     if(item.getName().equals(noun)) {
-                        System.out.println(item.getData());
+                        System.out.println(INDENT + item.getData());
                     }
                 });
+                enterToContinue();
                 break;
             case "go":
                 Room current = player.getCurrentRoom();
@@ -105,7 +120,8 @@ class Controller {
                     }
                 });
                 if (current.equals(player.getCurrentRoom())) {
-                    System.out.println("You can't go that way dummy!");
+                    System.out.println(INDENT + "You can't go that way dummy!");
+                    enterToContinue();
                 }
                 break;
             case "take":
@@ -119,7 +135,8 @@ class Controller {
                 }
                 player.getCurrentRoom().removeItem(item);
                 if (item == null) {
-                    System.out.println("There is no " + noun + " in the room.");
+                    System.out.println(INDENT + "There is no " + noun + " in the room.");
+                    enterToContinue();
                 }
                 break;
             case "talk":

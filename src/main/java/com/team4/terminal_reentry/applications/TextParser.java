@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 public class TextParser {
     private final Map<String, String> commands;
     private final List<Map.Entry<String, String>> sortedSynonyms;
+    private final String INDENT = "\t\t";
+    private final Scanner scanner = new Scanner(System.in);
 
     public TextParser() {
         commands= new HashMap<>();
@@ -45,14 +47,16 @@ public class TextParser {
         Scanner inputStream = new Scanner(input);
         String[] result = {null, "", ""};
         if(!inputStream.hasNext()) {
-            result[0] = "You need to provide input.";
+            result[0] = INDENT + "You need to provide input.";
+            enterToContinue();
         } else {
             String command = inputStream.next();
             if (commands.containsKey(command)) {
                 result[1] = command;
             } else {
-                result[0] = input + " is not valid because " + command + " is not a valid command. Type 'help' for more information";
+                result[0] = INDENT + input + " is not valid because " + command + " is not a valid command. Type 'help' for more information";
                 System.out.println(result[0]);
+                enterToContinue();
             }
         }
         while(inputStream.hasNext()) {
@@ -65,6 +69,7 @@ public class TextParser {
         }
         if ("help".equalsIgnoreCase(result[1])) {
             displayHelp();
+            enterToContinue();
         }
 
         result[0] = result[0] == null ? "200" : result[0];
@@ -82,9 +87,15 @@ public class TextParser {
     }
 
     private void displayHelp() {
-        System.out.println("List of commands: ");
+        System.out.println(INDENT + "List of commands: ");
         for (Map.Entry<String,String> entry : commands.entrySet()) {
-            System.out.println(entry.getKey() + " - " + entry.getValue());
+            System.out.println(INDENT + entry.getKey() + " - " + entry.getValue());
         }
+    }
+
+    private void enterToContinue() {
+        System.out.print(INDENT + "Press enter to continue...");
+        // Wait for the user to press enter
+        scanner.nextLine();
     }
 }
