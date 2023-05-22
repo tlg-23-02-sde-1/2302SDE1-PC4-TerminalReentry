@@ -1,10 +1,11 @@
 package com.team4.terminal_reentry.applications;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TextParser {
     private final Map<String, String> commands;
-    private final Map<String, String> synonyms;
+    private final List<Map.Entry<String, String>> sortedSynonyms;
 
     public TextParser() {
         commands= new HashMap<>();
@@ -19,7 +20,7 @@ public class TextParser {
         commands.put("talk", "talk to characters");
         commands.put("accuse","accuse the murderer");
 
-        synonyms= new HashMap<>();
+        Map<String, String> synonyms= new HashMap<>();
         synonyms.put("move", "go");
         synonyms.put("grab", "take");
         synonyms.put("view", "look");
@@ -31,6 +32,12 @@ public class TextParser {
         synonyms.put("help?", "help");
         synonyms.put("check", "look");
         synonyms.put("observe", "inspect");
+        synonyms.put("pick up", "take");
+        synonyms.put("speak", "talk");
+
+        sortedSynonyms = synonyms.entrySet().stream()
+                .sorted(Comparator.comparing((Map.Entry<String,String> e) -> e.getKey().split("\\s+").length).reversed())
+                .collect(Collectors.toList());
     }
 
     public String[] handleInput(String input) {
@@ -44,7 +51,8 @@ public class TextParser {
             if (commands.containsKey(command)) {
                 result[1] = command;
             } else {
-                result[0] = input + " is not valid because " + command + " is not a valid command.";
+                result[0] = input + " is not valid because " + command + " is not a valid command. Type 'help' for more information";
+                System.out.println(result[0]);
             }
         }
         while(inputStream.hasNext()) {
@@ -67,7 +75,7 @@ public class TextParser {
     private String reformatInput(String input) {
         String fixedInput = input.replace(" at ", " ")
                 .replace(" the ", " ").replace(" to "," ").toLowerCase();
-        for(Map.Entry<String, String> entry : synonyms.entrySet()) {
+        for(Map.Entry<String, String> entry : sortedSynonyms) {
             fixedInput= fixedInput.replace(entry.getKey(), entry.getValue());
         }
         return fixedInput;
@@ -79,5 +87,4 @@ public class TextParser {
             System.out.println(entry.getKey() + " - " + entry.getValue());
         }
     }
-
 }
