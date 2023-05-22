@@ -11,6 +11,7 @@ import java.util.*;
 
 class Controller {
     //get, go, look, quit, help
+    public static final String INDENT = "\t\t";
     private final Map<String, Room> map;
     private final Player player;
     private List<String> winCondition = new ArrayList<>();
@@ -122,36 +123,47 @@ class Controller {
                 }
                 break;
             case "talk":
+                String ANSI_RESET = "\u001B[0m";
+                String ANSI_YELLOW = "\u001B[33m";
                 player.getCurrentRoom().getNpcs().forEach((npc)->{
                     if(npc.getName().equalsIgnoreCase(noun) || npc.getFirstName().equalsIgnoreCase(noun) ||
                             npc.getLastName().equalsIgnoreCase(noun)){
-                        System.out.println("What would you like to ask (Enter a number 1-4): ");
-                        System.out.println("1. Where were you?");
-                        System.out.println("2. What were you doing at the time of the victim's murder?");
-                        System.out.println("3. What do you think of the victim?");
-                        System.out.println("4. What else can you share?");
-                        String question = scanner.nextLine();
-                        switch(question) {
-                            case "1":
-                                System.out.println(npc.getName() + " says: " + "\"I was at " +
-                                        npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
-                                break;
-                            case "2":
-                                System.out.println(npc.getName() + " says: " + "\"I was " +
-                                        npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
-                                break;
-                            case "3":
-                                System.out.println(npc.getName() + " says: " + "\"I think he " +
-                                        npc.getAnswers().get("opinionOfVictim") + "\"");
-                                break;
-                            case "4":
-                                System.out.println(npc.getName() + " says: " + "\"" +
-                                        npc.getAnswers().get("otherTestimony") + "\"");
-                                break;
-                            default:
-                                System.out.println("That is not a valid option!");
-                                break;
-                        }
+                        System.out.println(INDENT  + "What would you like to ask " + ANSI_YELLOW + npc.getName()
+                                + ANSI_RESET +" (Enter a number 1-4): ");
+                        System.out.println(INDENT  + "1. Where were you?");
+                        System.out.println(INDENT  + "2. What were you doing at the time of the victim's murder?");
+                        System.out.println(INDENT  + "3. What do you think of the victim?");
+                        System.out.println(INDENT  + "4. What else can you share?");
+                        System.out.println(INDENT  + "5. Stop talking to " + npc.getName());
+                        String question;
+                        do {
+                            System.out.print(INDENT  + "Enter: ");
+                            question = scanner.nextLine();
+                            switch(question) {
+                                case "1":
+                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I was at " +
+                                            npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
+                                    break;
+                                case "2":
+                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I was " +
+                                            npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
+                                    break;
+                                case "3":
+                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I think he " +
+                                            npc.getAnswers().get("opinionOfVictim") + "\"");
+                                    break;
+                                case "4":
+                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"" +
+                                            npc.getAnswers().get("otherTestimony") + "\"");
+                                    break;
+                                case "5":
+                                    question = "quit";
+                                    break;
+                                default:
+                                    System.out.println(INDENT  + "That is not a valid option!");
+                                    break;
+                            }
+                        } while (!question.equals("quit"));
                     }
                 });
                 break;
