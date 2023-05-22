@@ -16,6 +16,10 @@ class Controller {
     private final Map<String, Room> map;
     private final Player player;
     private List<String> winCondition = new ArrayList<>();
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_RED = "\u001B[31M";
+    private static final String ANSI_GREEN = "\u001B[32m";
     Scanner scanner = new Scanner(System.in);
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition) {
@@ -108,6 +112,7 @@ class Controller {
                 player.getInventory().forEach((item)->{
                     if(item.getName().equals(noun)) {
                         System.out.println(INDENT + item.getData());
+                        player.inspectedItem(item.getName(), item.getData());
                     }
                 });
                 enterToContinue();
@@ -117,6 +122,7 @@ class Controller {
                 player.getCurrentRoom().getExits().forEach((key, value) -> {
                     if (key.equals(noun)) {
                         player.setCurrentRoom(map.get(value));
+                        player.visitRoom(map.get(value).getName());
                     }
                 });
                 if (current.equals(player.getCurrentRoom())) {
@@ -140,11 +146,11 @@ class Controller {
                 }
                 break;
             case "talk":
-                String ANSI_RESET = "\u001B[0m";
-                String ANSI_YELLOW = "\u001B[33m";
+
                 player.getCurrentRoom().getNpcs().forEach((npc)->{
                     if(npc.getName().equalsIgnoreCase(noun) || npc.getFirstName().equalsIgnoreCase(noun) ||
                             npc.getLastName().equalsIgnoreCase(noun)){
+                        player.metNpc(npc.getName());
                         System.out.println(INDENT  + "What would you like to ask " + ANSI_YELLOW + npc.getName()
                                 + ANSI_RESET +" (Enter a number 1-4): ");
                         System.out.println(INDENT  + "1. Where were you?");
@@ -186,6 +192,22 @@ class Controller {
                 break;
             case "quit":
                 isQuit = true;
+                break;
+            case "logbook":
+                String ANSI_RED = "\u001B[31m";
+                System.out.println(INDENT + "NPCs Met:");
+                for(String npc : player.getNpcMet()) {
+                    System.out.println(INDENT + ANSI_YELLOW + npc + ANSI_RESET);
+                }
+                System.out.println(INDENT + "Items inspected with its data: ");
+                for(Map.Entry<String,String> entry : player.getInspectedItem().entrySet()) {
+                    System.out.println(INDENT + "Item: " + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
+                }
+                System.out.println(INDENT + "Rooms visited: ");
+                for(String room : player.getRoomsVisited()) {
+                    System.out.println(INDENT + ANSI_GREEN + room + ANSI_RESET);
+                }
+                enterToContinue();
                 break;
         }
         return isQuit;
