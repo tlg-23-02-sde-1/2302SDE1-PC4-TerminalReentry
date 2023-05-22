@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NPC {
-    private String name;
+    private String firstName;
+    private String lastName;
     private String nationality;
     private String pronoun;
     private String locationAtTimeOfMurder;
@@ -14,20 +15,29 @@ public class NPC {
     private boolean isMurderer;
     private Map<String, String> answers;
 
-    NPC (String name, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
+    NPC (String firstName, String lastName, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
         this.nationality = nationality;
         this.pronoun = pronoun;
-        setName(name);
+        setName(firstName, lastName);
         setMurderer(isMurderer);
         setAnswers(answers);
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
+
+    public void setName(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public boolean isMurderer() {
