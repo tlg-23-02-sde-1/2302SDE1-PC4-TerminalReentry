@@ -188,7 +188,7 @@ public class Application {
     }
 
     private void enterToContinue() {
-        System.out.println("                Press enter to continue...");
+        System.out.print(INDENT + "Press enter to continue...");
         // Wait for the user to press enter
         scanner.nextLine();
     }
