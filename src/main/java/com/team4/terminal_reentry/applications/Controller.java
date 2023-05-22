@@ -92,12 +92,12 @@ class Controller {
                 break;
             case "look":
                 player.getCurrentRoom().getInventory().forEach((item)->{
-                    if(item.getName().equals(noun)) {
+                    if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
                 player.getInventory().forEach((item)->{
-                    if(item.getName().equals(noun)) {
+                    if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
@@ -105,12 +105,12 @@ class Controller {
                 break;
             case "inspect":
                 player.getCurrentRoom().getInventory().forEach((item)->{
-                    if(item.getName().equals(noun)) {
+                    if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getData());
                     }
                 });
                 player.getInventory().forEach((item)->{
-                    if(item.getName().equals(noun)) {
+                    if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getData());
                         player.inspectedItem(item.getName(), item.getData());
                     }
@@ -134,7 +134,7 @@ class Controller {
                 Item item = null;
                 for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
                     Item value = player.getCurrentRoom().getInventory().get(i);
-                    if(value.getName().equals(noun)) {
+                    if(value.getName().equalsIgnoreCase(noun)) {
                         player.addItem(value);
                         item = value;
                     }

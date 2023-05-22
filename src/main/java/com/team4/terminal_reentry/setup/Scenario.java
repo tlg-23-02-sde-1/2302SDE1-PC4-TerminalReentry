@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.*;
 import com.team4.terminal_reentry.applications.Application;
@@ -51,10 +53,12 @@ public class Scenario {
         String clueItemsJson = resourcePath + "clueItems.json";
         List<Item> clues = getClues(loadJson(clueItemsJson));
 
+        List<Item> weaponsAndClues = Stream.concat(weapons.stream(), clues.stream()).collect(Collectors.toList());
+
         //load map
         String mapJson = resourcePath + "map.json";
         try {
-            setMap(loadJson(mapJson), weapons, npcs);
+            setMap(loadJson(mapJson), weaponsAndClues, npcs);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +102,7 @@ public class Scenario {
                     clue.get("secretData").toString().replace("\"", "").replace("<murderer>", murdererFirstName)
             ));
         }
-        return null;
+        return clues;
     }
 
     private List<Item> getWeapons(JsonArray weaponsData) {
@@ -162,18 +166,18 @@ public class Scenario {
     }
 
 
-    private void setMap(JsonElement mapJson, List<Item> weapons, List<NPC> npcs) {
+    private void setMap(JsonElement mapJson, List<Item> weaponsAndClues, List<NPC> npcs) {
         JsonArray issJson = mapJson.getAsJsonArray();
         Random rand = new Random();
         int crimeScene = rand.nextInt(issJson.size());
-        int[] itemPlacementNumbers = getRandomPlacement(weapons.size(), issJson.size());
+        int[] itemPlacementNumbers = getRandomPlacement(weaponsAndClues.size(), issJson.size());
         int[] npcPlacement = getRandomPlacement(npcs.size(), issJson.size());
         for (int i = 0; i < issJson.size(); i++) {
             List<Item> items = new ArrayList<>();
             List<NPC> npcInRoom = new ArrayList<>();
-            for (int j = 0; j < weapons.size(); j++) {
+            for (int j = 0; j < weaponsAndClues.size(); j++) {
                 if(itemPlacementNumbers[j] == i) {
-                    items.add(weapons.get(j));
+                    items.add(weaponsAndClues.get(j));
                 }
             }
             for (int j = 0; j < npcs.size(); j++) {
