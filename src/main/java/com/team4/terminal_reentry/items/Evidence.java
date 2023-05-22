@@ -3,10 +3,10 @@ package com.team4.terminal_reentry.items;
 public class Evidence extends Item{
 
 
-    Evidence(String name, String description, boolean associated, String data, String secret) {
+    public Evidence(String name, String description, boolean associated, String data, String secret) {
         super(name, description, associated);
         setData(data);
-        setSecret(secret);
+        setSecret(associated ? secret : "There is nothing out of the ordinary in this" + name + ".");
     }
 
     public String getData() {
