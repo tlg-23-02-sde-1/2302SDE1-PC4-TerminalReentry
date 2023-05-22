@@ -49,7 +49,7 @@ public class Application {
                 if(response[0].equals("200")) {
                     quit = controller.execute(response);
                 }
-                enterToContinue();
+//                enterToContinue();
             }
             while (!quit);//textParser.handleInput(scanner.nextLine())[0]);
         }

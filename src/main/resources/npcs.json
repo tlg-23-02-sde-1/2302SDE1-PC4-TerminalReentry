@@ -1,6 +1,7 @@
 [
   {
-    "name": "Yuri Gagarin",
+    "firstName": "Yuri",
+    "lastName": "Gagarin",
     "nationality": "Russian",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Zarya Cargo",
@@ -9,7 +10,8 @@
     "otherTestimony": "I heard <name> arguing with Dr. Hartman in the <sceneOfCrime> module two days ago. I don't know what it was about."
   },
   {
-    "name": "Sergei Korolev",
+    "firstName": "Sergei",
+    "lastName": "Korolev",
     "nationality": "Ukranian",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Zvezda",
@@ -18,7 +20,8 @@
     "otherTestimony": "I heard that Yuri owes Dr. Hartman some money. I guess that's one debt Yuri won't have to pay."
   },
   {
-    "name": "Jean-Pierre Haigneré",
+    "firstName": "Jean-Pierre",
+    "lastName": "Haigneré",
     "nationality": "French",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Unity",
@@ -27,7 +30,8 @@
     "otherTestimony": "Dr. Hartman seemed really anxious and secretive the day before. I don't know what was going on. But every time I saw him on a computer, he locked the screen."
   },
   {
-    "name": "Koichi Wakata",
+    "firstName": "Koichi",
+    "lastName": "Wakata",
     "nationality": "Japanese",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Unity",
@@ -36,7 +40,8 @@
     "otherTestimony": "Dr. Hartman seemed to value his privacy. So I didn't intrude."
   },
   {
-    "name": "Samuel Goldstein",
+    "firstName": "Samuel",
+    "lastName": "Goldstein",
     "nationality": "Israeli",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Rassvet Docking",

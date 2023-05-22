@@ -123,7 +123,8 @@ public class Scenario {
                 dialogue.put(answer, npc.get(answer).toString().replace("\"",""));
             }
             npcs.add(new NPC(
-                    npc.get("name").toString().replace("\"",""),
+                    npc.get("firstName").toString().replace("\"",""),
+                    npc.get("lastName").toString().replace("\"", ""),
                     npc.get("nationality").toString().replace("\"",""),
                     npc.get("pronoun").toString().replace("\"",""),
                     i == murderer,

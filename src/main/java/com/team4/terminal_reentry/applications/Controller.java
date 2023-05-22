@@ -123,7 +123,8 @@ class Controller {
                 break;
             case "talk":
                 player.getCurrentRoom().getNpcs().forEach((npc)->{
-                    if(npc.getName().equalsIgnoreCase(noun)){
+                    if(npc.getName().equalsIgnoreCase(noun) || npc.getFirstName().equalsIgnoreCase(noun) ||
+                            npc.getLastName().equalsIgnoreCase(noun)){
                         System.out.println("What would you like to ask (Enter a number 1-4): ");
                         System.out.println("1. Where were you?");
                         System.out.println("2. What were you doing at the time of the victim's murder?");
