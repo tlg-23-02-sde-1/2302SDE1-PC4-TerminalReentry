@@ -43,7 +43,7 @@ public class Application {
             Controller controller = new Controller(map,player,winCondition);
             boolean quit = false;
             do {
-                displayScreen(player.getCurrentRoom());
+                displayScreen(player.getCurrentRoom(),player);
                 String command = promptForCommand();
                 String[] response = textParser.handleInput(command);
                 if(response[0].equals("200")) {
@@ -60,7 +60,7 @@ public class Application {
         return scanner.nextLine();
     }
 
-    private void displayScreen(Room currentRoom) {
+    private void displayScreen(Room currentRoom, Player player) {
         String ANSI_RESET = "\u001B[0m";
         String ANSI_RED = "\u001B[31m";
         String ANSI_GREEN = "\u001B[32m";
@@ -83,6 +83,10 @@ public class Application {
         if(!currentRoom.getNpcs().isEmpty()) {
             System.out.println("\t\tYou see the following people in the room: ");
             currentRoom.getNpcs().forEach((npc)-> System.out.println("\t\t" + ANSI_YELLOW + npc.getName() + ANSI_RESET));
+        }
+        if(!player.getInventory().isEmpty()) {
+            System.out.println("\t\tYour inventory: ");
+            player.getInventory().forEach((item)-> System.out.println("\t\t" + ANSI_RED + item.getName() + ANSI_RESET));
         }
     }
 
