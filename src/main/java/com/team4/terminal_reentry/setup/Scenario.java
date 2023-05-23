@@ -75,7 +75,7 @@ public class Scenario {
             String scapegoat = "Frank";
             if(npcs.get(i).isMurderer()){
                 killer = true;
-                scapegoat = npcs.get(npcs.size() - i).getName();
+                scapegoat = npcs.get(npcs.size() - i - 1).getName();
             }
             npcs.get(i).getAnswers().put("otherTestimony", npcs.get(i).getAnswers()
                     .get("otherTestimony")

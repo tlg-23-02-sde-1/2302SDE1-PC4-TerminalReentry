@@ -41,10 +41,11 @@ public class Application {
 
 
     public void run() {
-        musicThread = new Thread(() -> {
+//        musicThread = new Thread(() -> {
             midiPlayer.playMusic();
-        });
-        musicThread.start();
+//        });
+//        musicThread.start();
+
 
         titleScreen();
         if(newGame()) {
@@ -53,7 +54,7 @@ public class Application {
             Map<String, Room> map = setUpMap();
             Room currentRoom = map.get("Harmony");
             Player player = new Player(currentRoom);
-            Controller controller = new Controller(map,player,winCondition);
+            Controller controller = new Controller(map,player,winCondition, midiPlayer);
             boolean quit = false;
             do {
                 displayScreen(player.getCurrentRoom(),player);

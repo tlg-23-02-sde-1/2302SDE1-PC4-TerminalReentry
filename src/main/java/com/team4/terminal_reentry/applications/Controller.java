@@ -17,11 +17,13 @@ class Controller {
     private final Player player;
     private List<String> winCondition = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
+    private MidiPlayer midiPlayer;
 
-    public Controller(Map<String, Room> map, Player player, List<String> winCondition) {
+    public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
         this.player = player;
         this.winCondition = winCondition;
+        this.midiPlayer = midiPlayer;
     }
 
     private void enterToContinue() {
@@ -184,8 +186,17 @@ class Controller {
                     }
                 });
                 break;
+            case "music":
+                if("off".equalsIgnoreCase(noun)){
+                    midiPlayer.stop();
+                }
+                if("on".equalsIgnoreCase(noun)) {
+                    midiPlayer.playMusic();
+                }
+                break;
             case "quit":
                 isQuit = true;
+                midiPlayer.stop();
                 break;
         }
         return isQuit;

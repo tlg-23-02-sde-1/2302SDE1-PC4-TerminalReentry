@@ -21,6 +21,7 @@ public class TextParser {
         commands.put("inspect", "Get more details about something.");
         commands.put("talk", "talk to characters");
         commands.put("accuse","accuse the murderer");
+        commands.put("music", "control the music: off, on, up, down");
 
         Map<String, String> synonyms= new HashMap<>();
         synonyms.put("move", "go");
