@@ -7,9 +7,7 @@ import java.io.IOException;
 class MidiPlayer {
     private byte[] midiBytes = null;
     private Sequencer sequencer;
-    private MidiChannel midiChannel;
-    private Transmitter transmitter;
-    private Receiver receiver;
+    private Sequence sequence;
     private int volume = 50;
 
     public MidiPlayer(byte[] midiBytes) {
@@ -34,7 +32,6 @@ class MidiPlayer {
         }
 
         // Create a sequence from the MIDI bytes
-        Sequence sequence = null;
         try {
             sequence = MidiSystem.getSequence(new ByteArrayInputStream(midiBytes));
             // Set the sequence in the sequencer
@@ -83,12 +80,45 @@ class MidiPlayer {
     }
 
     public void volumeUp() {
-        volume = volume > 108 ? volume + 20 : 127;
-        midiChannel.controlChange(7, volume);
+
     }
 
     public void volumeDown() {
-        volume = volume >= 20 ? volume - 20 : 0;
-        midiChannel.controlChange(7, volume);
+        // Retrieve the MIDI tracks from the sequence
+        Track[] tracks = sequence.getTracks();
+
+        // Adjust the volume for each MIDI event in each track
+        for (Track track : tracks) {
+            for (int i = 0; i < track.size(); i++) {
+                MidiEvent event = track.get(i);
+                MidiMessage message = event.getMessage();
+
+                if (message instanceof ShortMessage) {
+                    ShortMessage shortMessage = (ShortMessage) message;
+                    int command = shortMessage.getCommand();
+
+                    // Adjust the volume by modifying the velocity value
+                    if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF) {
+                        int originalVelocity = shortMessage.getData2();
+                        int modifiedVelocity = (int) (originalVelocity * 0.5);
+                                // e.g., originalVelocity * volumeFactor
+
+                        try {
+                            shortMessage.setMessage(command, shortMessage.getChannel(),
+                                    shortMessage.getData1(), modifiedVelocity);
+                        } catch (InvalidMidiDataException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        }
+        try {
+            sequencer.setSequence(sequence);
+        } catch (InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        }
+        sequencer.stop();
+        sequencer.start();
     }
 }
