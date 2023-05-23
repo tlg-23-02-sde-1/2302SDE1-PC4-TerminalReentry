@@ -18,6 +18,7 @@ class Controller {
     private List<String> winCondition = new ArrayList<>();
     Scanner scanner = new Scanner(System.in);
     private MidiPlayer midiPlayer;
+    private SoundFx soundFx = new SoundFx();
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
@@ -86,9 +87,11 @@ class Controller {
                 enterToContinue();
                 break;
             case "inventory":
+                soundFx.getItem1();
                 System.out.println(INDENT + player.showInventory());
                 break;
             case "look":
+                soundFx.getItem2();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
@@ -102,6 +105,7 @@ class Controller {
                 enterToContinue();
                 break;
             case "inspect":
+                soundFx.playTest();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getData());
@@ -131,6 +135,7 @@ class Controller {
                 for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
                     Item value = player.getCurrentRoom().getInventory().get(i);
                     if(value.getName().equalsIgnoreCase(noun)) {
+                        soundFx.pickupItem();
                         player.addItem(value);
                         item = value;
                     }
@@ -205,6 +210,7 @@ class Controller {
             case "quit":
                 isQuit = true;
                 midiPlayer.stop();
+                soundFx.killAll();
                 break;
         }
         return isQuit;
