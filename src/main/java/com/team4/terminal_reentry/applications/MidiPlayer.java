@@ -7,6 +7,11 @@ import java.io.IOException;
 class MidiPlayer {
     private byte[] midiBytes = null;
     private Sequencer sequencer;
+    private MidiChannel midiChannel;
+    private Synthesizer synthesizer;
+    private Transmitter transmitter;
+    private Receiver receiver;
+    private int volume = 50;
 
     public MidiPlayer(byte[] midiBytes) {
         this.midiBytes = midiBytes;
@@ -22,11 +27,10 @@ class MidiPlayer {
         Thread musicThread = new Thread(() -> {
             // Create a sequencer and open it
             try {
+                synthesizer = MidiSystem.getSynthesizer();
                 sequencer = MidiSystem.getSequencer();
-            } catch (MidiUnavailableException e) {
-                throw new RuntimeException(e);
-            }
-            try {
+
+                synthesizer.open();
                 sequencer.open();
             } catch (MidiUnavailableException e) {
                 throw new RuntimeException(e);
@@ -36,16 +40,12 @@ class MidiPlayer {
             Sequence sequence = null;
             try {
                 sequence = MidiSystem.getSequence(new ByteArrayInputStream(midiBytes));
-            } catch (InvalidMidiDataException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            // Set the sequence in the sequencer
-            try {
+                transmitter = sequencer.getTransmitter();
+                receiver = synthesizer.getReceiver();
+                transmitter.setReceiver(receiver);
+                // Set the sequence in the sequencer
                 sequencer.setSequence(sequence);
-            } catch (InvalidMidiDataException e) {
+            } catch (InvalidMidiDataException | MidiUnavailableException | IOException e) {
                 throw new RuntimeException(e);
             }
 
@@ -55,8 +55,10 @@ class MidiPlayer {
             // Start playing the MIDI music
             sequencer.start();
 
+            midiChannel = synthesizer.getChannels()[0];
+
             // Wait until the sequencer finishes playing
-            while (sequencer.isRunning()) {
+            while (sequencer != null && sequencer.isRunning()) {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -66,10 +68,6 @@ class MidiPlayer {
         });
 
         musicThread.start();
-
-        // Close the sequencer
-//        sequencer.stop();
-//        sequencer.close();
     }
 
     public void stop() {
@@ -77,6 +75,38 @@ class MidiPlayer {
             sequencer.stop();
             sequencer.close();
             sequencer = null;
+            synthesizer.close();
         }
+    }
+
+    public void mute() {
+        sequencer.stop();
+//        for (MidiChannel channel : synthesizer.getChannels()) {
+//            channel.allSoundOff();
+//            channel.setMute(true);
+////            for (int i = 0; i < 128; i++) {
+////                channel.controlChange(i, 0);
+////            }
+//        }
+
+//        midiChannel.allSoundOff();
+    }
+
+    public void start() {
+        sequencer.start();
+    }
+
+    public void volumeUp() {
+        volume = volume > 108 ? volume + 20 : 127;
+        System.out.println(midiChannel.getController(7));
+        midiChannel.controlChange(7, volume);
+        System.out.println(midiChannel.getController(7));
+    }
+
+    public void volumeDown() {
+        volume = volume >= 20 ? volume - 20 : 0;
+        System.out.println(midiChannel.getController(7));
+        midiChannel.controlChange(7, volume);
+        System.out.println(midiChannel.getController(7));
     }
 }

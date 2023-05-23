@@ -188,10 +188,18 @@ class Controller {
                 break;
             case "music":
                 if("off".equalsIgnoreCase(noun)){
-                    midiPlayer.stop();
+                    midiPlayer.mute();
                 }
-                if("on".equalsIgnoreCase(noun)) {
-                    midiPlayer.playMusic();
+                else if("on".equalsIgnoreCase(noun)) {
+                    midiPlayer.start();
+                }
+                else if("up".equalsIgnoreCase(noun)) {
+                    midiPlayer.volumeUp();
+                }
+                else if("down".equalsIgnoreCase(noun)) {
+                    midiPlayer.volumeDown();
+                } else if("mute".equalsIgnoreCase(noun)) {
+                    midiPlayer.mute();
                 }
                 break;
             case "quit":
