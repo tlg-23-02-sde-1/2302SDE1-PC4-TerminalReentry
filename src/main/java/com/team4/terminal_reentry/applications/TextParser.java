@@ -23,6 +23,7 @@ public class TextParser {
         commands.put("accuse","accuse the murderer");
         commands.put("music", "control the music: off, on, up, down");
         commands.put("logbook","show the logs of your activities");
+        commands.put("save", "save a game with its unique name");
 
 
         Map<String, String> synonyms= new HashMap<>();

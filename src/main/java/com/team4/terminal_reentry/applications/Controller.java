@@ -1,5 +1,6 @@
 package com.team4.terminal_reentry.applications;
 
+import com.google.gson.Gson;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 import com.team4.terminal_reentry.setup.NPC;
@@ -7,6 +8,8 @@ import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Room;
 
 import javax.swing.*;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,6 @@ class Controller {
         this.winCondition = winCondition;
         this.midiPlayer = midiPlayer;
     }
-
     private void enterToContinue() {
         System.out.print(INDENT + "Press enter to continue...");
         // Wait for the user to press enter
@@ -212,6 +214,7 @@ class Controller {
                 } else if("mute".equalsIgnoreCase(noun)) {
                     midiPlayer.mute();
                 }
+                enterToContinue();
                 break;
             case "quit":
                 isQuit = true;
@@ -234,7 +237,48 @@ class Controller {
                 }
                 enterToContinue();
                 break;
+            case "save":
+                saveGame();
+                enterToContinue();
+                break;
         }
         return isQuit;
+    }
+    private void saveGame() {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println(INDENT + "Please enter a name for your save file");
+            String userInput = scanner.nextLine();
+
+            String saveFileName;
+            if(userInput.isEmpty()) {
+                saveFileName = "saved1.json";
+            } else {
+                saveFileName = userInput + ".json";
+            }
+
+            Map<String, Object> gameData = new HashMap<>();
+
+            gameData.put("currentLocation", player.getCurrentRoom());
+            gameData.put("inventory", player.getInventory());
+            gameData.put("npcMet", player.getNpcMet());
+            gameData.put("inspectedItem", player.getInspectedItem());
+            gameData.put("roomsVisited", player.getRoomsVisited());
+            gameData.put("map",map);
+
+            Gson gson = new Gson();
+            String jsonData = gson.toJson(gameData);
+
+            FileWriter writer = new FileWriter(saveFileName);
+            writer.write(jsonData);
+            writer.close();
+
+            System.out.println(INDENT + "Game saved successfully");
+            enterToContinue();
+        } catch (IOException e) {
+            System.out.println(INDENT + "Failed to save the game");
+
+        }
+
     }
 }
