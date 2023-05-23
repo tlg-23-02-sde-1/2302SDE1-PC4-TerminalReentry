@@ -21,11 +21,13 @@ class Controller {
     private static final String ANSI_RED = "\u001B[31M";
     private static final String ANSI_GREEN = "\u001B[32m";
     Scanner scanner = new Scanner(System.in);
+    private MidiPlayer midiPlayer;
 
-    public Controller(Map<String, Room> map, Player player, List<String> winCondition) {
+    public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
         this.player = player;
         this.winCondition = winCondition;
+        this.midiPlayer = midiPlayer;
     }
 
     private void enterToContinue() {
@@ -190,8 +192,17 @@ class Controller {
                     }
                 });
                 break;
+            case "music":
+                if("off".equalsIgnoreCase(noun)){
+                    midiPlayer.stop();
+                }
+                if("on".equalsIgnoreCase(noun)) {
+                    midiPlayer.playMusic();
+                }
+                break;
             case "quit":
                 isQuit = true;
+                midiPlayer.stop();
                 break;
             case "logbook":
                 String ANSI_RED = "\u001B[31m";
