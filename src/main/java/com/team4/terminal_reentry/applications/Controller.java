@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 class Controller {
-    //get, go, look, quit, help
     public static final String INDENT = "\t\t";
     private final Map<String, Room> map;
     private final Player player;
@@ -21,8 +20,9 @@ class Controller {
     private static final String ANSI_RED = "\u001B[31M";
     private static final String ANSI_GREEN = "\u001B[32m";
     Scanner scanner = new Scanner(System.in);
-    private MidiPlayer midiPlayer;
-    private SoundFx soundFx = new SoundFx();
+    private final MidiPlayer midiPlayer;
+    //TODO: fix soundFX
+    private final SoundFx soundFx = new SoundFx();
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
@@ -81,8 +81,6 @@ class Controller {
                         .allMatch(winCondition.stream()
                                 .map(String::toLowerCase)
                                 .collect(Collectors.toList())::contains)) {
-//                    System.out.println(INDENT + "You've entered: " + accusation.toString());
-//                    System.out.println(INDENT + "The win condition was: " + winCondition.toString());
                     System.out.println(INDENT + "That was wrong! Try again");
                 } else {
                     System.out.println(INDENT + "You got it right!");
@@ -91,11 +89,10 @@ class Controller {
                 enterToContinue();
                 break;
             case "inventory":
-                soundFx.getItem1();
                 System.out.println(INDENT + player.showInventory());
+                soundFx.getItem1();
                 break;
             case "look":
-                soundFx.getItem2();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
@@ -106,10 +103,10 @@ class Controller {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
+                soundFx.getItem2();
                 enterToContinue();
                 break;
             case "inspect":
-                soundFx.playTest();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getData());
@@ -121,6 +118,7 @@ class Controller {
                         player.inspectedItem(item.getName(), item.getData());
                     }
                 });
+                soundFx.playTest();
                 enterToContinue();
                 break;
             case "go":
@@ -141,9 +139,9 @@ class Controller {
                 for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
                     Item value = player.getCurrentRoom().getInventory().get(i);
                     if(value.getName().equalsIgnoreCase(noun)) {
-                        soundFx.pickupItem();
                         player.addItem(value);
                         item = value;
+                        soundFx.pickupItem();
                     }
                 }
                 player.getCurrentRoom().removeItem(item);
@@ -202,7 +200,7 @@ class Controller {
                     midiPlayer.mute();
                 }
                 else if("on".equalsIgnoreCase(noun)) {
-                    midiPlayer.start();
+                    midiPlayer.playMusicThread(1);
                 }
                 else if("up".equalsIgnoreCase(noun)) {
                     midiPlayer.volumeUp();

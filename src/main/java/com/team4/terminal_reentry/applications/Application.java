@@ -41,7 +41,7 @@ public class Application {
 
 
     public void run() {
-            midiPlayer.playMusic(1);
+            midiPlayer.playMusicThread(1);
 
 
         titleScreen();
