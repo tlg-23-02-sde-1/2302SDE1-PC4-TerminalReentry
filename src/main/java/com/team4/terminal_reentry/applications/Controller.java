@@ -22,6 +22,7 @@ class Controller {
     private static final String ANSI_GREEN = "\u001B[32m";
     Scanner scanner = new Scanner(System.in);
     private MidiPlayer midiPlayer;
+    private SoundFx soundFx = new SoundFx();
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
@@ -90,9 +91,11 @@ class Controller {
                 enterToContinue();
                 break;
             case "inventory":
+                soundFx.getItem1();
                 System.out.println(INDENT + player.showInventory());
                 break;
             case "look":
+                soundFx.getItem2();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
@@ -106,6 +109,7 @@ class Controller {
                 enterToContinue();
                 break;
             case "inspect":
+                soundFx.playTest();
                 player.getCurrentRoom().getInventory().forEach((item)->{
                     if(item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getData());
@@ -137,6 +141,7 @@ class Controller {
                 for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
                     Item value = player.getCurrentRoom().getInventory().get(i);
                     if(value.getName().equalsIgnoreCase(noun)) {
+                        soundFx.pickupItem();
                         player.addItem(value);
                         item = value;
                     }
@@ -194,15 +199,24 @@ class Controller {
                 break;
             case "music":
                 if("off".equalsIgnoreCase(noun)){
-                    midiPlayer.stop();
+                    midiPlayer.mute();
                 }
-                if("on".equalsIgnoreCase(noun)) {
-                    midiPlayer.playMusic();
+                else if("on".equalsIgnoreCase(noun)) {
+                    midiPlayer.start();
+                }
+                else if("up".equalsIgnoreCase(noun)) {
+                    midiPlayer.volumeUp();
+                }
+                else if("down".equalsIgnoreCase(noun)) {
+                    midiPlayer.volumeDown();
+                } else if("mute".equalsIgnoreCase(noun)) {
+                    midiPlayer.mute();
                 }
                 break;
             case "quit":
                 isQuit = true;
                 midiPlayer.stop();
+                soundFx.killAll();
                 break;
             case "logbook":
                 String ANSI_RED = "\u001B[31m";

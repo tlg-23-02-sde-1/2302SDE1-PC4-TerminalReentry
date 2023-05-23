@@ -41,10 +41,7 @@ public class Application {
 
 
     public void run() {
-//        musicThread = new Thread(() -> {
-            midiPlayer.playMusic();
-//        });
-//        musicThread.start();
+            midiPlayer.playMusic(1);
 
 
         titleScreen();
