@@ -6,6 +6,7 @@ import java.io.IOException;
 
 class MidiPlayer {
     byte[] midiBytes = null;
+    Sequencer sequencer;
 
     public MidiPlayer(byte[] midiBytes) {
         this.midiBytes = midiBytes;
@@ -14,11 +15,10 @@ class MidiPlayer {
     public void playMusic() {
         try {
             // Create a sequencer and open it
-            Sequencer sequencer = MidiSystem.getSequencer();
+            sequencer = MidiSystem.getSequencer();
             sequencer.open();
 
             // Create a sequence from the MIDI bytes
-//            Sequence sequence = new Sequence(Sequence.PPQ, 24);
             Sequence sequence = MidiSystem.getSequence(new ByteArrayInputStream(midiBytes));
 
             // Set the sequence in the sequencer
@@ -46,6 +46,14 @@ class MidiPlayer {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void stop() {
+        if (sequencer != null && sequencer.isRunning()) {
+            sequencer.stop();
+            sequencer.close();
+            sequencer = null;
         }
     }
 }

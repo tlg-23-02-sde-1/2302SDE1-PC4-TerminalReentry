@@ -31,9 +31,21 @@ public class Application {
     private String resourcePath = "src/main/resources/";
 
     private List<String> winCondition = new ArrayList<>();
+    private Thread musicThread;
+    private Music source;
+    private MidiPlayer midiPlayer;
+    public Application() {
+        source = new Music();
+        midiPlayer = new MidiPlayer(source.getMidiBytes());
+    }
 
 
     public void run() {
+        musicThread = new Thread(() -> {
+            midiPlayer.playMusic();
+        });
+        musicThread.start();
+
         titleScreen();
         if(newGame()) {
             basicInfo();
@@ -53,6 +65,14 @@ public class Application {
 //                enterToContinue();
             }
             while (!quit);//textParser.handleInput(scanner.nextLine())[0]);
+            if (musicThread != null && musicThread.isAlive()) {
+                midiPlayer.stop();
+                try {
+                    musicThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
