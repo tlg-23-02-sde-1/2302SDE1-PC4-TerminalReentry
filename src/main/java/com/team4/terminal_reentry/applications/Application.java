@@ -214,58 +214,11 @@ public class Application {
     }
 
     private Map<String,Room> loadSavedMap(JsonObject mapData) {
-        //List<String> clues = new ArrayList<>(Arrays.asList("Postit Note","Email", "Log File","Diary"));
-        //json object to map convert helpers
+
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, Room>>() {}.getType();
-
+        //THIS IS ALL I NEEDED TO DO HOLY...
         return gson.fromJson(mapData, type);
-        //initialize currentLocation Room
-//        JsonObject currentRoom = mapData.get("currentLocation").getAsJsonObject();
-//        String roomName = currentRoom.get("name").toString().replace("\"","");
-//        String description = currentRoom.get("description").toString().replace("\"","");
-//        JsonObject directions = currentRoom.get("exits").getAsJsonObject();
-//        Map<String,String> exits = new HashMap<>();
-//        exits = gson.fromJson(directions,type);
-//        JsonArray jRoomInventory = currentRoom.get("inventory").getAsJsonArray();
-//        List<Item> roomInventory = new ArrayList<>();
-//        for(JsonElement j: jRoomInventory) {
-//            Item item;
-//            JsonObject jObject = j.getAsJsonObject();
-//            String itemName = jObject.get("name").toString().replace("\"","");
-//            String itemDescription = jObject.get("description").toString().replace("\"","");
-//            boolean isAssociated = jObject.get("isEvidence").getAsBoolean();
-//            String data = jObject.get("data").toString().replace("\"","");
-//            String secret = jObject.get("secret").toString().replace("\"","");
-//            if (clues.contains(itemName)) {
-//                //init evidence
-//                item = new Evidence(itemName,itemDescription,isAssociated,data,secret);
-//            }
-//            else {
-//                //init weapon
-//                item = new Weapon(itemName,itemDescription,isAssociated,data,secret);
-//            }
-//            roomInventory.add(item);
-//        }
-//        JsonArray room_Npcs = currentRoom.get("characters").getAsJsonArray();
-//        List<NPC> roomNpcs = new ArrayList<>();
-//        for(JsonElement npc: room_Npcs) {
-//            if(npc.isJsonObject()) {
-//                JsonObject jnpc = npc.getAsJsonObject();
-//                String firstName = jnpc.get("firstName").toString().replace("\"","");
-//                String lastName = jnpc.get("lastName").toString().replace("\"","");
-//                String nationality = jnpc.get("nationality").toString().replace("\"","");
-//                String pronoun = jnpc.get("pronoun").toString().replace("\"","");
-//                boolean isMurderer = jnpc.get("isMurderer").getAsBoolean();
-//                JsonObject jAnswers = jnpc.get("answers").getAsJsonObject();
-//                Map<String,String> answers = new HashMap<>();
-//                answers = gson.fromJson(jAnswers,type);
-//                NPC newNPC = new NPC(firstName,lastName,nationality,pronoun,isMurderer,answers);
-//                roomNpcs.add(newNPC);
-//            }
-//        }
-//
-//        Room loadedCurrentRoom = new Room(roomName,description,roomInventory,roomNpcs,exits);
     }
 
     private String promptForCommand() {
