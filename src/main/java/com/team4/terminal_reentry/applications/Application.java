@@ -22,8 +22,6 @@ public class Application {
     private final Scanner scanner = new Scanner(System.in);
     private final TextParser textParser = new TextParser();
 
-    private String resourcePath = "src/main/resources/";
-
     private List<String> winCondition = new ArrayList<>();
     private Thread musicThread;
     private Music source;
@@ -111,6 +109,7 @@ public class Application {
         }.getType();
         Type typeRoom = new TypeToken<Room>() {
         }.getType();
+        Type typeListW = new TypeToken<List<String>>() {}.getType();
 
         //initialize the Map<String,String> for inspectedItem
         JsonObject items = jsonObject.get("inspectedItem").getAsJsonObject();
@@ -132,6 +131,9 @@ public class Application {
         JsonObject currentRoom = jsonObject.get("currentLocation").getAsJsonObject();
         Room loadedCurrentRoom = gson.fromJson(currentRoom, typeRoom);
 
+        JsonArray jWinCondition = jsonObject.get("winCondition").getAsJsonArray();
+        winCondition = gson.fromJson(jWinCondition,typeListW);
+
         return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited);
     }
 
@@ -139,8 +141,14 @@ public class Application {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, Room>>() {
         }.getType();
-
         return gson.fromJson(mapData, type);
+    }
+
+    private List<String> loadSaveWinCondition(JsonObject winCondition) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<String>>() {
+        }.getType();
+        return gson.fromJson(winCondition, type);
     }
 
     private String promptForCommand() {
