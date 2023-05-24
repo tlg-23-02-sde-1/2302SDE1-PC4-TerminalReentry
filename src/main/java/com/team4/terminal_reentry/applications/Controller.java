@@ -9,7 +9,6 @@ import com.team4.terminal_reentry.setup.NPC;
 import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Room;
 
-import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -313,16 +312,8 @@ class Controller {
 
     private void saveGame() {
         try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print(INDENT + "Please enter a name for your save file: ");
-            String userInput = scanner.nextLine();
-
-            String saveFileName;
-            if(userInput.isEmpty()) {
-                saveFileName = "saved1.json";
-            } else {
-                saveFileName = userInput + ".json";
-            }
+            // default save file name
+            String saveFileName = "saved1.json";
 
             Map<String, Object> gameData = new HashMap<>();
 
