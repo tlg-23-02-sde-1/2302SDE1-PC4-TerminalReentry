@@ -35,6 +35,7 @@ class Controller {
         this.winCondition = winCondition;
         this.midiPlayer = midiPlayer;
     }
+
     private void enterToContinue() {
         System.out.print(INDENT + "Press enter to continue...");
         // Wait for the user to press enter
@@ -50,8 +51,8 @@ class Controller {
                 System.out.println(INDENT + "List of possible suspects: ");
                 List<String> accusation = new ArrayList<>();
                 int index = 1;
-                for(Room room: map.values()) {
-                    for(NPC npc: room.getNpcs()) {
+                for (Room room : map.values()) {
+                    for (NPC npc : room.getNpcs()) {
                         System.out.println(INDENT + index + ". " + npc.getName());
                         index++;
                     }
@@ -61,9 +62,9 @@ class Controller {
 
                 index = 1;
                 System.out.println(INDENT + "List of possible murder weapons: ");
-                for(Room room: map.values()) {
-                    for(Item item: room.getInventory()) {
-                        if(item instanceof Weapon) {
+                for (Room room : map.values()) {
+                    for (Item item : room.getInventory()) {
+                        if (item instanceof Weapon) {
                             System.out.println(INDENT + index + ". " + item.getName());
                             index++;
                         }
@@ -74,7 +75,7 @@ class Controller {
 
                 index = 1;
                 System.out.println(INDENT + "List of possible locations: ");
-                for(Room room: map.values()) {
+                for (Room room : map.values()) {
                     System.out.println(INDENT + index + ". " + room.getName());
                     index++;
                 }
@@ -97,13 +98,13 @@ class Controller {
                 soundFx.play(verb);
                 break;
             case "look":
-                player.getCurrentRoom().getInventory().forEach((item)->{
-                    if(item.getName().equalsIgnoreCase(noun)) {
+                player.getCurrentRoom().getInventory().forEach((item) -> {
+                    if (item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
-                player.getInventory().forEach((item)->{
-                    if(item.getName().equalsIgnoreCase(noun)) {
+                player.getInventory().forEach((item) -> {
+                    if (item.getName().equalsIgnoreCase(noun)) {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
@@ -115,10 +116,9 @@ class Controller {
                         .anyMatch((Item item) -> hasMatch(noun, item))
                         || player.getInventory().stream()
                         .anyMatch((Item item) -> hasMatch(noun, item));
-                if(!found) {
+                if (!found) {
                     System.out.println(INDENT + "You can't inspect " + noun);
-                }
-                else {
+                } else {
                     soundFx.play(verb);
                 }
                 enterToContinue();
@@ -138,9 +138,9 @@ class Controller {
                 break;
             case "take":
                 Item item = null;
-                for(int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
+                for (int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
                     Item value = player.getCurrentRoom().getInventory().get(i);
-                    if(value.getName().equalsIgnoreCase(noun)) {
+                    if (value.getName().equalsIgnoreCase(noun)) {
                         player.addItem(value);
                         item = value;
                         soundFx.play(verb);
@@ -156,35 +156,28 @@ class Controller {
                 talk(noun);
                 break;
             case "music":
-                if("off".equalsIgnoreCase(noun)){
+                if ("off".equalsIgnoreCase(noun)) {
                     midiPlayer.mute();
-                }
-                else if("on".equalsIgnoreCase(noun)) {
+                } else if ("on".equalsIgnoreCase(noun)) {
                     midiPlayer.playMusicThread(1);
-                }
-                else if("up".equalsIgnoreCase(noun)) {
+                } else if ("up".equalsIgnoreCase(noun)) {
                     midiPlayer.volumeUp();
-                }
-                else if("down".equalsIgnoreCase(noun)) {
+                } else if ("down".equalsIgnoreCase(noun)) {
                     midiPlayer.volumeDown();
-                } else if("mute".equalsIgnoreCase(noun)) {
+                } else if ("mute".equalsIgnoreCase(noun)) {
                     midiPlayer.mute();
                 }
                 break;
             case "soundfx":
-
-                if("off".equalsIgnoreCase(noun)){
+                if ("off".equalsIgnoreCase(noun)) {
                     soundFx.off();
-                }
-                else if("on".equalsIgnoreCase(noun)) {
+                } else if ("on".equalsIgnoreCase(noun)) {
                     soundFx.on();
-                }
-                else if("up".equalsIgnoreCase(noun)) {
+                } else if ("up".equalsIgnoreCase(noun)) {
                     soundFx.volumeUp();
-                }
-                else if("down".equalsIgnoreCase(noun)) {
+                } else if ("down".equalsIgnoreCase(noun)) {
                     soundFx.volumeDown();
-                } else if("mute".equalsIgnoreCase(noun)) {
+                } else if ("mute".equalsIgnoreCase(noun)) {
                     soundFx.off();
                 }
                 break;
@@ -197,15 +190,15 @@ class Controller {
             case "logbook":
                 String ANSI_RED = "\u001B[31m";
                 System.out.println(INDENT + "NPCs Met:");
-                for(String npc : player.getNpcMet()) {
+                for (String npc : player.getNpcMet()) {
                     System.out.println(INDENT + ANSI_YELLOW + npc + ANSI_RESET);
                 }
                 System.out.println(INDENT + "Items inspected with its data: ");
-                for(Map.Entry<String,String> entry : player.getInspectedItem().entrySet()) {
+                for (Map.Entry<String, String> entry : player.getInspectedItem().entrySet()) {
                     System.out.println(INDENT + "Item: " + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
                 }
                 System.out.println(INDENT + "Rooms visited: ");
-                for(String room : player.getRoomsVisited()) {
+                for (String room : player.getRoomsVisited()) {
                     System.out.println(INDENT + ANSI_GREEN + room + ANSI_RESET);
                 }
                 enterToContinue();
@@ -221,7 +214,7 @@ class Controller {
     private void talk(String noun) {
         boolean found = player.getCurrentRoom().getNpcs().stream()
                 .anyMatch((NPC npc) -> {
-                    if(noun.equalsIgnoreCase(npc.getName())
+                    if (noun.equalsIgnoreCase(npc.getName())
                             || noun.equalsIgnoreCase(npc.getFirstName())
                             || noun.equalsIgnoreCase(npc.getLastName())) {
                         npcTalkMenu(npc);
@@ -230,7 +223,7 @@ class Controller {
                     }
                     return false;
                 });
-        if(!found) {
+        if (!found) {
             System.out.println(INDENT + "You can't talk to " + noun);
             enterToContinue();
         }
@@ -239,50 +232,47 @@ class Controller {
     private void npcTalkMenu(NPC npc) {
         Random random = new Random();
         int randomNumber;
-        System.out.println(INDENT  + "What would you like to ask " + ANSI_YELLOW + npc.getName()
-                + ANSI_RESET +" (Enter a number 1-4): ");
-        System.out.println(INDENT  + "1. Where were you?");
-        System.out.println(INDENT  + "2. What were you doing at the time of the victim's murder?");
-        System.out.println(INDENT  + "3. What do you think of the victim?");
-        System.out.println(INDENT  + "4. What else can you share?");
-        System.out.println(INDENT  + "5. Stop talking to " + npc.getName());
+        System.out.println(INDENT + "What would you like to ask " + ANSI_YELLOW + npc.getName()
+                + ANSI_RESET + " (Enter a number 1-4): ");
+        System.out.println(INDENT + "1. Where were you?");
+        System.out.println(INDENT + "2. What were you doing at the time of the victim's murder?");
+        System.out.println(INDENT + "3. What do you think of the victim?");
+        System.out.println(INDENT + "4. What else can you share?");
+        System.out.println(INDENT + "5. Stop talking to " + npc.getName());
         String question;
         do {
-            randomNumber= random.nextInt(4) + 1;
-            System.out.print(INDENT  + "Enter: ");
+            randomNumber = random.nextInt(4) + 1;
+            System.out.print(INDENT + "Enter: ");
             question = scanner.nextLine();
-            if(randomNumber == 1) {
+            if ("5".equals(question)) {
+                question = "quit";
+            } else if (randomNumber == 1) {
                 randomNumber = random.nextInt(2) + 1;
-                if(randomNumber == 1) {
+                if (randomNumber == 1) {
                     System.out.println(INDENT + npc.getName() + " says: " + "\"I have to go to the bathroom\"");
-                }
-                else {
+                } else {
                     System.out.println(INDENT + npc.getName() + " says: " + "\"I can't handle this anymore\"");
                 }
-            }
-            else {
-                switch(question) {
+            } else {
+                switch (question) {
                     case "1":
-                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I was at " +
+                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was at " +
                                 npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
                         break;
                     case "2":
-                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I was " +
+                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was " +
                                 npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
                         break;
                     case "3":
-                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I think he " +
+                        System.out.println(INDENT + npc.getName() + " says: " + "\"I think he " +
                                 npc.getAnswers().get("opinionOfVictim") + "\"");
                         break;
                     case "4":
-                        System.out.println(INDENT  + npc.getName() + " says: " + "\"" +
+                        System.out.println(INDENT + npc.getName() + " says: " + "\"" +
                                 npc.getAnswers().get("otherTestimony") + "\"");
                         break;
-                    case "5":
-                        question = "quit";
-                        break;
                     default:
-                        System.out.println(INDENT  + question + " is not a valid option!");
+                        System.out.println(INDENT + question + " is not a valid option!");
                         break;
                 }
             }
@@ -310,9 +300,10 @@ class Controller {
             gameData.put("npcMet", player.getNpcMet());
             gameData.put("inspectedItem", player.getInspectedItem());
             gameData.put("roomsVisited", player.getRoomsVisited());
-            gameData.put("map",map);
+            gameData.put("map", map);
 
-            Type typeListW = new TypeToken<List<String>>() {}.getType();
+            Type typeListW = new TypeToken<List<String>>() {
+            }.getType();
 
             Gson gson = new Gson();
             JsonArray winConditionArray = gson.toJsonTree(winCondition, typeListW).getAsJsonArray();
