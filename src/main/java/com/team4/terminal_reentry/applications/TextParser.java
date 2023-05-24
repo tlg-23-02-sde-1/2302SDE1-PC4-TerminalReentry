@@ -15,7 +15,6 @@ public class TextParser {
         commands.put("go", "Move in the specified direction.");
         commands.put("take", "Pick up an item.");
         commands.put("use", "Use an item in your inventory.");
-        commands.put("inventory", "Check your inventory.");
         commands.put("quit", "Quit the game.");
         commands.put("help", "show the commands");
         commands.put("inspect", "Get more details about something.");
