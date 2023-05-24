@@ -1,6 +1,8 @@
 package com.team4.terminal_reentry.applications;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 import com.team4.terminal_reentry.setup.NPC;
@@ -10,6 +12,7 @@ import com.team4.terminal_reentry.setup.Room;
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -287,7 +290,12 @@ class Controller {
             gameData.put("roomsVisited", player.getRoomsVisited());
             gameData.put("map",map);
 
+            Type typeListW = new TypeToken<List<String>>() {}.getType();
+
             Gson gson = new Gson();
+            JsonArray winConditionArray = gson.toJsonTree(winCondition, typeListW).getAsJsonArray();
+            gameData.put("winCondition", winConditionArray);
+
             String jsonData = gson.toJson(gameData);
 
             FileWriter writer = new FileWriter(saveFileName);
