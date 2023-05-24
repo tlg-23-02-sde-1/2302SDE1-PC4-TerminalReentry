@@ -221,24 +221,11 @@ class Controller {
     private void talk(String noun) {
         boolean found = player.getCurrentRoom().getNpcs().stream()
                 .anyMatch((NPC npc) -> {
-                    if(noun.equalsIgnoreCase(npc.getName())) {
+                    if(noun.equalsIgnoreCase(npc.getName())
+                            || noun.equalsIgnoreCase(npc.getFirstName())
+                            || noun.equalsIgnoreCase(npc.getLastName())) {
                         npcTalkMenu(npc);
-                        return true;
-                    }
-                    return false;
-                })
-                || player.getCurrentRoom().getNpcs().stream()
-                .anyMatch((NPC npc) -> {
-                    if(noun.equalsIgnoreCase(npc.getFirstName())) {
-                        npcTalkMenu(npc);
-                        return true;
-                    }
-                    return false;
-                })
-                || player.getCurrentRoom().getNpcs().stream()
-                .anyMatch((NPC npc) -> {
-                    if(noun.equalsIgnoreCase(npc.getLastName())) {
-                        npcTalkMenu(npc);
+                        player.metNpc(npc.getName());
                         return true;
                     }
                     return false;
@@ -305,6 +292,7 @@ class Controller {
     private boolean hasMatch(String noun, Item item) {
         if (item.getName().equalsIgnoreCase(noun)) {
             System.out.println(INDENT + item.getData());
+            player.inspectedItem(item.getName(), item.getData());
             return true;
         }
         return false;
