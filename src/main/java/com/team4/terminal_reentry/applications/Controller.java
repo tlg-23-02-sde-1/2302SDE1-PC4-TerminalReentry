@@ -95,7 +95,7 @@ class Controller {
                 break;
             case "inventory":
                 System.out.println(INDENT + player.showInventory());
-
+                soundFx.play(verb);
                 break;
             case "look":
                 player.getCurrentRoom().getInventory().forEach((item)->{
@@ -108,7 +108,7 @@ class Controller {
                         System.out.println(INDENT + item.getDescription());
                     }
                 });
-//                soundFx.getItem2();
+                soundFx.play(verb);
                 enterToContinue();
                 break;
             case "inspect":
@@ -120,7 +120,7 @@ class Controller {
                     System.out.println(INDENT + "You can't inspect " + noun);
                 }
                 else {
-//                    soundFx.playTest();
+                    soundFx.play(verb);
                 }
                 enterToContinue();
                 break;
@@ -144,7 +144,7 @@ class Controller {
                     if(value.getName().equalsIgnoreCase(noun)) {
                         player.addItem(value);
                         item = value;
-//                        soundFx.pickupItem();
+                        soundFx.play(verb);
                     }
                 }
                 player.getCurrentRoom().removeItem(item);
@@ -173,21 +173,23 @@ class Controller {
                 }
                 break;
             case "soundfx":
-//                if("off".equalsIgnoreCase(noun)){
-//                    soundFx.off();
-//                }
-//                else if("on".equalsIgnoreCase(noun)) {
-//                    soundFx.on();
-//                }
-//                else if("up".equalsIgnoreCase(noun)) {
+
+                if("off".equalsIgnoreCase(noun)){
+                    soundFx.off();
+                }
+                else if("on".equalsIgnoreCase(noun)) {
+                    soundFx.on();
+                }
+                else if("up".equalsIgnoreCase(noun)) {
 //                    soundFx.volumeUp();
-//                }
-//                else if("down".equalsIgnoreCase(noun)) {
+                }
+                else if("down".equalsIgnoreCase(noun)) {
 //                    soundFx.volumeDown();
-//                } else if("mute".equalsIgnoreCase(noun)) {
-//                    soundFx.off();
-//                }
-//                break;
+                } else if("mute".equalsIgnoreCase(noun)) {
+                    soundFx.off();
+                }
+                break;
+
             case "quit":
                 isQuit = true;
                 midiPlayer.stop();
@@ -214,7 +216,6 @@ class Controller {
                 enterToContinue();
                 break;
         }
-        soundFx.play(verb);
         return isQuit;
     }
 
