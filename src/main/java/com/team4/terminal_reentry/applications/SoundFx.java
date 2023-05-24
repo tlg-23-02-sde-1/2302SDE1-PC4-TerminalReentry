@@ -23,11 +23,7 @@ class SoundFx {
         pickupItem = new MidiPlayer(new
                 Music("https://www.vgmusic.com/music/console/nintendo/nes/smb-1up.mid").getMidiBytes());
     }
-    public SoundFx(String URL) {
-        getItem1 = new MidiPlayer(new
-                Music("https://www.vgmusic.com/music/console/nintendo/nes/mm6equip.mid").getMidiBytes());
-        test = new MidiPlayer(new Music(URL).getMidiBytes());
-    }
+
     public void getItem1() {
         getItem1.playMusic(0);
     }

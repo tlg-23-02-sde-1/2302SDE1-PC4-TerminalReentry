@@ -35,11 +35,11 @@ public class Application {
     }
 
     public void run() {
-        midiPlayer.playMusic(1);
+        midiPlayer.playMusicThread(1);
         Map<String, Room> map = null;
+        Player player = null;
         Room currentRoom;
         titleScreen();
-        Player player = null;
         if (newGame()) {
             basicInfo();
             instructions();
