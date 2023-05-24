@@ -5,6 +5,7 @@ import java.util.Map;
 
 class SoundFx {
     private double volumeFactor = 1.0;
+    private final double VOLUME_INCREMENT = 0.2;
     Map<String, MidiPlayer> soundFx = new HashMap<>();
     /*
      * Discard pile:
@@ -46,10 +47,10 @@ class SoundFx {
     }
 
     public void volumeDown() {
-        volumeFactor -= 0.2;
+        volumeFactor = volumeFactor >= VOLUME_INCREMENT ? VOLUME_INCREMENT : 0.0;
     }
 
     public void volumeUp() {
-        volumeFactor += 0.2;
+        volumeFactor += VOLUME_INCREMENT;
     }
 }
