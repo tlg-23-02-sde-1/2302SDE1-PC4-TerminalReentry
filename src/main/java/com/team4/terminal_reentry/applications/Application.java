@@ -23,12 +23,10 @@ public class Application {
     private final TextParser textParser = new TextParser();
 
     private List<String> winCondition = new ArrayList<>();
-    private Thread musicThread;
-    private Music source;
-    private MidiPlayer midiPlayer;
+    private final MidiPlayer midiPlayer;
 
     public Application() {
-        source = new Music();
+        Music source = new Music();
         midiPlayer = new MidiPlayer(source.getMidiBytes());
     }
 
@@ -51,7 +49,6 @@ public class Application {
             map = loadSavedMap(jObject.get("map").getAsJsonObject());
         }
         else {
-            stopMusic();
             midiPlayer.stop();
             return;
         }
@@ -66,19 +63,8 @@ public class Application {
             }
         }
         while (!quit);
-        stopMusic();
     }
 
-    private void stopMusic() {
-        if (musicThread != null && musicThread.isAlive()) {
-            midiPlayer.stop();
-            try {
-                musicThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     private JsonObject readInSavedFile(String path) {
         JsonObject jObject = null;
