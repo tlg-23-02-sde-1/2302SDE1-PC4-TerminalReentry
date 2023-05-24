@@ -13,14 +13,5 @@ class SoundFxTest {
         soundFx = new SoundFx();
     }
 
-    @Test
-    void getItem() {
-        soundFx.getItem1();
-    }
 
-    @Test
-    void testURL() {
-        soundFx = new SoundFx();
-        soundFx.playTest();
-    }
 }

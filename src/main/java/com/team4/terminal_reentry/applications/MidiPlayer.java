@@ -16,13 +16,13 @@ class MidiPlayer {
 
     public void playMusicThread(int loop) {
         Thread musicThread = new Thread(() -> {
-            playMusic(loop);
+            playMusic(loop, 0.25);
         });
 
         musicThread.start();
     }
 
-    public void playMusic(int loop) {
+    public void playMusic(int loop, double volumeFactor) {
         try {
             sequencer = MidiSystem.getSequencer();
 
@@ -43,7 +43,7 @@ class MidiPlayer {
         // Set loop count
         sequencer.setLoopCount(loop > 0 ? Sequencer.LOOP_CONTINUOUSLY : 0);
 
-        modifyVolume(0.25);
+        modifyVolume(volumeFactor);
         // Start playing the MIDI music
         sequencer.start();
 
@@ -76,8 +76,8 @@ class MidiPlayer {
         stop();
     }
 
-    public void start() {
-        playMusic(1);
+    public void start(int loopCount, double volumeFactor) {
+        playMusic(loopCount, volumeFactor);
     }
 
     public void volumeUp() {
