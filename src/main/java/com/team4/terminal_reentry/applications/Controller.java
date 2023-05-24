@@ -22,7 +22,7 @@ class Controller {
     private final List<String> winCondition;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_RED = "\u001B[31M";
+    private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
     private final Scanner scanner = new Scanner(System.in);
     private final MidiPlayer midiPlayer;
@@ -93,7 +93,7 @@ class Controller {
         }
         System.out.println(INDENT + "Items inspected with its data: ");
         for (Map.Entry<String, String> entry : player.getInspectedItem().entrySet()) {
-            System.out.println(INDENT + "Item: " + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
+            System.out.println(INDENT + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
         }
         System.out.println(INDENT + "Rooms visited: ");
         for (String room : player.getRoomsVisited()) {
