@@ -1,6 +1,8 @@
 package com.team4.terminal_reentry.applications;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 import com.team4.terminal_reentry.setup.NPC;
@@ -10,6 +12,7 @@ import com.team4.terminal_reentry.setup.Room;
 import javax.swing.*;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -151,49 +154,7 @@ class Controller {
                 }
                 break;
             case "talk":
-
-                player.getCurrentRoom().getNpcs().forEach((npc)->{
-                    if(npc.getName().equalsIgnoreCase(noun) || npc.getFirstName().equalsIgnoreCase(noun) ||
-                            npc.getLastName().equalsIgnoreCase(noun)){
-                        player.metNpc(npc.getName());
-                        System.out.println(INDENT  + "What would you like to ask " + ANSI_YELLOW + npc.getName()
-                                + ANSI_RESET +" (Enter a number 1-4): ");
-                        System.out.println(INDENT  + "1. Where were you?");
-                        System.out.println(INDENT  + "2. What were you doing at the time of the victim's murder?");
-                        System.out.println(INDENT  + "3. What do you think of the victim?");
-                        System.out.println(INDENT  + "4. What else can you share?");
-                        System.out.println(INDENT  + "5. Stop talking to " + npc.getName());
-                        String question;
-                        do {
-                            System.out.print(INDENT  + "Enter: ");
-                            question = scanner.nextLine();
-                            switch(question) {
-                                case "1":
-                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I was at " +
-                                            npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
-                                    break;
-                                case "2":
-                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I was " +
-                                            npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
-                                    break;
-                                case "3":
-                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"I think he " +
-                                            npc.getAnswers().get("opinionOfVictim") + "\"");
-                                    break;
-                                case "4":
-                                    System.out.println(INDENT  + npc.getName() + " says: " + "\"" +
-                                            npc.getAnswers().get("otherTestimony") + "\"");
-                                    break;
-                                case "5":
-                                    question = "quit";
-                                    break;
-                                default:
-                                    System.out.println(INDENT  + "That is not a valid option!");
-                                    break;
-                            }
-                        } while (!question.equals("quit"));
-                    }
-                });
+                talk(noun);
                 break;
             case "music":
                 if("off".equalsIgnoreCase(noun)){
@@ -212,6 +173,7 @@ class Controller {
                 }
                 break;
             case "soundfx":
+
                 if("off".equalsIgnoreCase(noun)){
                     soundFx.off();
                 }
@@ -227,6 +189,7 @@ class Controller {
                     soundFx.off();
                 }
                 break;
+
             case "quit":
                 isQuit = true;
                 midiPlayer.stop();
@@ -254,6 +217,90 @@ class Controller {
                 break;
         }
         return isQuit;
+    }
+
+    private void talk(String noun) {
+        boolean found = player.getCurrentRoom().getNpcs().stream()
+                .anyMatch((NPC npc) -> {
+                    if(noun.equalsIgnoreCase(npc.getName())) {
+                        npcTalkMenu(npc);
+                        return true;
+                    }
+                    return false;
+                })
+                || player.getCurrentRoom().getNpcs().stream()
+                .anyMatch((NPC npc) -> {
+                    if(noun.equalsIgnoreCase(npc.getFirstName())) {
+                        npcTalkMenu(npc);
+                        return true;
+                    }
+                    return false;
+                })
+                || player.getCurrentRoom().getNpcs().stream()
+                .anyMatch((NPC npc) -> {
+                    if(noun.equalsIgnoreCase(npc.getLastName())) {
+                        npcTalkMenu(npc);
+                        return true;
+                    }
+                    return false;
+                });
+        if(!found) {
+            System.out.println(INDENT + "You can't talk to " + noun);
+            enterToContinue();
+        }
+    }
+
+    private void npcTalkMenu(NPC npc) {
+        Random random = new Random();
+        int randomNumber;
+        System.out.println(INDENT  + "What would you like to ask " + ANSI_YELLOW + npc.getName()
+                + ANSI_RESET +" (Enter a number 1-4): ");
+        System.out.println(INDENT  + "1. Where were you?");
+        System.out.println(INDENT  + "2. What were you doing at the time of the victim's murder?");
+        System.out.println(INDENT  + "3. What do you think of the victim?");
+        System.out.println(INDENT  + "4. What else can you share?");
+        System.out.println(INDENT  + "5. Stop talking to " + npc.getName());
+        String question;
+        do {
+            randomNumber= random.nextInt(4) + 1;
+            System.out.print(INDENT  + "Enter: ");
+            question = scanner.nextLine();
+            if(randomNumber == 1) {
+                randomNumber = random.nextInt(2) + 1;
+                if(randomNumber == 1) {
+                    System.out.println(INDENT + npc.getName() + " says: " + "\"I have to go to the bathroom\"");
+                }
+                else {
+                    System.out.println(INDENT + npc.getName() + " says: " + "\"I can't handle this anymore\"");
+                }
+            }
+            else {
+                switch(question) {
+                    case "1":
+                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I was at " +
+                                npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
+                        break;
+                    case "2":
+                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I was " +
+                                npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
+                        break;
+                    case "3":
+                        System.out.println(INDENT  + npc.getName() + " says: " + "\"I think he " +
+                                npc.getAnswers().get("opinionOfVictim") + "\"");
+                        break;
+                    case "4":
+                        System.out.println(INDENT  + npc.getName() + " says: " + "\"" +
+                                npc.getAnswers().get("otherTestimony") + "\"");
+                        break;
+                    case "5":
+                        question = "quit";
+                        break;
+                    default:
+                        System.out.println(INDENT  + question + " is not a valid option!");
+                        break;
+                }
+            }
+        } while (!question.equals("quit"));
     }
 
     private boolean hasMatch(String noun, Item item) {
@@ -286,7 +333,12 @@ class Controller {
             gameData.put("roomsVisited", player.getRoomsVisited());
             gameData.put("map",map);
 
+            Type typeListW = new TypeToken<List<String>>() {}.getType();
+
             Gson gson = new Gson();
+            JsonArray winConditionArray = gson.toJsonTree(winCondition, typeListW).getAsJsonArray();
+            gameData.put("winCondition", winConditionArray);
+
             String jsonData = gson.toJson(gameData);
 
             FileWriter writer = new FileWriter(saveFileName);

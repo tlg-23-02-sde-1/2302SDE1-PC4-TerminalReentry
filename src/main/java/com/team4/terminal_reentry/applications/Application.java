@@ -109,6 +109,7 @@ public class Application {
         }.getType();
         Type typeRoom = new TypeToken<Room>() {
         }.getType();
+        Type typeListW = new TypeToken<List<String>>() {}.getType();
 
         //initialize the Map<String,String> for inspectedItem
         JsonObject items = jsonObject.get("inspectedItem").getAsJsonObject();
@@ -130,6 +131,9 @@ public class Application {
         JsonObject currentRoom = jsonObject.get("currentLocation").getAsJsonObject();
         Room loadedCurrentRoom = gson.fromJson(currentRoom, typeRoom);
 
+        JsonArray jWinCondition = jsonObject.get("winCondition").getAsJsonArray();
+        winCondition = gson.fromJson(jWinCondition,typeListW);
+
         return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited);
     }
 
@@ -137,7 +141,6 @@ public class Application {
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, Room>>() {
         }.getType();
-
         return gson.fromJson(mapData, type);
     }
 

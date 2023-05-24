@@ -26,9 +26,11 @@ class SoundFx {
     }
 
     public void play(String key){
+
         if(soundFx.containsKey(key)) {
             soundFx.get(key).playMusic(0, volumeFactor);
         }
+
     }
 
 
