@@ -43,6 +43,7 @@ class MidiPlayer {
         // Set loop count
         sequencer.setLoopCount(loop > 0 ? Sequencer.LOOP_CONTINUOUSLY : 0);
 
+        modifyVolume(0.25);
         // Start playing the MIDI music
         sequencer.start();
 
@@ -80,10 +81,14 @@ class MidiPlayer {
     }
 
     public void volumeUp() {
-
+        modifyVolume(2.0);
     }
 
     public void volumeDown() {
+        modifyVolume(0.5);
+    }
+
+    private void modifyVolume(double factor) {
         // Retrieve the MIDI tracks from the sequence
         Track[] tracks = sequence.getTracks();
 
@@ -100,8 +105,8 @@ class MidiPlayer {
                     // Adjust the volume by modifying the velocity value
                     if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF) {
                         int originalVelocity = shortMessage.getData2();
-                        int modifiedVelocity = (int) (originalVelocity * 0.5);
-                                // e.g., originalVelocity * volumeFactor
+                        int modifiedVelocity = modifiedVelocity(originalVelocity, factor);
+                        // e.g., originalVelocity * volumeFactor
 
                         try {
                             shortMessage.setMessage(command, shortMessage.getChannel(),
@@ -120,5 +125,18 @@ class MidiPlayer {
         }
         sequencer.stop();
         sequencer.start();
+    }
+
+    private int modifiedVelocity(int originalVelocity, double factor) {
+        final int MAX_VELOCITY = 127;
+        double scaledVelocity;
+
+        if(factor > 1) {
+            scaledVelocity = Math.min(originalVelocity * factor, MAX_VELOCITY);
+        } else {
+            scaledVelocity = Math.max(originalVelocity * factor, 1);
+        }
+
+        return (int) Math.round(scaledVelocity);
     }
 }
