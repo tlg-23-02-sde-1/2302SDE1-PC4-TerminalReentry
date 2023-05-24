@@ -44,6 +44,14 @@ class SoundFx {
     }
 
     public void on() {
-        volumeFactor = 1.0;
+        volumeFactor = 1.4;
+    }
+
+    public void volumeDown() {
+        volumeFactor -= 0.2;
+    }
+
+    public void volumeUp() {
+        volumeFactor += 0.2;
     }
 }

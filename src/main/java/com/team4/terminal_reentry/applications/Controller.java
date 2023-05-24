@@ -181,10 +181,10 @@ class Controller {
                     soundFx.on();
                 }
                 else if("up".equalsIgnoreCase(noun)) {
-//                    soundFx.volumeUp();
+                    soundFx.volumeUp();
                 }
                 else if("down".equalsIgnoreCase(noun)) {
-//                    soundFx.volumeDown();
+                    soundFx.volumeDown();
                 } else if("mute".equalsIgnoreCase(noun)) {
                     soundFx.off();
                 }
