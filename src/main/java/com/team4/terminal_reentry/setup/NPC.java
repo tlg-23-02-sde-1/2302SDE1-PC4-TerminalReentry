@@ -15,7 +15,7 @@ public class NPC {
     private boolean isMurderer;
     private Map<String, String> answers;
 
-    NPC (String firstName, String lastName, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
+    public NPC(String firstName, String lastName, String nationality, String pronoun, boolean isMurderer, Map<String, String> answers) {
         this.nationality = nationality;
         this.pronoun = pronoun;
         setName(firstName, lastName);

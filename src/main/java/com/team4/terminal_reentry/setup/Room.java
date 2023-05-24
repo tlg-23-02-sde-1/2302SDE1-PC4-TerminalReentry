@@ -13,7 +13,7 @@ public class Room {
     private final List<Item> inventory = new ArrayList<>();
     private final List<NPC> characters = new ArrayList<>();
 
-    Room(String name, String description, List<Item> items, List<NPC> npcs, Map<String, String> exits) {
+    public Room(String name, String description, List<Item> items, List<NPC> npcs, Map<String, String> exits) {
         this.name = name;
         this.description = description;
         for (Item item: items) {
