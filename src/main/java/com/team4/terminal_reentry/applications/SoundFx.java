@@ -29,7 +29,7 @@ class SoundFx {
     }
 
     public void play(String key){
-        soundFx.get(key).playMusic(0, 1.0);
+        //soundFx.get(key).playMusic(0, 1.0);
     }
 
 
