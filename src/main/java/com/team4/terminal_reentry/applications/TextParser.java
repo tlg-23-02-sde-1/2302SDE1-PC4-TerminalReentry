@@ -85,8 +85,7 @@ public class TextParser {
     }
 
     private String reformatInput(String input) {
-        String fixedInput = input.replace(" at ", " ")
-                .replace(" the ", " ").replace(" to "," ").toLowerCase();
+        String fixedInput = input.strip().replace("\\s+(?:at|the|to)\\s+", " ").toLowerCase();
         for(Map.Entry<String, String> entry : sortedSynonyms) {
             fixedInput= fixedInput.replace(entry.getKey(), entry.getValue());
         }
