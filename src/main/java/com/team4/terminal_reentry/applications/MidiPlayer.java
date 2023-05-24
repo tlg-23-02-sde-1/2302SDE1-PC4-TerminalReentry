@@ -73,7 +73,9 @@ class MidiPlayer {
     }
 
     public void mute() {
-        stop();
+        if (sequencer != null && sequencer.isRunning()) {
+            sequencer.stop();
+        }
     }
 
     public void start(int loopCount, double volumeFactor) {

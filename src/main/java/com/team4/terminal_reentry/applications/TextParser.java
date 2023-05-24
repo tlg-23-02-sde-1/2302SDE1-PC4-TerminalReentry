@@ -24,6 +24,7 @@ public class TextParser {
         commands.put("music", "control the music: off, on, up, down");
         commands.put("logbook","show the logs of your activities");
         commands.put("save", "save a game with its unique name");
+        commands.put("soundfx", "control sound effects: off, on, up, down");
 
 
         Map<String, String> synonyms= new HashMap<>();

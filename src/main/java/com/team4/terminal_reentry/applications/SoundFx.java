@@ -4,10 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class SoundFx {
-    MidiPlayer getItem1;
-    MidiPlayer getItem2;
-    MidiPlayer pickupItem;
-    MidiPlayer test;
+    private double volumeFactor = 1.0;
     Map<String, MidiPlayer> soundFx = new HashMap<>();
     /*
      * Discard pile:
@@ -29,15 +26,22 @@ class SoundFx {
     }
 
     public void play(String key){
-        soundFx.get(key).playMusic(0, 1.0);
+        if(soundFx.containsKey(key)) {
+            soundFx.get(key).playMusic(0, volumeFactor);
+        }
     }
 
 
 
     public void killAll() {
-        getItem1.stop();
-        getItem2.stop();
-        test.stop();
-        pickupItem.stop();
+
+    }
+
+    public void off() {
+        volumeFactor = 0.0;
+    }
+
+    public void on() {
+        volumeFactor = 1.0;
     }
 }
