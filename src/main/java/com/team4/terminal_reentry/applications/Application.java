@@ -144,13 +144,6 @@ public class Application {
         return gson.fromJson(mapData, type);
     }
 
-    private List<String> loadSaveWinCondition(JsonObject winCondition) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<String>>() {
-        }.getType();
-        return gson.fromJson(winCondition, type);
-    }
-
     private String promptForCommand() {
         System.out.print("\n\n" + INDENT + "Enter your command: ");
         return scanner.nextLine();
