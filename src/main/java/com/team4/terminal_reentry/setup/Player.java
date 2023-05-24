@@ -7,14 +7,22 @@ import java.util.*;
 public class Player {
     private String name= "Jessy";
     private Room currentRoom;
-    private final List<Item> inventory = new ArrayList<>();
-    private final Set<String> npcMet = new HashSet<>();
-    private final Map<String,String> inspectedItem = new HashMap<>();
-    private final Set<String> roomsVisited = new HashSet<>();
+    private List<Item> inventory = new ArrayList<>();
+    private Set<String> npcMet = new HashSet<>();
+    private Map<String,String> inspectedItem = new HashMap<>();
+    private Set<String> roomsVisited = new HashSet<>();
 
     public Player(Room currentRoom) {
         this.currentRoom = currentRoom;
         roomsVisited.add(currentRoom.getName());
+    }
+
+    public Player(Room currentRoom, List<Item> inventory, Map<String,String> inspectedItem, Set<String> npcMet, Set<String> roomsVisited) {
+        this.currentRoom = currentRoom;
+        this.inventory = inventory;
+        this.inspectedItem = inspectedItem;
+        this.npcMet = npcMet;
+        this.roomsVisited = roomsVisited;
     }
 
     public List<Item> getInventory() {

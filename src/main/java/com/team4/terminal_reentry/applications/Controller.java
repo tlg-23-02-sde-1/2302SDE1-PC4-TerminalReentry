@@ -247,7 +247,7 @@ class Controller {
     private void saveGame() {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println(INDENT + "Please enter a name for your save file");
+            System.out.print(INDENT + "Please enter a name for your save file: ");
             String userInput = scanner.nextLine();
 
             String saveFileName;
@@ -274,11 +274,9 @@ class Controller {
             writer.close();
 
             System.out.println(INDENT + "Game saved successfully");
-            enterToContinue();
         } catch (IOException e) {
             System.out.println(INDENT + "Failed to save the game");
 
         }
-
     }
 }
