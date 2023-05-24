@@ -20,8 +20,7 @@ class SoundFxTest {
 
     @Test
     void testURL() {
-        String url = "https://www.vgmusic.com/music/console/nintendo/nes/KnightMan.mid";
-        soundFx = new SoundFx(url);
+        soundFx = new SoundFx();
         soundFx.playTest();
     }
 }

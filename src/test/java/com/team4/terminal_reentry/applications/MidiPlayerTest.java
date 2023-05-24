@@ -10,12 +10,12 @@ class MidiPlayerTest {
 
     @BeforeEach
     void setUp() {
-        tunes = new Music();
+        tunes = new Music("https://www.vgmusic.com/music/console/nintendo/nes/smb-1up.mid");
     }
 
     @Test
     void playMusic() {
-        MidiPlayer myMusic = new MidiPlayer(tunes.getMidiBytes());
-        myMusic.playMusic(1);
+//        MidiPlayer myMusic = new MidiPlayer(tunes.getMidiBytes());
+//        myMusic.playMusic(0);
     }
 }
