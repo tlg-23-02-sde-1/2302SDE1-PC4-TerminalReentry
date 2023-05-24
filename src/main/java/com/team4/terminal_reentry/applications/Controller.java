@@ -109,18 +109,16 @@ class Controller {
                 enterToContinue();
                 break;
             case "inspect":
-                player.getCurrentRoom().getInventory().forEach((item)->{
-                    if(item.getName().equalsIgnoreCase(noun)) {
-                        System.out.println(INDENT + item.getData());
-                    }
-                });
-                player.getInventory().forEach((item)->{
-                    if(item.getName().equalsIgnoreCase(noun)) {
-                        System.out.println(INDENT + item.getData());
-                        player.inspectedItem(item.getName(), item.getData());
-                    }
-                });
-                soundFx.playTest();
+                boolean found = player.getCurrentRoom().getInventory().stream()
+                        .anyMatch((Item item) -> hasMatch(noun, item))
+                        || player.getInventory().stream()
+                        .anyMatch((Item item) -> hasMatch(noun, item));
+                if(!found) {
+                    System.out.println(INDENT + "You can't inspect " + noun);
+                }
+                else {
+                    soundFx.playTest();
+                }
                 enterToContinue();
                 break;
             case "go":
@@ -242,6 +240,15 @@ class Controller {
         }
         return isQuit;
     }
+
+    private boolean hasMatch(String noun, Item item) {
+        if (item.getName().equalsIgnoreCase(noun)) {
+            System.out.println(INDENT + item.getData());
+            return true;
+        }
+        return false;
+    }
+
     private void saveGame() {
         try {
             Scanner scanner = new Scanner(System.in);

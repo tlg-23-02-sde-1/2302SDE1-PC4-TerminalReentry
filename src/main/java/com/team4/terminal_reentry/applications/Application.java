@@ -22,8 +22,6 @@ public class Application {
     private final Scanner scanner = new Scanner(System.in);
     private final TextParser textParser = new TextParser();
 
-    private String resourcePath = "src/main/resources/";
-
     private List<String> winCondition = new ArrayList<>();
     private Thread musicThread;
     private Music source;
