@@ -311,6 +311,7 @@ class Controller {
 
     private void saveGame() {
         try {
+            // default save file name
             String saveFileName = "saved1.json";
 
             Map<String, Object> gameData = new HashMap<>();
