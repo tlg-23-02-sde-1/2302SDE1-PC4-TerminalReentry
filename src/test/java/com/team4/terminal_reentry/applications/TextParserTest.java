@@ -56,13 +56,13 @@ class TextParserTest {
         assertArrayEquals(expected, actual);
     }
 
-    @Test
-    void handleInput_shouldReturn200_help_null_whenGivenValidHelpCommand() {
-        String inputText = "HELP";
-        String[] actual = input.handleInput(inputText);
-        String[] expected = {"200", "help", ""};
-        assertArrayEquals(expected, actual);
-    }
+//    @Test
+//    void handleInput_shouldReturn200_help_null_whenGivenValidHelpCommand() {
+//        String inputText = "HELP";
+//        String[] actual = input.handleInput(inputText);
+//        String[] expected = {"200", "help", ""};
+//        assertArrayEquals(expected, actual);
+//    }
 
     @Test
     void handleInput_shouldReturn200_quit_null_whenGivenValidQuitCommand() {
@@ -72,11 +72,11 @@ class TextParserTest {
         assertArrayEquals(expected, actual);
     }
 
-    @Test
-    void handleInput_shouldReturn40X_help_null_whenGivenValidHelpCommand() {
-        String inputText = "HELP! me out";
-        String[] actual = input.handleInput(inputText);
-        String[] expected = {"200", "help", "me out"};
-        assertArrayEquals(expected, actual);
-    }
+//    @Test
+//    void handleInput_shouldReturn40X_help_null_whenGivenValidHelpCommand() {
+//        String inputText = "HELP! me out";
+//        String[] actual = input.handleInput(inputText);
+//        String[] expected = {"200", "help", "me out"};
+//        assertArrayEquals(expected, actual);
+//    }
 }

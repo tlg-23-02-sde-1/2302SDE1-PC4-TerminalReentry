@@ -1,0 +1,29 @@
+
+
+                ╔══════╗                ╔═╗                 ╔═╝-╚═╗
+                ║      ║                ║ ║                 ║     ║
+                ║      ║             ╔══╝ ╚═╗               ╚═╗  ╔╝
+                ╚═╗  ╔═╝ ╔══════════╗╚══╗ ╔═╝ ╔══════════╗  ╔═╝  ╚════════╗
+                ╔═╝  ╚═╗ ║          ╚═══╝ ╚═══╝          ╚══╝             ╚
+                ╝      ╚═╝                                                [
+                ]   ?               ╔╗       ╔╗          ╔═╗              ╔
+                ╗      ╔═╗          ║╚╗      ║╚══════════╝ ╚╗  ╔══════════╝
+                ╚═╗  ╔═╝ ╚══════════╝ ╚═╗  ╔═╝            ╔═╝  ╚══╗
+                ╔═╝  ╚═╗             ╔══╝  ╚══╗           ║       ║
+                ║      ║             ║        ║           ║       ║
+                ║      ║             ╚═══╗_╔══╝           ║       ║
+                ║      ║                                  ║       ║
+                ║      ║                                  ║       ║
+                ╚══════╝                                  ╚═══════╝
+
+
+                You are currently in the Harmony module.
+                You see the machinery that provides air, electrical power, water, and other essential systems.
+                ===================================================================================
+                Possible directions you can go:
+                right: Destiny
+                up: Columbus
+                down: Kibo
+
+
+                Enter your command:

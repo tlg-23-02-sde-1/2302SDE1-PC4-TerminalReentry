@@ -8,14 +8,19 @@
   {
     "title": "Email",
     "description": "Size: 8Kb",
-    "data": "I see that the email was sent to the victim just hours before he died.",
+    "data": "I see that the email was sent to the victim just hours before he died. It was sent by <murderer>",
     "secretData": "Subject: never again\n \nI've put up with your actions for far too long. I won't let you hurt me again. This will end... one way or another."
   },
   {
     "title": "Log file",
     "description": "Computer access logfile",
     "data": "These are the terminal access and command files for the last 2 days.",
-    "secretData": "There is nothing out of the ordinary in these log files."
-
+    "secretData": "This log file shows that numerous entries were deleted by <murderer>."
+  },
+  {
+    "title": "Diary",
+    "description": "This is the victim's diary",
+    "data": "<murderer> has been keeping a close eye on me. I think that he suspects that I know more than I should about his little side project.",
+    "secretData": "I hope I can make it home before <murderer> tries to silence me forever."
   }
 ]

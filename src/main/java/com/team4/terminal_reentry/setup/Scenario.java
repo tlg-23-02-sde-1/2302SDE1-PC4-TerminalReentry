@@ -7,9 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.gson.*;
 import com.team4.terminal_reentry.applications.Application;
+import com.team4.terminal_reentry.items.Evidence;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 
@@ -19,6 +22,10 @@ public class Scenario {
     private final Map<String, Room> map;
     private final List<String> winCondition;
     private final String resourcePath;
+    private String murderer;
+    private String murdererFirstName;
+    private String murderWeapon;
+    private String sceneOfCrime;
 
     public Scenario() throws FileNotFoundException {
         this.map = new HashMap<>();
@@ -38,60 +45,64 @@ public class Scenario {
         String weaponsJson = resourcePath + "weapons.json";
         List<Item> weapons = getWeapons(loadJson(weaponsJson));
 
-        // TODO: load in data items (notes, emails, logs, etc.)
-        String clueItemsJson = resourcePath + "clueItems.json";
-        List<Item> clues = getClues(loadJson(clueItemsJson));
-
         //read in npcs
         String npcsJson = resourcePath + "npcs.json";
         List<NPC> npcs = getNPCs(loadJson(npcsJson));
 
+        // TODO: load in data items (notes, emails, logs, etc.)
+        String clueItemsJson = resourcePath + "clueItems.json";
+        List<Item> clues = getClues(loadJson(clueItemsJson));
+
+        List<Item> weaponsAndClues = Stream.concat(weapons.stream(), clues.stream()).collect(Collectors.toList());
+
         //load map
         String mapJson = resourcePath + "map.json";
         try {
-            setMap(loadJson(mapJson), weapons, npcs);
+            setMap(loadJson(mapJson), weaponsAndClues, npcs);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         //set win condition
-        setWinCondition(npcs,map,weapons);
+        setWinCondition(npcs);
     }
 
-    private void setWinCondition(List<NPC> npcs, Map<String, Room> map, List<Item> weapons) {
-        String name = null;
+    private void setWinCondition(List<NPC> npcs) {
 
-        for(NPC npc:npcs) {
-            if(npc.isMurderer()) {
-                name = npc.getName();
+        for(int i = 0; i < npcs.size(); i++) {
+//        for(NPC npc:npcs) {
+            boolean killer = false;
+            String scapegoat = "Frank";
+            if(npcs.get(i).isMurderer()){
+                killer = true;
+                scapegoat = npcs.get(npcs.size() - i - 1).getName();
             }
+            npcs.get(i).getAnswers().put("otherTestimony", npcs.get(i).getAnswers()
+                    .get("otherTestimony")
+                    .replace("<murderer>",killer ? scapegoat : murdererFirstName)
+                    .replace("<sceneOfCrime>",sceneOfCrime));
         }
 
-        for(NPC npc:npcs) {
-            if("Yuri Gagarin".equalsIgnoreCase(npc.getName())) {
-                assert name != null;
-                npc.getAnswers().put("otherTestimony", npc.getAnswers()
-                        .get("otherTestimony")
-                        .replace("<name>",name)
-                        .replace("<sceneOfCrime>","Zarya"));
-            }
-        }
-
-        String weaponName = null;
-
-        for(Item weapon: weapons) {
-            if(weapon.isEvidence()) {
-                weaponName = weapon.getName();
-            }
-        }
-
-        winCondition.add(name);       //add murderer
-        winCondition.add(weaponName);  //add murder weapon
-        winCondition.add("Zarya"); //add location
+        winCondition.add(murderer);       //add murderer
+        winCondition.add(murderWeapon);  //add murder weapon
+        winCondition.add(sceneOfCrime); //add location
     }
 
-    private List<Item> getClues(JsonArray loadJson) {
-        return null;
+    private List<Item> getClues(JsonArray cluesData) {
+        List<Item> clues = new ArrayList<>();
+        Random rand = new Random();
+        int murderClue = rand.nextInt(cluesData.size());
+        for (int i = 0; i < cluesData.size(); i++) {
+            JsonObject clue = cluesData.get(i).getAsJsonObject();
+            clues.add(new Evidence(
+                    clue.get("title").toString().replace("\"", ""),
+                    clue.get("description").toString().replace("\"", ""),
+                    i == murderClue,
+                    clue.get("data").toString().replace("\"", "").replace("<murderer>", murdererFirstName),
+                    clue.get("secretData").toString().replace("\"", "").replace("<murderer>", murdererFirstName)
+            ));
+        }
+        return clues;
     }
 
     private List<Item> getWeapons(JsonArray weaponsData) {
@@ -107,6 +118,9 @@ public class Scenario {
                     weapon.get("data").toString().replace("\"",""),
                     weapon.get("secretData").toString().replace("\"","")
             ));
+            if( i == murderWeapon) {
+                this.murderWeapon = weapon.get("title").toString().replace("\"","");
+            }
         }
         return weapons;
     }
@@ -123,12 +137,17 @@ public class Scenario {
                 dialogue.put(answer, npc.get(answer).toString().replace("\"",""));
             }
             npcs.add(new NPC(
-                    npc.get("name").toString().replace("\"",""),
+                    npc.get("firstName").toString().replace("\"",""),
+                    npc.get("lastName").toString().replace("\"", ""),
                     npc.get("nationality").toString().replace("\"",""),
                     npc.get("pronoun").toString().replace("\"",""),
                     i == murderer,
                     dialogue
             ));
+            if (i == murderer) {
+                this.murderer = npcs.get(i).getName();
+                this.murdererFirstName = npcs.get(i).getFirstName();
+            }
         }
         return npcs;
     }
@@ -149,16 +168,18 @@ public class Scenario {
     }
 
 
-    private void setMap(JsonElement mapJson, List<Item> weapons, List<NPC> npcs) {
+    private void setMap(JsonElement mapJson, List<Item> weaponsAndClues, List<NPC> npcs) {
         JsonArray issJson = mapJson.getAsJsonArray();
-        int[] itemPlacementNumbers = getRandomPlacement(weapons.size(), issJson.size());
+        Random rand = new Random();
+        int crimeScene = rand.nextInt(issJson.size());
+        int[] itemPlacementNumbers = getRandomPlacement(weaponsAndClues.size(), issJson.size());
         int[] npcPlacement = getRandomPlacement(npcs.size(), issJson.size());
         for (int i = 0; i < issJson.size(); i++) {
             List<Item> items = new ArrayList<>();
             List<NPC> npcInRoom = new ArrayList<>();
-            for (int j = 0; j < weapons.size(); j++) {
+            for (int j = 0; j < weaponsAndClues.size(); j++) {
                 if(itemPlacementNumbers[j] == i) {
-                    items.add(weapons.get(j));
+                    items.add(weaponsAndClues.get(j));
                 }
             }
             for (int j = 0; j < npcs.size(); j++) {
@@ -184,6 +205,9 @@ public class Scenario {
                     npcInRoom,
                     exits
             ));
+            if(i == crimeScene) {
+                this.sceneOfCrime = roomName;
+            }
         }
 
     }

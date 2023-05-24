@@ -1,24 +1,27 @@
 [
   {
-    "name": "Yuri Gagarin",
+    "firstName": "Yuri",
+    "lastName": "Gagarin",
     "nationality": "Russian",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Zarya Cargo",
     "activityAtTimeOfMurder": "checking inventory",
     "opinionOfVictim": "was a lazy bastard who cheated at cards. But I would never hurt a fly.",
-    "otherTestimony": "I heard <name> arguing with Dr. Hartman in the <sceneOfCrime> module two days ago. I don't know what it was about."
+    "otherTestimony": "I heard <murderer> arguing with Dr. Hartman in the <sceneOfCrime> module two days ago. I don't know what it was about."
   },
   {
-    "name": "Sergei Korolev",
+    "firstName": "Sergei",
+    "lastName": "Korolev",
     "nationality": "Ukranian",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Zvezda",
     "activityAtTimeOfMurder": "sleeping",
     "opinionOfVictim": "was anoying. So I just avoided him. I don't waste my time with people who are a waste of time.",
-    "otherTestimony": "I heard that Yuri owes Dr. Hartman some money. I guess that's one debt Yuri won't have to pay."
+    "otherTestimony": "I heard that <murderer> owes Dr. Hartman some money. I guess that's one debt <murderer> won't have to pay."
   },
   {
-    "name": "Jean-Pierre Haigneré",
+    "firstName": "Jean-Pierre",
+    "lastName": "Haignere",
     "nationality": "French",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Unity",
@@ -27,7 +30,8 @@
     "otherTestimony": "Dr. Hartman seemed really anxious and secretive the day before. I don't know what was going on. But every time I saw him on a computer, he locked the screen."
   },
   {
-    "name": "Koichi Wakata",
+    "firstName": "Koichi",
+    "lastName": "Wakata",
     "nationality": "Japanese",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Unity",
@@ -36,12 +40,13 @@
     "otherTestimony": "Dr. Hartman seemed to value his privacy. So I didn't intrude."
   },
   {
-    "name": "Samuel Goldstein",
+    "firstName": "Samuel",
+    "lastName": "Goldstein",
     "nationality": "Israeli",
     "pronoun": "his",
     "locationAtTimeOfMurder": "Rassvet Docking",
     "activityAtTimeOfMurder": "Praying. I needed someplace private.",
     "opinionOfVictim": "really stunk. Nobody smells good up here... But, he's smelling any better now.",
-    "otherTestimony": "I'm a little suspicious of Yuri. I think that he was very resentful toward him."
+    "otherTestimony": "I'm a little suspicious of <murderer>. I think that he was very resentful toward Dr. Harman."
   }
 ]
