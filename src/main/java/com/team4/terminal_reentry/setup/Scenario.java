@@ -203,7 +203,8 @@ public class Scenario {
                     room.get("description").toString().replace("\"",""),
                     items,
                     npcInRoom,
-                    exits
+                    exits,
+                    i == crimeScene ? "On the right wall you can clearly see blood that was hastily cleaned up. Something terrible happened in here." :"The blacklight reveals nothing new"
             ));
             if(i == crimeScene) {
                 this.sceneOfCrime = roomName;

@@ -24,6 +24,7 @@ public class TextParser {
         commands.put("logbook","show the logs of your activities");
         commands.put("save", "save a game with its unique name");
         commands.put("soundfx", "control sound effects: off, on, up, down");
+        commands.put("blacklight", "use blacklight to examine items and places");
 
 
         Map<String, String> synonyms= new HashMap<>();
@@ -42,6 +43,7 @@ public class TextParser {
         synonyms.put("speak", "talk");
         synonyms.put("view logbook", "logbook");
         synonyms.put("see logbook" , "logbook");
+        synonyms.put("use blacklight", "blacklight");
 
 
         sortedSynonyms = synonyms.entrySet().stream()

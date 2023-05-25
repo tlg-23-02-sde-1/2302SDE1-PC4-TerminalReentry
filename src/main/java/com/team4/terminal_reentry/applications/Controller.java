@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class Controller {
     public static final String INDENT = "\t\t";
@@ -55,6 +56,9 @@ class Controller {
             case "inspect":
                 inspect(verb, noun);
                 break;
+            case "blacklight":
+                blacklight();
+                break;
             case "go":
                 go(noun);
                 break;
@@ -84,6 +88,36 @@ class Controller {
                 break;
         }
         return isQuit;
+    }
+
+    private void blacklight() {
+        boolean hasBlacklight = false;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            Item value = player.getInventory().get(i);
+            if (value.getName().equalsIgnoreCase("blacklight")) {
+                hasBlacklight = true;
+                break;
+            }
+        }
+        if(hasBlacklight) {
+            System.out.println("What do you want to examine with the blacklight?");
+            List<Item> availableItems = Stream.concat(player.getInventory().stream(),
+                    player.getCurrentRoom().getInventory().stream()).collect(Collectors.toList());
+            for (int i = 0; i < availableItems.size(); i++) {
+                System.out.println((i + 1) + ". " + availableItems.get(i).getName());
+            }
+            System.out.println(availableItems.size() + 1 + ". " + player.getCurrentRoom().getName() + " module");
+            int selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
+            if (selectedItem == availableItems.size()){
+                System.out.println(player.getCurrentRoom().getSecret());
+            } else {
+                System.out.println(availableItems.get(selectedItem).getSecret());
+            }
+
+        } else {
+            System.out.println("You need to add the blacklight to your inventory to use it.");
+        }
+        enterToContinue();
     }
 
     private void logbook() {
@@ -219,12 +253,10 @@ class Controller {
         //print weapons
         index = 1;
         System.out.println(INDENT + "List of possible murder weapons: ");
-        for (Room room : map.values()) {
-            for (Item item : room.getInventory()) {
+        for (Item item : player.getInventory()) {
                 if (item instanceof Weapon) {
                     System.out.println(INDENT + index + ". " + item.getName());
                     index++;
-                }
             }
         }
         //player guesses murder weapon
