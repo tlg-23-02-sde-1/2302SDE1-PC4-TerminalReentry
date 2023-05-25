@@ -1,0 +1,17 @@
+{
+  "look" : "Look at object",
+  "go" : "Move in the specified direction.",
+  "take" : "Pick up an item.",
+  "use" : "Use an item in your inventory.",
+  "inspect" : "Get more details about something.",
+  "talk" : "talk to characters",
+  "accuse" : "accuse the murderer",
+  "blacklight" : "it will reveal some secret data of the item.",
+  "music" : "control the music: off, on, up, down",
+  "soundfx" : "control sound effects: off, on, up, down",
+  "logbook" : "show the logs of your activities",
+  "help" : "show the commands",
+  "save" : "save a game with its unique name",
+  "restore" : "restore a saved game",
+  "quit" : "Quit the game."
+}

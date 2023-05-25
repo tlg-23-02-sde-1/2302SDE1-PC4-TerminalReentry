@@ -1,54 +1,46 @@
 package com.team4.terminal_reentry.applications;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TextParser {
-    private final Map<String, String> commands;
-    private final List<Map.Entry<String, String>> sortedSynonyms;
+
+    private Map<String, String> commands;
+    private List<Map.Entry<String,String>> sortedSynonyms;
     private final String INDENT = "\t\t";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BOLD = "\u001B[1m";
     private final Scanner scanner = new Scanner(System.in);
 
     public TextParser() {
-        commands= new HashMap<>();
-        commands.put("look", "Look at object"); //prints room.description & room.inventory
-        commands.put("go", "Move in the specified direction.");
-        commands.put("take", "Pick up an item.");
-        commands.put("use", "Use an item in your inventory.");
-        commands.put("quit", "Quit the game.");
-        commands.put("help", "show the commands");
-        commands.put("inspect", "Get more details about something.");
-        commands.put("talk", "talk to characters");
-        commands.put("accuse","accuse the murderer");
-        commands.put("music", "control the music: off, on, up, down");
-        commands.put("logbook","show the logs of your activities");
-        commands.put("save", "save a game with its unique name");
-        commands.put("soundfx", "control sound effects: off, on, up, down");
-        commands.put("blacklight", "use blacklight to examine items and places");
 
 
-        Map<String, String> synonyms= new HashMap<>();
-        synonyms.put("move", "go");
-        synonyms.put("grab", "take");
-        synonyms.put("view", "look");
-        synonyms.put("check inventory", "inventory");
-        synonyms.put("examine", "look");
-        synonyms.put("apply", "use");
-        synonyms.put("get", "take");
-        synonyms.put("help!", "help");
-        synonyms.put("help?", "help");
-        synonyms.put("check", "look");
-        synonyms.put("observe", "inspect");
-        synonyms.put("pick up", "take");
-        synonyms.put("speak", "talk");
-        synonyms.put("view logbook", "logbook");
-        synonyms.put("see logbook" , "logbook");
-        synonyms.put("use blacklight", "blacklight");
+        Gson gson = new Gson();
+        Type mapType = new TypeToken<Map<String,String>>(){}.getType();
 
+        try {
+            InputStream commandsStream = getClass().getClassLoader().getResourceAsStream("commands.json");
+            InputStream synonymsStream = getClass().getClassLoader().getResourceAsStream("synonyms.json");
 
-        sortedSynonyms = synonyms.entrySet().stream()
-                .sorted(Comparator.comparing((Map.Entry<String,String> e) -> e.getKey().split("\\s+").length).reversed())
-                .collect(Collectors.toList());
+            if (commandsStream == null || synonymsStream == null) {
+                throw new FileNotFoundException("Required resources not found");
+            }
+
+            commands = gson.fromJson(new InputStreamReader(commandsStream), mapType);
+            Map<String, String> synonyms = gson.fromJson(new InputStreamReader(synonymsStream), mapType);
+
+            sortedSynonyms = synonyms.entrySet().stream()
+                    .sorted(Comparator.comparing((Map.Entry<String, String> e) -> e.getKey().split("\\s+").length).reversed())
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String[] handleInput(String input) {
@@ -80,6 +72,9 @@ public class TextParser {
             displayHelp();
             enterToContinue();
         }
+        if("restore".equalsIgnoreCase(result[1])) {
+            result[0] = "restore";
+        }
 
         result[0] = result[0] == null ? "200" : result[0];
 
@@ -95,9 +90,9 @@ public class TextParser {
     }
 
     private void displayHelp() {
-        System.out.println(INDENT + "List of commands: ");
+        System.out.println(ANSI_BOLD + INDENT + "List of commands: \n" + ANSI_RESET);
         for (Map.Entry<String,String> entry : commands.entrySet()) {
-            System.out.println(INDENT + entry.getKey() + " - " + entry.getValue());
+            System.out.println(INDENT + ANSI_BOLD + entry.getKey() + ANSI_RESET + " - " + entry.getValue());
         }
     }
 
