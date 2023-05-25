@@ -22,5 +22,11 @@
     "description": "This is the victim's diary",
     "data": "<murderer> has been keeping a close eye on me. I think that he suspects that I know more than I should about his little side project.",
     "secretData": "I hope I can make it home before <murderer> tries to silence me forever."
+  },
+  {
+    "title": "Blacklight",
+    "description": "This is a forensic blaklight.",
+    "data": "You can use this blacklight to examine items and rooms and gather more information.",
+    "secretData": "This blacklight runs on an experimental radioactive thermal generator that is expected to last 50 years even with constant use."
   }
 ]

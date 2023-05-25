@@ -12,10 +12,12 @@ public class Room {
     private Map<String,String> exits;
     private final List<Item> inventory = new ArrayList<>();
     private final List<NPC> characters = new ArrayList<>();
+    private final String secretData;
 
-    public Room(String name, String description, List<Item> items, List<NPC> npcs, Map<String, String> exits) {
+    public Room(String name, String description, List<Item> items, List<NPC> npcs, Map<String, String> exits, String secretData) {
         this.name = name;
         this.description = description;
+        this.secretData = secretData;
         for (Item item: items) {
             setInventory(item);
         }
@@ -86,5 +88,9 @@ public class Room {
                 ", inventory=" + inventoryToString() + "\n" +
                 ", characters=" + charactersToString() + "\n" +
                 '}';
+    }
+
+    public String getSecret() {
+        return secretData;
     }
 }

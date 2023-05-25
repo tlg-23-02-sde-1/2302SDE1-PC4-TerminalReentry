@@ -19,6 +19,7 @@ public class TextParser {
 
     public TextParser() {
 
+
         Gson gson = new Gson();
         Type mapType = new TypeToken<Map<String,String>>(){}.getType();
 

@@ -27,15 +27,15 @@ class SoundFx {
     }
 
     public void play(String key){
-
         if(soundFx.containsKey(key)) {
             soundFx.get(key).playMusic(0, volumeFactor);
         }
-
     }
 
     public void killAll() {
-
+        for(MidiPlayer player : soundFx.values()){
+            player.stop();
+        }
     }
 
     public void off() {
