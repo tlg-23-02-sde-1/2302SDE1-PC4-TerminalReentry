@@ -36,33 +36,61 @@ public class Application {
         Player player = null;
         Room currentRoom;
         titleScreen();
-        if (newGame()) {
+        Boolean newOrRestore = newGame();
+        boolean quit = false;
+        if (newOrRestore == null) {
+            midiPlayer.stop();
+            quit = true;
+        }
+        else if(newOrRestore) {
             basicInfo();
             instructions();
             map = setUpMap();
             currentRoom = map.get("Harmony");
             player = new Player(currentRoom);
         }
-        else if(savedGame()) {
+        else {
             JsonObject jObject = readInSavedFile("saved1.json");
             player = loadSavedPlayer(jObject);
             map = loadSavedMap(jObject.get("map").getAsJsonObject());
         }
-        else {
-            midiPlayer.stop();
-            return;
-        }
         Controller controller = new Controller(map, player, winCondition, midiPlayer);
-        boolean quit = false;
-        do {
+        while (!quit) {
             displayScreen(player.getCurrentRoom(), player);
             String command = promptForCommand();
             String[] response = textParser.handleInput(command);
             if (response[0].equals("200")) {
                 quit = controller.execute(response);
             }
+            else if(response[0].equals("restore")) {
+                if (warnBeforeRestore()) {
+                    JsonObject jObject = readInSavedFile("saved1.json");
+                    player = loadSavedPlayer(jObject);
+                    map = loadSavedMap(jObject.get("map").getAsJsonObject());
+                    controller = new Controller(map, player, winCondition, midiPlayer);
+                }
+            }
         }
-        while (!quit);
+    }
+
+    private boolean warnBeforeRestore() {
+        boolean response = false;
+        System.out.print("\n\n" + INDENT + "Would you like to restore a saved game? " +
+                "\n" + INDENT + "You will lose all unsaved progress  --> [Y,N]");
+        String answer = scanner.nextLine();
+        boolean valid = false;
+        while (!valid) {
+            if (answer.toLowerCase().equals("y")) {
+                valid = true;
+                response = true;
+            } else if (answer.toLowerCase().equals("n")) {
+                break;
+            } else {
+                System.out.println(INDENT + "Invalid Input. Please enter y or n: ");
+                answer = scanner.nextLine();
+            }
+        }
+        return response;
     }
 
 
@@ -195,18 +223,22 @@ public class Application {
         return scenario.getMap();
     }
 
-    private boolean newGame() {
+    private Boolean newGame() {
         Console.clear();
-        System.out.print("\n\n" + INDENT + "New Game --> [Y,N] : ");
+        System.out.println("\n\n" + INDENT + "For a new game enter new game, to restore a game enter restore game, to quit enter quit.");
+        System.out.print(INDENT + "New Game or Restore Game --> ");
         String answer = scanner.nextLine();
-        boolean valid = false;
-        while (!valid) {
-            if (answer.toLowerCase().equals("y")) {
+        Boolean valid = false;
+        while (Boolean.FALSE.equals(valid)) {
+            if ("new game".equalsIgnoreCase(answer)) {
                 valid = true;
-            } else if (answer.toLowerCase().equals("n")) {
+            } else if ("restore game".equalsIgnoreCase(answer)) {
+                break; }
+            else if ("quit".equalsIgnoreCase(answer)) {
+                valid = null;
                 break;
             } else {
-                System.out.println(INDENT + "Invalid Input. Please enter y or n: ");
+                System.out.print(INDENT + "Invalid Input. Please enter New Game, Restore Game or Quit: ");
                 answer = scanner.nextLine();
             }
         }

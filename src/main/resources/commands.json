@@ -12,5 +12,6 @@
   "logbook" : "show the logs of your activities",
   "help" : "show the commands",
   "save" : "save a game with its unique name",
+  "restore" : "restore a saved game",
   "quit" : "Quit the game."
 }

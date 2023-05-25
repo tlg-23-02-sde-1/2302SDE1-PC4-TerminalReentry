@@ -14,5 +14,6 @@
   "speak" : "talk",
   "view logbook" : "logbook",
   "see logbook": "logbook",
+  "restore game" : "restore",
   "use blacklight" : "blacklight"
 }

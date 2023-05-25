@@ -71,6 +71,9 @@ public class TextParser {
             displayHelp();
             enterToContinue();
         }
+        if("restore".equalsIgnoreCase(result[1])) {
+            result[0] = "restore";
+        }
 
         result[0] = result[0] == null ? "200" : result[0];
 
