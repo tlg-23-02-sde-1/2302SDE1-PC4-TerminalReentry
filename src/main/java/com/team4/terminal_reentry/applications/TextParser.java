@@ -14,7 +14,6 @@ public class TextParser {
     private List<Map.Entry<String,String>> sortedSynonyms;
     private final String INDENT = "\t\t";
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_BOLD = "\u001B[1m";
     private final Scanner scanner = new Scanner(System.in);
 
     public TextParser() {
@@ -90,9 +89,13 @@ public class TextParser {
     }
 
     private void displayHelp() {
+
+        String ANSI_BOLD = "\u001B[1m";
+        String ANSI_ITALIC = "\u001B[3m";
+        String ANSI_ORANGE = "\u001B[38;5;208m";
         System.out.println(ANSI_BOLD + INDENT + "List of commands: \n" + ANSI_RESET);
         for (Map.Entry<String,String> entry : commands.entrySet()) {
-            System.out.println(INDENT + ANSI_BOLD + entry.getKey() + ANSI_RESET + " - " + entry.getValue());
+            System.out.println(INDENT + ANSI_BOLD + ANSI_ITALIC + ANSI_ORANGE+ entry.getKey() + ANSI_RESET + " - " + entry.getValue());
         }
     }
 
