@@ -132,21 +132,27 @@ class Controller {
         switch(eventIndex) {
             case 0:
                 path = "/RandomEvents/Food.txt";
+                player.setStatusIndex(1);
                 break;
             case 1:
                 path = "/RandomEvents/Oxygen.txt";
+                player.setStatusIndex(2);
                 break;
             case 2:
                 path = "/RandomEvents/Carbon.txt";
+                player.setStatusIndex(3);
                 break;
             case 3:
                 path = "/RandomEvents/Radio.txt";
+                player.setStatusIndex(4);
                 break;
             case 4:
                 path = "/RandomEvents/SpaceSuit.txt";
+                player.setStatusIndex(5);
                 break;
             case 5:
                 path = "/RandomEvents/PeanutButter.txt";
+                player.setStatusIndex(6);
                 break;
         }
 
@@ -477,6 +483,7 @@ class Controller {
             gameData.put("roomsVisited", player.getRoomsVisited());
             gameData.put("map", map);
             gameData.put("moveCount", moveCount);
+            gameData.put("statusIndex", player.getStatusIndex());
 
             Type typeListW = new TypeToken<List<String>>() {
             }.getType();
