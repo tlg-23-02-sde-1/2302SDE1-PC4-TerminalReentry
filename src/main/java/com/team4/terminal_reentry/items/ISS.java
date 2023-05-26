@@ -75,10 +75,6 @@ public class ISS {
         return baseMap;
     }
 
-    public String[] getIssMap() {
-        return baseMap;
-    }
-
     public String[] getMap(String currentRoom) {
         playerMap = getBaseMap(path);
         int row = playerLocations.get(currentRoom)[0];
@@ -96,14 +92,14 @@ public class ISS {
         playerMap[row] = temp.substring(0, column) + player + temp.substring(column + 1);
         return playerMap;
     }
-    public String[] coverMap(String currentRoom, Set<String> visitedRooms) {
+    private String[] coverMap(String currentRoom, Set<String> visitedRooms) {
         String[] coveredMap = getBaseMap(path);
 
         for(int i = 1; i < coveredMap.length - 1; i++){
             List<String> hittingRooms = visibleRows(i, visitedRooms);
             if(!hittingRooms.isEmpty()) {
                 char[] line = coveredMap[i].toCharArray();
-                for (int j = 1; j < line.length - 1; j++) {
+                for (int j = 1; j < line.length - 2; j++) {
                     if (visibleColumns(j, hittingRooms)) {
                     } else {
                         line[j] = ' ';

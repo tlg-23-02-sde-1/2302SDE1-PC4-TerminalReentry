@@ -25,7 +25,7 @@ class Music {
         return midiBytes;
     }
 
-    public int setMidiBytes(String url) {
+    private int setMidiBytes(String url) {
         // Open a connection to the URL
         URLConnection connection = null;
         try {

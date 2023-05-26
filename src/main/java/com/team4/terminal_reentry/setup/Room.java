@@ -35,7 +35,7 @@ public class Room {
         return this.description;
     }
 
-    public void setInventory(Item item) {
+    private void setInventory(Item item) {
         inventory.add(item);
     }
 
@@ -48,7 +48,7 @@ public class Room {
         inventory.remove(item);
     }
 
-    public void setNpcs(NPC npc) {
+    private void setNpcs(NPC npc) {
         characters.add(npc);
     }
 
@@ -56,7 +56,7 @@ public class Room {
         return characters;
     }
 
-    public void setExits(Map<String, String> exits) {
+    private void setExits(Map<String, String> exits) {
         this.exits = exits;
     }
 

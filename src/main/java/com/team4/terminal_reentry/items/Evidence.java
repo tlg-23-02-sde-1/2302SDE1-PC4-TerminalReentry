@@ -13,7 +13,7 @@ public class Evidence extends Item{
         return data;
     }
 
-    public void setData(String data) {
+    private void setData(String data) {
         this.data = data;
     }
 
@@ -21,7 +21,7 @@ public class Evidence extends Item{
         return secret;
     }
 
-    public void setSecret(String secret) {
+    private void setSecret(String secret) {
         this.secret = secret;
     }
 }
