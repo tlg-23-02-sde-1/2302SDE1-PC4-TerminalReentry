@@ -128,6 +128,7 @@ class Controller {
             e.printStackTrace();
         }
         int eventIndex = rand.nextInt(events.size());
+        String badEvent = events.get(eventIndex);
         String path = null;
         switch(eventIndex) {
             case 0:
@@ -155,6 +156,7 @@ class Controller {
                 player.setStatusIndex(6);
                 break;
         }
+        player.addBadEvent(badEvent);
 
         Console.clear();
         try {
@@ -484,6 +486,7 @@ class Controller {
             gameData.put("map", map);
             gameData.put("moveCount", moveCount);
             gameData.put("statusIndex", player.getStatusIndex());
+            gameData.put("badEvents", player.getBadEvents());
 
             Type typeListW = new TypeToken<List<String>>() {
             }.getType();

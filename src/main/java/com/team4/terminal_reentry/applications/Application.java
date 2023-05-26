@@ -158,7 +158,10 @@ public class Application {
 
         int statusIndex = jsonObject.get("statusIndex").getAsInt();
 
-        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited, moveCount, statusIndex);
+        JsonArray BadEvents = jsonObject.get("badEvents").getAsJsonArray();
+        Set<String> badEvents = gson.fromJson(BadEvents,typeSetS);
+
+        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited, moveCount, statusIndex, badEvents);
     }
 
     private Map<String, Room> loadSavedMap(JsonObject mapData) {
@@ -205,7 +208,13 @@ public class Application {
             player.getInventory().forEach((item) -> System.out.println(TxtFormat.wordWrap(ANSI_RED +
                     item.getName() + ANSI_RESET)));
         }
+
         System.out.println(TxtFormat.wordWrap("Player Status: ") + ANSI_ORANGE + player.getStatus() + ANSI_RESET);
+
+        if (!player.getBadEvents().isEmpty()) {
+            System.out.println(TxtFormat.wordWrap("Bad events that have happened: "));
+            player.getBadEvents().forEach((event) -> System.out.println(TxtFormat.wordWrap(ANSI_RED + event + ANSI_RESET)));
+        }
     }
 
     private void displayISS(String roomName) {
