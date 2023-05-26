@@ -14,6 +14,7 @@ public class Player {
     private Set<String> roomsVisited = new HashSet<>();
     private final List<String> status = new ArrayList<>(List.of("calm","hungry","light-headed","exhausted","concerned","disturbed","confused"));
     private int statusIndex;
+    private Set<String> badEvents = new LinkedHashSet<>();
 
     public Player(Room currentRoom) {
         this.currentRoom = currentRoom;
@@ -21,7 +22,7 @@ public class Player {
         this.statusIndex = 0;
     }
 
-    public Player(Room currentRoom, List<Item> inventory, Map<String,String> inspectedItem, Set<String> npcMet, Set<String> roomsVisited, int moveCount, int statusIndex) {
+    public Player(Room currentRoom, List<Item> inventory, Map<String,String> inspectedItem, Set<String> npcMet, Set<String> roomsVisited, int moveCount, int statusIndex, Set<String> badEvents) {
         this.currentRoom = currentRoom;
         this.inventory = inventory;
         this.inspectedItem = inspectedItem;
@@ -29,6 +30,7 @@ public class Player {
         this.roomsVisited = roomsVisited;
         this.moveCount = moveCount;
         this.statusIndex = statusIndex;
+        this.badEvents = badEvents;
     }
 
     public int getStatusIndex() {
@@ -41,6 +43,18 @@ public class Player {
 
     public String getStatus() {
         return status.get(statusIndex);
+    }
+
+    public Set<String> getBadEvents() {
+        return badEvents;
+    }
+
+    public void setBadEvents(Set<String> badEvents) {
+        this.badEvents = badEvents;
+    }
+
+    public void addBadEvent(String badEvent) {
+        this.badEvents.add(badEvent);
     }
 
     public List<Item> getInventory() {
