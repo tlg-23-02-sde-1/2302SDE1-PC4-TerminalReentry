@@ -82,7 +82,7 @@ public class Application {
     private boolean warnBeforeRestore() {
         boolean response = false;
         System.out.print("\n\n" + INDENT + "Would you like to restore a saved game? " +
-                "\n" + INDENT + "You will lose all unsaved progress  --> [Y,N]");
+                "\n" + INDENT + "You will lose all unsaved progress [Y,N]  --> ");
         String answer = scanner.nextLine();
         boolean valid = false;
         while (!valid) {
@@ -92,7 +92,7 @@ public class Application {
             } else if (answer.equalsIgnoreCase("n")) {
                 break;
             } else {
-                System.out.println(INDENT + "Invalid Input. Please enter y or n: ");
+                System.out.print(INDENT + "Invalid Input. Please enter y or n: ");
                 answer = scanner.nextLine();
             }
         }
@@ -202,6 +202,7 @@ public class Application {
             player.getInventory().forEach((item) -> System.out.println(TxtFormat.wordWrap(ANSI_RED +
                     item.getName() + ANSI_RESET)));
         }
+
     }
 
     private void displayISS(String roomName) {
