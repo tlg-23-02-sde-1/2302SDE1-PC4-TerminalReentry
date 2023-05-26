@@ -100,8 +100,7 @@ public class ISS {
             if(!hittingRooms.isEmpty()) {
                 char[] line = coveredMap[i].toCharArray();
                 for (int j = 1; j < line.length - 2; j++) {
-                    if (visibleColumns(j, hittingRooms)) {
-                    } else {
+                    if (!visibleColumns(j, hittingRooms)) {
                         line[j] = ' ';
                     }
                 }
