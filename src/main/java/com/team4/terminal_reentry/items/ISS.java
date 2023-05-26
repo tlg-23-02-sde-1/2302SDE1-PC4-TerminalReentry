@@ -23,7 +23,7 @@ public class ISS {
     private String[] playerMap;
     private final String path = "/MapInfo/map.txt";
     private final Map<String, int[]> playerLocations;
-    private final String player = ANSI_GOLD + "§" + ANSI_RESET;
+    private final String player = ANSI_GOLD + "\u00A7" + ANSI_RESET;
 
     public ISS() {
         baseMap = getBaseMap(path);

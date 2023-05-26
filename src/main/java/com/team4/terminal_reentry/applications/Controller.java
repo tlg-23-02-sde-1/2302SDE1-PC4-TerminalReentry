@@ -7,6 +7,7 @@ import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 import com.team4.terminal_reentry.setup.NPC;
 import com.team4.terminal_reentry.setup.Player;
+import com.team4.terminal_reentry.setup.Resource;
 import com.team4.terminal_reentry.setup.Room;
 
 import java.io.*;
@@ -20,6 +21,7 @@ class Controller {
     private final Map<String, Room> map;
     private final Player player;
     private final List<String> winCondition;
+    private static final String ANSI_BOLD = "\u001B[1m";
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_YELLOW = "\u001B[33m";
     private static final String ANSI_RED = "\u001B[31m";
@@ -27,7 +29,7 @@ class Controller {
     private final Scanner scanner = new Scanner(System.in);
     private final MidiPlayer midiPlayer;
     private final SoundFx soundFx = new SoundFx();
-    private int moveCount = 0;
+    private int moveCount;
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
@@ -124,7 +126,39 @@ class Controller {
             e.printStackTrace();
         }
         int eventIndex = rand.nextInt(events.size());
-        System.out.println(INDENT + events.get(eventIndex));
+        String path = null;
+        switch(eventIndex) {
+            case 0:
+                path = "/RandomEvents/Food.txt";
+                break;
+            case 1:
+                path = "/RandomEvents/Oxygen.txt";
+                break;
+            case 2:
+                path = "/RandomEvents/Carbon.txt";
+                break;
+            case 3:
+                path = "/RandomEvents/Radio.txt";
+                break;
+            case 4:
+                path = "/RandomEvents/SpaceSuit.txt";
+                break;
+            case 5:
+                path = "/RandomEvents/PeanutButter.txt";
+                break;
+        }
+
+        Console.clear();
+        try {
+            // read the entire file as a string
+            String contents = Resource.read(path);
+            contents = INDENT + contents;
+            contents = contents.replace("\n","\n" + INDENT);
+            System.out.println(contents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(INDENT + ANSI_RED + ANSI_BOLD + events.get(eventIndex) + ANSI_RESET + "\n\n");
         enterToContinue();
     }
 
