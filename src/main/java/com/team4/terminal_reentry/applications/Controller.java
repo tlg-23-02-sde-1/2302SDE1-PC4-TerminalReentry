@@ -201,7 +201,8 @@ class Controller {
                     valid = true;
                 }
                 else {
-                    System.out.print(INDENT + "Invalid selection. Please enter a number between [1-" + moduleNumber + "] --> ");
+                    System.out.print(TxtFormat.wordWrap("Invalid selection. Please enter a number between [1-" +
+                            moduleNumber + "] --> "));
                     try {
                         selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
                     } catch (NumberFormatException e) {
@@ -455,7 +456,7 @@ class Controller {
 
     private boolean hasMatch(String noun, Item item) {
         if (item.getName().equalsIgnoreCase(noun)) {
-            System.out.println(INDENT + item.getData());
+            System.out.println(TxtFormat.wordWrap(item.getData()));
             player.inspectedItem(item.getName(), item.getData());
             return true;
         }
