@@ -180,7 +180,7 @@ public class Application {
 
         Console.clear();
 
-        displayISS(currentRoom.getName());
+        displayISS(currentRoom.getName(), player);
         System.out.println("\n" + TxtFormat.wordWrap("You are currently in the " + ANSI_GREEN + currentRoom.getName() + ANSI_RESET + " module."));
         System.out.println(TxtFormat.wordWrap("You " + currentRoom.getDescription()));
         System.out.println(TxtFormat.wordWrap("================================================================="));
@@ -204,9 +204,9 @@ public class Application {
         }
     }
 
-    private void displayISS(String roomName) {
+    private void displayISS(String roomName, Player player) {
 
-        String[] issLines = iss.getMap(roomName.toLowerCase());
+        String[] issLines = iss.getHiddenMap(roomName.toLowerCase(), player.getRoomsVisited());
         System.out.println("\n");
         for(String line : issLines) {
             System.out.println(INDENT + line);

@@ -1,0 +1,68 @@
+{
+  "harmony": {
+    "top": 5,
+    "bottom": 9,
+    "left": 3,
+    "right": 11
+  },
+  "unity": {
+    "top": 5,
+    "bottom": 9,
+    "left": 24,
+    "right": 32
+  },
+  "columbus": {
+    "top": 0,
+    "bottom": 4,
+    "left": 3,
+    "right": 11
+  },
+  "destiny": {
+    "top": 0,
+    "bottom": 9,
+    "left": 12,
+    "right": 23
+  },
+  "kibo": {
+    "top": 10,
+    "bottom": 15,
+    "left": 3,
+    "right": 11
+  },
+  "nauka": {
+    "top": 9,
+    "bottom": 15,
+    "left": 40,
+    "right": 54
+  },
+  "quest": {
+    "top": 1,
+    "bottom": 4,
+    "left": 24,
+    "right": 32
+  },
+  "rassvet": {
+    "top": 1,
+    "bottom": 3,
+    "left": 45,
+    "right": 54
+  },
+  "tranquility": {
+    "top": 10,
+    "bottom": 13,
+    "left": 24,
+    "right": 33
+  },
+  "zarya": {
+    "top": 4,
+    "bottom": 9,
+    "left": 33,
+    "right": 44
+  },
+  "zvezda": {
+    "top": 4,
+    "bottom": 8,
+    "left": 44,
+    "right": 61
+  }
+}
