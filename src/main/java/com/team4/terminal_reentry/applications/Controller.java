@@ -9,8 +9,7 @@ import com.team4.terminal_reentry.setup.NPC;
 import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Room;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,12 +27,14 @@ class Controller {
     private final Scanner scanner = new Scanner(System.in);
     private final MidiPlayer midiPlayer;
     private final SoundFx soundFx = new SoundFx();
+    private int moveCount = 0;
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
         this.player = player;
         this.winCondition = winCondition;
         this.midiPlayer = midiPlayer;
+        this.moveCount = player.getMoveCount();
     }
 
     private void enterToContinue() {
@@ -43,30 +44,45 @@ class Controller {
     }
 
     public boolean execute(String[] commands) {
+        boolean randTrigger = false;
         boolean isQuit = false;
         String verb = commands[1];
         String noun = commands[2];
         switch (verb) {
             case "accuse":
                 isQuit = accuse();
+                moveCount++;
+                randTrigger = true;
                 break;
             case "look":
                 look(verb, noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "inspect":
                 inspect(verb, noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "blacklight":
                 blacklight();
+                moveCount++;
+                randTrigger = true;
                 break;
             case "go":
                 go(noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "take":
                 take(verb, noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "talk":
                 talk(noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "music":
                 music(noun);
@@ -87,7 +103,29 @@ class Controller {
                 enterToContinue();
                 break;
         }
+        if(moveCount % 20 == 0 && moveCount != 0 && randTrigger) {
+            triggerRandomEvent();
+        }
         return isQuit;
+    }
+
+    private void triggerRandomEvent() {
+        Gson gson = new Gson();
+        Random rand = new Random();
+        ArrayList<String> events = new ArrayList<>();
+        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        try {
+            InputStream eventsStream = getClass().getClassLoader().getResourceAsStream("events.json");
+            if (eventsStream == null) {
+                throw new FileNotFoundException("Events file not found");
+            }
+            events = gson.fromJson(new InputStreamReader(eventsStream), listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int eventIndex = rand.nextInt(events.size());
+        System.out.println(INDENT + events.get(eventIndex));
+        enterToContinue();
     }
 
     private void blacklight() {
@@ -378,6 +416,7 @@ class Controller {
             gameData.put("inspectedItem", player.getInspectedItem());
             gameData.put("roomsVisited", player.getRoomsVisited());
             gameData.put("map", map);
+            gameData.put("moveCount", moveCount);
 
             Type typeListW = new TypeToken<List<String>>() {
             }.getType();

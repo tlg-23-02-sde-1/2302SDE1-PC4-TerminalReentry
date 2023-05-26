@@ -148,7 +148,9 @@ public class Application {
         JsonArray jWinCondition = jsonObject.get("winCondition").getAsJsonArray();
         winCondition = gson.fromJson(jWinCondition,typeListW);
 
-        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited);
+        int moveCount = jsonObject.get("moveCount").getAsInt();
+
+        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited, moveCount);
     }
 
     private Map<String, Room> loadSavedMap(JsonObject mapData) {
