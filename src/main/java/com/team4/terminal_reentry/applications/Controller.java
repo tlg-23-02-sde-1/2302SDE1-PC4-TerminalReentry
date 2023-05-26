@@ -9,15 +9,17 @@ import com.team4.terminal_reentry.setup.NPC;
 import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Resource;
 import com.team4.terminal_reentry.setup.Room;
+import com.team4.terminal_reentry.setup.TxtFormat;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static com.team4.terminal_reentry.setup.TxtFormat.INDENT;
+import static com.team4.terminal_reentry.setup.TxtFormat.MAX_WIDTH;
 
 class Controller {
-    public static final String INDENT = "\t\t";
     private final Map<String, Room> map;
     private final Player player;
     private final List<String> winCondition;
@@ -414,38 +416,40 @@ class Controller {
             randomNumber = random.nextInt(4) + 1;
             System.out.print(INDENT + "Enter: ");
             question = scanner.nextLine();
+            String npcResponse = "";
             if ("5".equals(question)) {
                 question = "quit";
             } else if (randomNumber == 1) {
                 randomNumber = random.nextInt(2) + 1;
                 if (randomNumber == 1) {
-                    System.out.println(INDENT + npc.getName() + " says: " + "\"I have to go to the bathroom\"");
+                    npcResponse = npc.getName() + " says: " + "\"I have to go to the bathroom\"";
                 } else {
-                    System.out.println(INDENT + npc.getName() + " says: " + "\"I can't handle this anymore\"");
+                    npcResponse = npc.getName() + " says: " + "\"I can't handle this anymore\"";
                 }
             } else {
                 switch (question) {
                     case "1":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was at " +
-                                npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I was at " +
+                                npc.getAnswers().get("locationAtTimeOfMurder") + "\"";
                         break;
                     case "2":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was " +
-                                npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I was " +
+                                npc.getAnswers().get("activityAtTimeOfMurder") + "\"";
                         break;
                     case "3":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I think he " +
-                                npc.getAnswers().get("opinionOfVictim") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I think he " +
+                                npc.getAnswers().get("opinionOfVictim") + "\"";
                         break;
                     case "4":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"" +
-                                npc.getAnswers().get("otherTestimony") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"" +
+                                npc.getAnswers().get("otherTestimony") + "\"";
                         break;
                     default:
-                        System.out.println(INDENT + question + " is not a valid option!");
+                        npcResponse = question + " is not a valid option!";
                         break;
                 }
             }
+            System.out.println(INDENT + TxtFormat.wordWrap(npcResponse));
         } while (!question.equals("quit"));
     }
 

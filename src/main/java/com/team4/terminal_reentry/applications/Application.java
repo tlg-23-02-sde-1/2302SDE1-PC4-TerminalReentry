@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.team4.terminal_reentry.items.ISS;
 import com.team4.terminal_reentry.items.Item;
+import com.team4.terminal_reentry.setup.TxtFormat;
 import com.team4.terminal_reentry.setup.Player;
 import com.team4.terminal_reentry.setup.Resource;
 import com.team4.terminal_reentry.setup.Room;
@@ -15,12 +16,14 @@ import com.team4.terminal_reentry.setup.Scenario;
 
 import java.io.*;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static com.team4.terminal_reentry.setup.TxtFormat.INDENT;
+import static com.team4.terminal_reentry.setup.TxtFormat.MAX_WIDTH;
 
 public class Application {
 
-    public static final String INDENT = "\t\t";
+
     private final Scanner scanner = new Scanner(System.in);
     private final TextParser textParser = new TextParser();
 
@@ -178,29 +181,33 @@ public class Application {
         Console.clear();
 
         displayISS(currentRoom.getName());
-        System.out.println("\n\t\tYou are currently in the " + ANSI_GREEN + currentRoom.getName() + ANSI_RESET + " module.");
-        System.out.println(INDENT + "You " + currentRoom.getDescription());
-        System.out.println(INDENT + "===================================================================================");
-        System.out.println(INDENT + "Possible directions you can go:");
-        currentRoom.getExits().forEach((key, value) -> System.out.println(INDENT + ANSI_WHITE + key + ANSI_RESET + ": "
-                + ANSI_GREEN + value + ANSI_RESET));
+        System.out.println("\n" + TxtFormat.wordWrap("You are currently in the " + ANSI_GREEN + currentRoom.getName() + ANSI_RESET + " module."));
+        System.out.println(TxtFormat.wordWrap("You " + currentRoom.getDescription()));
+        System.out.println(TxtFormat.wordWrap("================================================================="));
+        System.out.println(TxtFormat.wordWrap("Possible directions you can go:"));
+        currentRoom.getExits().forEach((key, value) -> System.out.println(TxtFormat.wordWrap(ANSI_WHITE +
+                key + ANSI_RESET + ": " + ANSI_GREEN + value + ANSI_RESET)));
         if (!currentRoom.getInventory().isEmpty()) {
-            System.out.println(INDENT + "You see the following items room: ");
-            currentRoom.getInventory().forEach((item) -> System.out.println(INDENT + ANSI_RED + item.getName() + ANSI_RESET));
+            System.out.println(TxtFormat.wordWrap("You see the following items room: "));
+            currentRoom.getInventory().forEach((item) -> System.out.println(TxtFormat.wordWrap(ANSI_RED +
+                    item.getName() + ANSI_RESET)));
         }
         if (!currentRoom.getNpcs().isEmpty()) {
-            System.out.println(INDENT + "You see the following people in the room: ");
-            currentRoom.getNpcs().forEach((npc) -> System.out.println(INDENT + ANSI_YELLOW + npc.getName() + ANSI_RESET));
+            System.out.println(TxtFormat.wordWrap("You see the following people in the room: "));
+            currentRoom.getNpcs().forEach((npc) -> System.out.println(TxtFormat.wordWrap(ANSI_YELLOW +
+                    npc.getName() + ANSI_RESET)));
         }
         if (!player.getInventory().isEmpty()) {
-            System.out.println(INDENT + "Your inventory: ");
-            player.getInventory().forEach((item) -> System.out.println(INDENT + ANSI_RED + item.getName() + ANSI_RESET));
+            System.out.println(TxtFormat.wordWrap("Your inventory: "));
+            player.getInventory().forEach((item) -> System.out.println(TxtFormat.wordWrap(ANSI_RED +
+                    item.getName() + ANSI_RESET)));
         }
     }
 
     private void displayISS(String roomName) {
 
         String[] issLines = iss.getMap(roomName.toLowerCase());
+        System.out.println("\n");
         for(String line : issLines) {
             System.out.println(INDENT + line);
         }
