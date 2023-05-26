@@ -10,7 +10,6 @@ public class TxtFormat {
     public static String wordWrap(String words) {
         StringBuilder formatted = new StringBuilder();
         formatted.append(INDENT);
-//        words = words.trim();
         String[] wordArray = words.split("\\s+");
 
         int currentLength = INDENT.length();
