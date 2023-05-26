@@ -5,6 +5,7 @@ import com.team4.terminal_reentry.items.Item;
 import java.util.*;
 
 public class Player {
+    private int moveCount;
     private String name= "Jessy";
     private Room currentRoom;
     private List<Item> inventory = new ArrayList<>();
@@ -12,17 +13,19 @@ public class Player {
     private Map<String,String> inspectedItem = new HashMap<>();
     private Set<String> roomsVisited = new HashSet<>();
 
+
     public Player(Room currentRoom) {
         this.currentRoom = currentRoom;
         roomsVisited.add(currentRoom.getName());
     }
 
-    public Player(Room currentRoom, List<Item> inventory, Map<String,String> inspectedItem, Set<String> npcMet, Set<String> roomsVisited) {
+    public Player(Room currentRoom, List<Item> inventory, Map<String,String> inspectedItem, Set<String> npcMet, Set<String> roomsVisited, int moveCount) {
         this.currentRoom = currentRoom;
         this.inventory = inventory;
         this.inspectedItem = inspectedItem;
         this.npcMet = npcMet;
         this.roomsVisited = roomsVisited;
+        this.moveCount = moveCount;
     }
 
     public List<Item> getInventory() {
@@ -71,5 +74,9 @@ public class Player {
 
     public Map<String, String> getInspectedItem() {
         return inspectedItem;
+    }
+
+    public int getMoveCount() {
+        return moveCount;
     }
 }
