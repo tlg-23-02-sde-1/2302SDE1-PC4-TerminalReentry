@@ -17,8 +17,6 @@ public class TextParser {
     private final Scanner scanner = new Scanner(System.in);
 
     public TextParser() {
-
-
         Gson gson = new Gson();
         Type mapType = new TypeToken<Map<String,String>>(){}.getType();
 

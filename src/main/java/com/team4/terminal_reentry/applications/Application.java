@@ -6,8 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.team4.terminal_reentry.items.ISS;
 import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.setup.Player;
+import com.team4.terminal_reentry.setup.Resource;
 import com.team4.terminal_reentry.setup.Room;
 import com.team4.terminal_reentry.setup.Scenario;
 
@@ -24,6 +26,7 @@ public class Application {
 
     private List<String> winCondition = new ArrayList<>();
     private final MidiPlayer midiPlayer;
+    private final ISS iss = new ISS();
 
     public Application() {
         Music source = new Music();
@@ -194,20 +197,10 @@ public class Application {
     }
 
     private void displayISS(String roomName) {
-        String ANSI_GOLD = "\u001B[38;5;220m";
-        String ANSI_RESET = "\u001B[0m";
 
-        try {
-            String path = "/locations/" + roomName + ".txt";
-            // read the entire file as a string
-            String contents = readResource(path);
-            contents = INDENT + contents;
-            contents = contents.replaceAll("\n", "\n" + INDENT);
-            contents = contents.replace("\u00A7", ANSI_GOLD + "\u00A7" + ANSI_RESET);
-            contents = "\n\n" + contents;
-            System.out.println(contents);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String[] issLines = iss.getMap(roomName.toLowerCase());
+        for(String line : issLines) {
+            System.out.println(INDENT + line);
         }
     }
 
@@ -249,7 +242,7 @@ public class Application {
         Console.clear();
         try {
             // read the entire file as a string
-            String contents = readResource("/instructions.txt");
+            String contents = Resource.read("/instructions.txt");
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -261,7 +254,7 @@ public class Application {
         Console.clear();
         try {
             // read the entire file as a string
-            String contents = readResource("/basicInfo.txt");
+            String contents = Resource.read("/basicInfo.txt");
             System.out.println(contents);
         } catch (IOException e) {
             e.printStackTrace();
@@ -273,7 +266,7 @@ public class Application {
         Console.clear();
         try {
             // read the entire file as a string
-            String titleScreen = readResource("/titleScreen.txt");
+            String titleScreen = Resource.read("/titleScreen.txt");
             System.out.println(titleScreen);
         } catch (IOException e) {
             e.printStackTrace();
@@ -281,15 +274,6 @@ public class Application {
         enterToContinue();
     }
 
-
-    private static String readResource(String path) throws IOException {
-        try (InputStream is = Application.class.getResourceAsStream(path)) {
-            if (is == null) {
-                throw new FileNotFoundException("Resource not found: " + path);
-            }
-            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        }
-    }
 
     private void enterToContinue() {
         System.out.print(INDENT + "Press enter to continue...");

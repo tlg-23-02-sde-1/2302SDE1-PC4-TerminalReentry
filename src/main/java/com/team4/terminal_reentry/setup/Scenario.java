@@ -153,7 +153,7 @@ public class Scenario {
     }
 
     private JsonArray loadJson(String filePath) throws IOException {
-        String contents = readResource(filePath);
+        String contents = Resource.read(filePath);
         return (JsonArray) JsonParser.parseString(contents);
     }
 
@@ -219,14 +219,5 @@ public class Scenario {
 
     public List<String> getWinCondition() {
         return winCondition;
-    }
-
-    private static String readResource(String path) throws IOException {
-        try (InputStream is = Scenario.class.getResourceAsStream(path)) {
-            if (is == null) {
-                throw new FileNotFoundException("Resource not found: " + path);
-            }
-            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-        }
     }
 }
