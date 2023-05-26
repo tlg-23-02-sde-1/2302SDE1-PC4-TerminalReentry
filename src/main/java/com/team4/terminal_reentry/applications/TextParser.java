@@ -2,17 +2,19 @@ package com.team4.terminal_reentry.applications;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.team4.terminal_reentry.setup.TxtFormat;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.team4.terminal_reentry.setup.TxtFormat.INDENT;
+
 public class TextParser {
 
     private Map<String, String> commands;
     private List<Map.Entry<String,String>> sortedSynonyms;
-    private final String INDENT = "\t\t";
     private static final String ANSI_RESET = "\u001B[0m";
     private final Scanner scanner = new Scanner(System.in);
 
@@ -52,7 +54,8 @@ public class TextParser {
             if (commands.containsKey(command)) {
                 result[1] = command;
             } else {
-                result[0] = INDENT + input + " is not valid because " + command + " is not a valid command. Type 'help' for more information";
+                result[0] = TxtFormat.wordWrap(input + " is not valid because " + command +
+                        " is not a valid command. Type 'help' for more information");
                 System.out.println(result[0]);
                 enterToContinue();
             }
