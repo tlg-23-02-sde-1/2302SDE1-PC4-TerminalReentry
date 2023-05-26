@@ -99,23 +99,44 @@ class Controller {
                 break;
             }
         }
-        if(hasBlacklight) {
-            System.out.println("What do you want to examine with the blacklight?");
+        if (hasBlacklight) {
+            System.out.println(INDENT + "What do you want to examine with the blacklight?");
             List<Item> availableItems = Stream.concat(player.getInventory().stream(),
                     player.getCurrentRoom().getInventory().stream()).collect(Collectors.toList());
             for (int i = 0; i < availableItems.size(); i++) {
-                System.out.println((i + 1) + ". " + availableItems.get(i).getName());
+                System.out.println(INDENT + (i + 1) + ". " + availableItems.get(i).getName());
             }
-            System.out.println(availableItems.size() + 1 + ". " + player.getCurrentRoom().getName() + " module");
-            int selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
-            if (selectedItem == availableItems.size()){
-                System.out.println(player.getCurrentRoom().getSecret());
-            } else {
-                System.out.println(availableItems.get(selectedItem).getSecret());
+            int moduleNumber = availableItems.size()+1;
+            System.out.println(INDENT + moduleNumber + ". " + player.getCurrentRoom().getName() + " module");
+            System.out.print(INDENT + "Please a number above [1-" + moduleNumber + "] --> ");
+
+            int selectedItem = 0;
+            try {
+                selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
+            } catch (NumberFormatException e) {
+                System.out.println(INDENT + "Please enter a number");
             }
 
+            boolean valid = false;
+            while(!valid) {
+                if (selectedItem == availableItems.size()) {
+                    System.out.println(INDENT + player.getCurrentRoom().getSecret());
+                    valid = true;
+                } else if (selectedItem < availableItems.size() && selectedItem >= 0){
+                    System.out.println(INDENT + availableItems.get(selectedItem).getSecret());
+                    valid = true;
+                }
+                else {
+                    System.out.print(INDENT + "Invalid selection. Please enter a number between [1-" + moduleNumber + "] --> ");
+                    try {
+                        selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
+                    } catch (NumberFormatException e) {
+                        System.out.println(INDENT + "Please enter a number");
+                    }
+                }
+            }
         } else {
-            System.out.println("You need to add the blacklight to your inventory to use it.");
+            System.out.println(INDENT + "You need to add the blacklight to your inventory to use it.");
         }
         enterToContinue();
     }
@@ -254,9 +275,9 @@ class Controller {
         index = 1;
         System.out.println(INDENT + "List of possible murder weapons: ");
         for (Item item : player.getInventory()) {
-                if (item instanceof Weapon) {
-                    System.out.println(INDENT + index + ". " + item.getName());
-                    index++;
+            if (item instanceof Weapon) {
+                System.out.println(INDENT + index + ". " + item.getName());
+                index++;
             }
         }
         //player guesses murder weapon

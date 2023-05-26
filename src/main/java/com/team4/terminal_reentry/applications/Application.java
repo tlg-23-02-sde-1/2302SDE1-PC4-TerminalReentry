@@ -80,10 +80,10 @@ public class Application {
         String answer = scanner.nextLine();
         boolean valid = false;
         while (!valid) {
-            if (answer.toLowerCase().equals("y")) {
+            if (answer.equalsIgnoreCase("y")) {
                 valid = true;
                 response = true;
-            } else if (answer.toLowerCase().equals("n")) {
+            } else if (answer.equalsIgnoreCase("n")) {
                 break;
             } else {
                 System.out.println(INDENT + "Invalid Input. Please enter y or n: ");
@@ -239,23 +239,6 @@ public class Application {
                 break;
             } else {
                 System.out.print(INDENT + "Invalid Input. Please enter New Game, Restore Game or Quit: ");
-                answer = scanner.nextLine();
-            }
-        }
-        return valid;
-    }
-
-    private boolean savedGame() {
-        System.out.print("\n\n" + INDENT + "Load saved game --> [Y,N]: ");
-        String answer = scanner.nextLine();
-        boolean valid = false;
-        while (!valid) {
-            if (answer.toLowerCase().equals("y")) {
-                valid = true;
-            } else if (answer.toLowerCase().equals("n")) {
-                break;
-            } else {
-                System.out.println(INDENT + "Invalid Input. Please enter y or n: ");
                 answer = scanner.nextLine();
             }
         }
