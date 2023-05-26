@@ -103,9 +103,8 @@ public class ISS {
             List<String> hittingRooms = visibleRows(i, visitedRooms);
             if(!hittingRooms.isEmpty()) {
                 char[] line = coveredMap[i].toCharArray();
-                for (int j = 1; j < line.length - 1; j++) {
-                    if (visibleColumns(j, hittingRooms)) {
-                    } else {
+                for (int j = 1; j < line.length - 2; j++) {
+                    if (!visibleColumns(j, hittingRooms)) {
                         line[j] = ' ';
                     }
                 }
