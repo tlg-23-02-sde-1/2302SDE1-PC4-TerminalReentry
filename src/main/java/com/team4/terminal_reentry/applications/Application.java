@@ -156,7 +156,9 @@ public class Application {
 
         int moveCount = jsonObject.get("moveCount").getAsInt();
 
-        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited, moveCount);
+        int statusIndex = jsonObject.get("statusIndex").getAsInt();
+
+        return new Player(loadedCurrentRoom, inventory, inspectedItem, npcMet, roomsVisited, moveCount, statusIndex);
     }
 
     private Map<String, Room> loadSavedMap(JsonObject mapData) {
@@ -177,6 +179,7 @@ public class Application {
         String ANSI_GREEN = "\u001B[32m";
         String ANSI_YELLOW = "\u001B[33m";
         String ANSI_WHITE = "\u001B[37m";
+        String ANSI_ORANGE = "\u001B[38;5;208m";
 
         Console.clear();
 
@@ -202,7 +205,7 @@ public class Application {
             player.getInventory().forEach((item) -> System.out.println(TxtFormat.wordWrap(ANSI_RED +
                     item.getName() + ANSI_RESET)));
         }
-
+        System.out.println(TxtFormat.wordWrap("Player Status: ") + ANSI_ORANGE + player.getStatus() + ANSI_RESET);
     }
 
     private void displayISS(String roomName) {
