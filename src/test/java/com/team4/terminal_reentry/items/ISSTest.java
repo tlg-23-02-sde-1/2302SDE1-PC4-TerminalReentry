@@ -15,12 +15,7 @@ ISS iss;
         iss = new ISS();
     }
 
-    @Test
-    void getIssMap() {
-        String[] map = iss.getIssMap();
-        String line4 = "*  ╚═╗  ╔═╝ ╔══════════╗╚══╗ ╔═╝ ╔══════════╗  ╔═╝  ╚════════╗  *";
-        assertEquals(line4, map[4]);
-    }
+
 
     @Test
     void getMap_shouldReturnMapWithCharacter_harmony() {
@@ -41,7 +36,6 @@ ISS iss;
         String line6 = "*  ]                   ╔╗   \u001B[38;5;220m§\u001B[0m   ╔╗          ╔═╗              ╔  *";
         String[] map = iss.getMap("unity");
         assertEquals(line6, map[7]);
-        System.out.println(iss.getIssMap()[7]);
     }
 
 

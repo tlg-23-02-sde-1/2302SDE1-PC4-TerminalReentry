@@ -49,9 +49,6 @@ public class Player {
         return badEvents;
     }
 
-    public void setBadEvents(Set<String> badEvents) {
-        this.badEvents = badEvents;
-    }
 
     public void addBadEvent(String badEvent) {
         this.badEvents.add(badEvent);
@@ -65,13 +62,6 @@ public class Player {
         this.inventory.add(item);
     }
 
-    public String showInventory() {
-        StringBuilder itemList = new StringBuilder();
-        for (Item item: inventory) {
-            itemList.append(item.getName() + "\n");
-        }
-        return itemList.toString();
-    }
 
     public Room getCurrentRoom() {
         return currentRoom;

@@ -8,12 +8,6 @@ public class Console {
     private Console() {
     }
 
-    public static void blankLines(int var0) {
-        for(int var1 = 0; var1 < var0; ++var1) {
-            System.out.println();
-        }
-
-    }
 
     public static void clear() {
         ProcessBuilder var0 = os.contains("windows") ? new ProcessBuilder(new String[]{"cmd", "/c", "cls"}) : new ProcessBuilder(new String[]{"clear"});
@@ -27,11 +21,4 @@ public class Console {
 
     }
 
-    public static void pause(long var0) {
-        try {
-            Thread.sleep(var0);
-        } catch (InterruptedException var3) {
-        }
-
-    }
 }
