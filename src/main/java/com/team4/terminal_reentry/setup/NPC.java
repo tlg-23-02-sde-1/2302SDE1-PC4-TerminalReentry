@@ -35,7 +35,7 @@ public class NPC {
         return firstName + " " + lastName;
     }
 
-    public void setName(String firstName, String lastName) {
+    private void setName(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
@@ -44,7 +44,7 @@ public class NPC {
         return isMurderer;
     }
 
-    public void setMurderer(boolean murderer) {
+    private void setMurderer(boolean murderer) {
         isMurderer = murderer;
     }
 
@@ -52,7 +52,7 @@ public class NPC {
         return answers;
     }
 
-    public void setAnswers(Map<String, String> answers) {
+    private void setAnswers(Map<String, String> answers) {
         this.answers = answers;
     }
 }

@@ -8,7 +8,6 @@ class MidiPlayer {
     private byte[] midiBytes = null;
     private Sequencer sequencer;
     private Sequence sequence;
-    private int volume = 50;
 
     public MidiPlayer(byte[] midiBytes) {
         this.midiBytes = midiBytes;
@@ -78,10 +77,6 @@ class MidiPlayer {
         }
     }
 
-    public void start(int loopCount, double volumeFactor) {
-        playMusic(loopCount, volumeFactor);
-    }
-
     public void volumeUp() {
         modifyVolume(2.0);
     }
@@ -108,7 +103,6 @@ class MidiPlayer {
                     if (command == ShortMessage.NOTE_ON || command == ShortMessage.NOTE_OFF) {
                         int originalVelocity = shortMessage.getData2();
                         int modifiedVelocity = modifiedVelocity(originalVelocity, factor);
-                        // e.g., originalVelocity * volumeFactor
 
                         try {
                             shortMessage.setMessage(command, shortMessage.getChannel(),

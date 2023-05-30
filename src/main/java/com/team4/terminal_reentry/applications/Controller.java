@@ -7,33 +7,38 @@ import com.team4.terminal_reentry.items.Item;
 import com.team4.terminal_reentry.items.Weapon;
 import com.team4.terminal_reentry.setup.NPC;
 import com.team4.terminal_reentry.setup.Player;
+import com.team4.terminal_reentry.setup.Resource;
 import com.team4.terminal_reentry.setup.Room;
+import com.team4.terminal_reentry.setup.TxtFormat;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import static com.team4.terminal_reentry.setup.TxtFormat.INDENT;
+import static com.team4.terminal_reentry.setup.TxtFormat.MAX_WIDTH;
 
 class Controller {
-    public static final String INDENT = "\t\t";
     private final Map<String, Room> map;
     private final Player player;
-    private List<String> winCondition = new ArrayList<>();
+    private final List<String> winCondition;
+    private static final String ANSI_BOLD = "\u001B[1m";
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_RED = "\u001B[31M";
+    private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
-    Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final MidiPlayer midiPlayer;
-    //TODO: fix soundFX
     private final SoundFx soundFx = new SoundFx();
+    private int moveCount;
 
     public Controller(Map<String, Room> map, Player player, List<String> winCondition, MidiPlayer midiPlayer) {
         this.map = map;
         this.player = player;
         this.winCondition = winCondition;
         this.midiPlayer = midiPlayer;
+        this.moveCount = player.getMoveCount();
     }
 
     private void enterToContinue() {
@@ -43,171 +48,347 @@ class Controller {
     }
 
     public boolean execute(String[] commands) {
+        boolean randTrigger = false;
         boolean isQuit = false;
         String verb = commands[1];
         String noun = commands[2];
         switch (verb) {
             case "accuse":
-                System.out.println(INDENT + "List of possible suspects: ");
-                List<String> accusation = new ArrayList<>();
-                int index = 1;
-                for (Room room : map.values()) {
-                    for (NPC npc : room.getNpcs()) {
-                        System.out.println(INDENT + index + ". " + npc.getName());
-                        index++;
-                    }
-                }
-                System.out.print(INDENT + "Please type who you want to accuse: ");
-                accusation.add(scanner.nextLine());
-
-                index = 1;
-                System.out.println(INDENT + "List of possible murder weapons: ");
-                for (Room room : map.values()) {
-                    for (Item item : room.getInventory()) {
-                        if (item instanceof Weapon) {
-                            System.out.println(INDENT + index + ". " + item.getName());
-                            index++;
-                        }
-                    }
-                }
-                System.out.print(INDENT + "Please type the murder weapon: ");
-                accusation.add(scanner.nextLine());
-
-                index = 1;
-                System.out.println(INDENT + "List of possible locations: ");
-                for (Room room : map.values()) {
-                    System.out.println(INDENT + index + ". " + room.getName());
-                    index++;
-                }
-                System.out.print(INDENT + "Please type location of the murder: ");
-                accusation.add(scanner.nextLine());
-
-                if (!accusation.stream().map(String::toLowerCase)
-                        .allMatch(winCondition.stream()
-                                .map(String::toLowerCase)
-                                .collect(Collectors.toList())::contains)) {
-                    System.out.println(INDENT + "That was wrong! Try again");
-                } else {
-                    System.out.println(INDENT + "You got it right!");
-                    isQuit = true;
-                }
-                enterToContinue();
-                break;
-            case "inventory":
-                System.out.println(INDENT + player.showInventory());
-                soundFx.play(verb);
+                isQuit = accuse();
+                moveCount++;
+                randTrigger = true;
                 break;
             case "look":
-                player.getCurrentRoom().getInventory().forEach((item) -> {
-                    if (item.getName().equalsIgnoreCase(noun)) {
-                        System.out.println(INDENT + item.getDescription());
-                    }
-                });
-                player.getInventory().forEach((item) -> {
-                    if (item.getName().equalsIgnoreCase(noun)) {
-                        System.out.println(INDENT + item.getDescription());
-                    }
-                });
-                soundFx.play(verb);
-                enterToContinue();
+                look(verb, noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "inspect":
-                boolean found = player.getCurrentRoom().getInventory().stream()
-                        .anyMatch((Item item) -> hasMatch(noun, item))
-                        || player.getInventory().stream()
-                        .anyMatch((Item item) -> hasMatch(noun, item));
-                if (!found) {
-                    System.out.println(INDENT + "You can't inspect " + noun);
-                } else {
-                    soundFx.play(verb);
-                }
-                enterToContinue();
+                inspect(verb, noun);
+                moveCount++;
+                randTrigger = true;
+                break;
+            case "blacklight":
+                blacklight();
+                moveCount++;
+                randTrigger = true;
                 break;
             case "go":
-                Room current = player.getCurrentRoom();
-                player.getCurrentRoom().getExits().forEach((key, value) -> {
-                    if (key.equals(noun)) {
-                        player.setCurrentRoom(map.get(value));
-                        player.visitRoom(map.get(value).getName());
-                    }
-                });
-                if (current.equals(player.getCurrentRoom())) {
-                    System.out.println(INDENT + "You can't go that way dummy!");
-                    enterToContinue();
-                }
+                go(noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "take":
-                Item item = null;
-                for (int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
-                    Item value = player.getCurrentRoom().getInventory().get(i);
-                    if (value.getName().equalsIgnoreCase(noun)) {
-                        player.addItem(value);
-                        item = value;
-                        soundFx.play(verb);
-                    }
-                }
-                player.getCurrentRoom().removeItem(item);
-                if (item == null) {
-                    System.out.println(INDENT + "There is no " + noun + " in the room.");
-                    enterToContinue();
-                }
+                take(verb, noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "talk":
                 talk(noun);
+                moveCount++;
+                randTrigger = true;
                 break;
             case "music":
-                if ("off".equalsIgnoreCase(noun)) {
-                    midiPlayer.mute();
-                } else if ("on".equalsIgnoreCase(noun)) {
-                    midiPlayer.playMusicThread(1);
-                } else if ("up".equalsIgnoreCase(noun)) {
-                    midiPlayer.volumeUp();
-                } else if ("down".equalsIgnoreCase(noun)) {
-                    midiPlayer.volumeDown();
-                } else if ("mute".equalsIgnoreCase(noun)) {
-                    midiPlayer.mute();
-                }
+                music(noun);
                 break;
             case "soundfx":
-                if ("off".equalsIgnoreCase(noun)) {
-                    soundFx.off();
-                } else if ("on".equalsIgnoreCase(noun)) {
-                    soundFx.on();
-                } else if ("up".equalsIgnoreCase(noun)) {
-                    soundFx.volumeUp();
-                } else if ("down".equalsIgnoreCase(noun)) {
-                    soundFx.volumeDown();
-                } else if ("mute".equalsIgnoreCase(noun)) {
-                    soundFx.off();
-                }
+                soundfx(noun);
                 break;
-
             case "quit":
                 isQuit = true;
                 midiPlayer.stop();
                 soundFx.killAll();
                 break;
             case "logbook":
-                String ANSI_RED = "\u001B[31m";
-                System.out.println(INDENT + "NPCs Met:");
-                for (String npc : player.getNpcMet()) {
-                    System.out.println(INDENT + ANSI_YELLOW + npc + ANSI_RESET);
-                }
-                System.out.println(INDENT + "Items inspected with its data: ");
-                for (Map.Entry<String, String> entry : player.getInspectedItem().entrySet()) {
-                    System.out.println(INDENT + "Item: " + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
-                }
-                System.out.println(INDENT + "Rooms visited: ");
-                for (String room : player.getRoomsVisited()) {
-                    System.out.println(INDENT + ANSI_GREEN + room + ANSI_RESET);
-                }
-                enterToContinue();
+                logbook();
                 break;
             case "save":
                 saveGame();
                 enterToContinue();
                 break;
         }
+        if(moveCount % 20 == 0 && moveCount != 0 && randTrigger) {
+            triggerRandomEvent();
+        }
+        return isQuit;
+    }
+
+    private void triggerRandomEvent() {
+        Gson gson = new Gson();
+        Random rand = new Random();
+        ArrayList<String> events = new ArrayList<>();
+        Type listType = new TypeToken<ArrayList<String>>(){}.getType();
+        try {
+            InputStream eventsStream = getClass().getClassLoader().getResourceAsStream("events.json");
+            if (eventsStream == null) {
+                throw new FileNotFoundException("Events file not found");
+            }
+            events = gson.fromJson(new InputStreamReader(eventsStream), listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int eventIndex = rand.nextInt(events.size());
+        String badEvent = events.get(eventIndex);
+        String path = null;
+        switch(eventIndex) {
+            case 0:
+                path = "/RandomEvents/Food.txt";
+                player.setStatusIndex(1);
+                break;
+            case 1:
+                path = "/RandomEvents/Oxygen.txt";
+                player.setStatusIndex(2);
+                break;
+            case 2:
+                path = "/RandomEvents/Carbon.txt";
+                player.setStatusIndex(3);
+                break;
+            case 3:
+                path = "/RandomEvents/Radio.txt";
+                player.setStatusIndex(4);
+                break;
+            case 4:
+                path = "/RandomEvents/SpaceSuit.txt";
+                player.setStatusIndex(5);
+                break;
+            case 5:
+                path = "/RandomEvents/PeanutButter.txt";
+                player.setStatusIndex(6);
+                break;
+        }
+        player.addBadEvent(badEvent);
+
+        Console.clear();
+        try {
+            // read the entire file as a string
+            String contents = Resource.read(path);
+            contents = INDENT + contents;
+            contents = contents.replace("\n","\n" + INDENT);
+            System.out.println(contents);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(INDENT + ANSI_RED + ANSI_BOLD + events.get(eventIndex) + ANSI_RESET + "\n\n");
+        enterToContinue();
+    }
+
+    private void blacklight() {
+        boolean hasBlacklight = false;
+        for (int i = 0; i < player.getInventory().size(); i++) {
+            Item value = player.getInventory().get(i);
+            if (value.getName().equalsIgnoreCase("blacklight")) {
+                hasBlacklight = true;
+                break;
+            }
+        }
+        if (hasBlacklight) {
+            System.out.println(INDENT + "What do you want to examine with the blacklight?");
+            List<Item> availableItems = Stream.concat(player.getInventory().stream(),
+                    player.getCurrentRoom().getInventory().stream()).collect(Collectors.toList());
+            for (int i = 0; i < availableItems.size(); i++) {
+                System.out.println(INDENT + (i + 1) + ". " + availableItems.get(i).getName());
+            }
+            int moduleNumber = availableItems.size()+1;
+            System.out.println(INDENT + moduleNumber + ". " + player.getCurrentRoom().getName() + " module");
+            System.out.print(INDENT + "Please a number above [1-" + moduleNumber + "] --> ");
+
+            int selectedItem = 0;
+            try {
+                selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
+            } catch (NumberFormatException e) {
+                System.out.println(INDENT + "Please enter a number");
+            }
+
+            boolean valid = false;
+            while(!valid) {
+                if (selectedItem == availableItems.size()) {
+                    System.out.println(INDENT + player.getCurrentRoom().getSecret());
+                    valid = true;
+                } else if (selectedItem < availableItems.size() && selectedItem >= 0){
+                    System.out.println(INDENT + availableItems.get(selectedItem).getSecret());
+                    valid = true;
+                }
+                else {
+                    System.out.print(TxtFormat.wordWrap("Invalid selection. Please enter a number between [1-" +
+                            moduleNumber + "] --> "));
+                    try {
+                        selectedItem = Integer.parseInt(scanner.nextLine()) - 1;
+                    } catch (NumberFormatException e) {
+                        System.out.println(INDENT + "Please enter a number");
+                    }
+                }
+            }
+        } else {
+            System.out.println(INDENT + "You need to add the blacklight to your inventory to use it.");
+        }
+        enterToContinue();
+    }
+
+    private void logbook() {
+        System.out.println(INDENT + "NPCs Met:");
+        for (String npc : player.getNpcMet()) {
+            System.out.println(INDENT + ANSI_YELLOW + npc + ANSI_RESET);
+        }
+        System.out.println(INDENT + "Items inspected with its data: ");
+        for (Map.Entry<String, String> entry : player.getInspectedItem().entrySet()) {
+            System.out.println(INDENT + ANSI_RED + entry.getKey() + ANSI_RESET + "   Data: " + entry.getValue());
+        }
+        System.out.println(INDENT + "Rooms visited: ");
+        for (String room : player.getRoomsVisited()) {
+            System.out.println(INDENT + ANSI_GREEN + room + ANSI_RESET);
+        }
+        enterToContinue();
+    }
+
+    private void soundfx(String noun) {
+        if ("off".equalsIgnoreCase(noun)) {
+            soundFx.off();
+        } else if ("on".equalsIgnoreCase(noun)) {
+            soundFx.on();
+        } else if ("up".equalsIgnoreCase(noun)) {
+            soundFx.volumeUp();
+        } else if ("down".equalsIgnoreCase(noun)) {
+            soundFx.volumeDown();
+        } else if ("mute".equalsIgnoreCase(noun)) {
+            soundFx.off();
+        }
+    }
+
+    private void music(String noun) {
+        if ("off".equalsIgnoreCase(noun)) {
+            midiPlayer.mute();
+        } else if ("on".equalsIgnoreCase(noun)) {
+            midiPlayer.playMusicThread(1);
+        } else if ("up".equalsIgnoreCase(noun)) {
+            midiPlayer.volumeUp();
+        } else if ("down".equalsIgnoreCase(noun)) {
+            midiPlayer.volumeDown();
+        } else if ("mute".equalsIgnoreCase(noun)) {
+            midiPlayer.mute();
+        }
+    }
+
+    private void take(String verb, String noun) {
+        Item item = null;
+        for (int i = 0; i < player.getCurrentRoom().getInventory().size(); i++) {
+            Item value = player.getCurrentRoom().getInventory().get(i);
+            if (value.getName().equalsIgnoreCase(noun)) {
+                player.addItem(value);
+                item = value;
+                soundFx.play(verb);
+                break;
+            }
+        }
+        player.getCurrentRoom().removeItem(item);
+        if (item == null) {
+            System.out.println(INDENT + "There is no " + noun + " in the room.");
+            enterToContinue();
+        }
+    }
+
+    private void go(String noun) {
+        Room current = player.getCurrentRoom();
+        player.getCurrentRoom().getExits().forEach((key, value) -> {
+            if (key.equals(noun)) {
+                player.setCurrentRoom(map.get(value));
+                player.visitRoom(map.get(value).getName());
+            }
+        });
+        if (current.equals(player.getCurrentRoom())) {
+            System.out.println(INDENT + "You can't go that way dummy!");
+            enterToContinue();
+        }
+    }
+
+    private void inspect(String verb, String noun) {
+        boolean found = player.getCurrentRoom().getInventory().stream()
+                .anyMatch((Item item) -> hasMatch(noun, item))
+                || player.getInventory().stream()
+                .anyMatch((Item item) -> hasMatch(noun, item));
+        if (!found) {
+            System.out.println(INDENT + "You can't inspect " + noun);
+        } else {
+            soundFx.play(verb);
+        }
+        enterToContinue();
+    }
+
+    private void look(String verb, String noun) {
+        boolean found = player.getCurrentRoom().getInventory().stream()
+                .anyMatch((Item item) -> {
+                    if (item.getName().equalsIgnoreCase(noun)) {
+                        System.out.println(INDENT + item.getDescription());
+                        return true;
+                    }
+                    return false;
+                })
+                || player.getInventory().stream()
+                .anyMatch((Item item) -> {
+                    if (item.getName().equalsIgnoreCase(noun)) {
+                        System.out.println(INDENT + item.getDescription());
+                        return true;
+                    }
+                    return false;
+                });
+        if (!found) {
+            System.out.println(INDENT + "You can't look at " + noun);
+        } else {
+            soundFx.play(verb);
+        }
+        enterToContinue();
+    }
+
+    private boolean accuse() {
+        boolean isQuit = false;
+        //print suspects
+        System.out.println(INDENT + "List of possible suspects: ");
+        List<String> accusation = new ArrayList<>();
+        int index = 1;
+        for (Room room : map.values()) {
+            for (NPC npc : room.getNpcs()) {
+                System.out.println(INDENT + index + ". " + npc.getName());
+                index++;
+            }
+        }
+        //player guesses npc
+        System.out.print(INDENT + "Please type who you want to accuse: ");
+        accusation.add(scanner.nextLine());
+
+        //print weapons
+        index = 1;
+        System.out.println(INDENT + "List of possible murder weapons: ");
+        for (Item item : player.getInventory()) {
+            if (item instanceof Weapon) {
+                System.out.println(INDENT + index + ". " + item.getName());
+                index++;
+            }
+        }
+        //player guesses murder weapon
+        System.out.print(INDENT + "Please type the murder weapon: ");
+        accusation.add(scanner.nextLine());
+
+        //print rooms
+        index = 1;
+        System.out.println(INDENT + "List of possible locations: ");
+        for (Room room : map.values()) {
+            System.out.println(INDENT + index + ". " + room.getName());
+            index++;
+        }
+        //player guesses room
+        System.out.print(INDENT + "Please type location of the murder: ");
+        accusation.add(scanner.nextLine());
+
+        //check if player is correct
+        if (!accusation.stream().map(String::toLowerCase)
+                .allMatch(winCondition.stream()
+                        .map(String::toLowerCase)
+                        .collect(Collectors.toList())::contains)) {
+            System.out.println(INDENT + "That was wrong! Try again");
+        } else {
+            System.out.println(INDENT + "You got it right!");
+            isQuit = true;
+        }
+        enterToContinue();
         return isQuit;
     }
 
@@ -244,44 +425,46 @@ class Controller {
             randomNumber = random.nextInt(4) + 1;
             System.out.print(INDENT + "Enter: ");
             question = scanner.nextLine();
+            String npcResponse = "";
             if ("5".equals(question)) {
                 question = "quit";
             } else if (randomNumber == 1) {
                 randomNumber = random.nextInt(2) + 1;
                 if (randomNumber == 1) {
-                    System.out.println(INDENT + npc.getName() + " says: " + "\"I have to go to the bathroom\"");
+                    npcResponse = npc.getName() + " says: " + "\"I have to go to the bathroom\"";
                 } else {
-                    System.out.println(INDENT + npc.getName() + " says: " + "\"I can't handle this anymore\"");
+                    npcResponse = npc.getName() + " says: " + "\"I can't handle this anymore\"";
                 }
             } else {
                 switch (question) {
                     case "1":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was at " +
-                                npc.getAnswers().get("locationAtTimeOfMurder") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I was at " +
+                                npc.getAnswers().get("locationAtTimeOfMurder") + "\"";
                         break;
                     case "2":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I was " +
-                                npc.getAnswers().get("activityAtTimeOfMurder") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I was " +
+                                npc.getAnswers().get("activityAtTimeOfMurder") + "\"";
                         break;
                     case "3":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"I think he " +
-                                npc.getAnswers().get("opinionOfVictim") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"I think he " +
+                                npc.getAnswers().get("opinionOfVictim") + "\"";
                         break;
                     case "4":
-                        System.out.println(INDENT + npc.getName() + " says: " + "\"" +
-                                npc.getAnswers().get("otherTestimony") + "\"");
+                        npcResponse = npc.getName() + " says: " + "\"" +
+                                npc.getAnswers().get("otherTestimony") + "\"";
                         break;
                     default:
-                        System.out.println(INDENT + question + " is not a valid option!");
+                        npcResponse = question + " is not a valid option!";
                         break;
                 }
             }
+            System.out.println(INDENT + TxtFormat.wordWrap(npcResponse));
         } while (!question.equals("quit"));
     }
 
     private boolean hasMatch(String noun, Item item) {
         if (item.getName().equalsIgnoreCase(noun)) {
-            System.out.println(INDENT + item.getData());
+            System.out.println(TxtFormat.wordWrap(item.getData()));
             player.inspectedItem(item.getName(), item.getData());
             return true;
         }
@@ -301,6 +484,9 @@ class Controller {
             gameData.put("inspectedItem", player.getInspectedItem());
             gameData.put("roomsVisited", player.getRoomsVisited());
             gameData.put("map", map);
+            gameData.put("moveCount", moveCount);
+            gameData.put("statusIndex", player.getStatusIndex());
+            gameData.put("badEvents", player.getBadEvents());
 
             Type typeListW = new TypeToken<List<String>>() {
             }.getType();

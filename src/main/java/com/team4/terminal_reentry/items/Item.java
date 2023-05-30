@@ -22,31 +22,23 @@ public class Item {
         return secret;
     }
 
-    public boolean isEvidence() {
-        return isEvidence;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    private void setDescription(String description) {
         this.description = description;
     }
 
-    public void setEvidence(boolean evidence) {
+    private void setEvidence(boolean evidence) {
         this.isEvidence = evidence;
-    }
-
-    public boolean getEvidence() {
-        return isEvidence;
     }
 }

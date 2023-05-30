@@ -13,11 +13,11 @@ public class Weapon extends Item{
         return data;
     }
 
-    public void setData(String data) {
+    private void setData(String data) {
         this.data = data;
     }
 
-    public void setSecretData(String secretData) {
+    private void setSecretData(String secretData) {
         this.secret = secretData;
     }
 
